@@ -1,9 +1,10 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, pre, button, div, text)
+import Html exposing (Html, Attribute, input, pre, button, div, text)
+import Html.Attributes exposing (..)
 import Http
-import Html.Events exposing (onClick)
+import Html.Events exposing (onClick, onInput)
 
 
 --Main
@@ -22,6 +23,9 @@ main =
 
 
 --Model
+type alias Content = 
+  { content : String
+  }
 
 --declare data schema
 type Model 
@@ -32,8 +36,8 @@ type Model
   | Visible
   | StatusDialogOpen
   | StatusDialogClose
-  | UpdateDialogOpen
-  | UpdateDialogClose
+  | UpdateDialogOpen Content
+  | UpdateDialogClose 
 
 
 --declare type
@@ -57,6 +61,7 @@ type Msg
   | CloseStatus
   | OpenUpdate
   | CloseUpdate
+  | ChangeText String
 --declare type
 update : Msg -> Model -> (Model, Cmd Msg)
 
@@ -79,9 +84,11 @@ update msg model =
     CloseStatus -> 
       (StatusDialogClose, Cmd.none)
     OpenUpdate -> 
-      (UpdateDialogOpen, Cmd.none)
+      (UpdateDialogOpen { content = "" }, Cmd.none)
     CloseUpdate ->
       (UpdateDialogClose, Cmd.none)
+    ChangeText newContent ->
+      (UpdateDialogOpen { content = newContent}, Cmd.none)
 
 --Subscriptions
 subscriptions : Model -> Sub Msg
@@ -172,12 +179,19 @@ view model =
       , div [] [ button [onClick OpenUpdate][text "update"] ]
       , div [] [ button [onClick OpenStatus][text "change status"] ]
       ]
-    UpdateDialogOpen -> 
+    UpdateDialogOpen userInput-> 
       div []
       [
        div [] [ button [onClick CloseStatus][text "green"] ]
       , div [] [ button [onClick CloseStatus][text "yellow"] ]
       , div [] [ button [onClick CloseStatus][text "red"] ]
+      , div [] 
+        [ input 
+          [ placeholder "Text to reverse"
+          , value userInput.content
+          , onInput ChangeText ] [] 
+        , div [] [ text (String.reverse userInput.content) ]
+        ]
       , div [] [ button [onClick MakeHidden][text "hide"] ]
       , div [] [ button [onClick Placeholder][text "create"] ]
       , div [] [ button [onClick Placeholder][text "delete"] ]
