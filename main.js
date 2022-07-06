@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.ag.aa === region.al.aa)
+	if (region.am.ac === region.as.ac)
 	{
-		return 'on line ' + region.ag.aa;
+		return 'on line ' + region.am.ac;
 	}
-	return 'on lines ' + region.ag.aa + ' through ' + region.al.aa;
+	return 'on lines ' + region.am.ac + ' through ' + region.as.ac;
 }
 
 
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aD,
-		impl.aP,
 		impl.aN,
+		impl.aZ,
+		impl.aX,
 		function() { return function() {} }
 	);
 });
@@ -2720,8 +2720,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		n: func(record.n),
-		ah: record.ah,
-		ae: record.ae
+		an: record.an,
+		ak: record.ak
 	}
 });
 
@@ -2990,10 +2990,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.n;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.ah;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.an;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.ae) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.ak) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3943,11 +3943,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aD,
-		impl.aP,
 		impl.aN,
+		impl.aZ,
+		impl.aX,
 		function(sendToApp, initialModel) {
-			var view = impl.aR;
+			var view = impl.a_;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3979,12 +3979,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aD,
-		impl.aP,
 		impl.aN,
+		impl.aZ,
+		impl.aX,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.af && impl.af(sendToApp)
-			var view = impl.aR;
+			var divertHrefToApp = impl.al && impl.al(sendToApp)
+			var view = impl.a_;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3992,12 +3992,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.X);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc._);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.ac) && (_VirtualDom_doc.title = title = doc.ac);
+				(title !== doc.ad) && (_VirtualDom_doc.title = title = doc.ad);
 			});
 		}
 	);
@@ -4053,12 +4053,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aF;
-	var onUrlRequest = impl.aG;
+	var onUrlChange = impl.aP;
+	var onUrlRequest = impl.aQ;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		af: function(sendToApp)
+		al: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.aq === next.aq
-							&& curr.an === next.an
-							&& curr.ap.a === next.ap.a
+							&& curr.ay === next.ay
+							&& curr.av === next.av
+							&& curr.ax.a === next.ax.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4084,13 +4084,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aD: function(flags)
+		aN: function(flags)
 		{
-			return A3(impl.aD, flags, _Browser_getUrl(), key);
+			return A3(impl.aN, flags, _Browser_getUrl(), key);
 		},
-		aR: impl.aR,
-		aP: impl.aP,
-		aN: impl.aN
+		a_: impl.a_,
+		aZ: impl.aZ,
+		aX: impl.aX
 	});
 }
 
@@ -4156,17 +4156,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aB: 'hidden', ay: 'visibilitychange' }
+		? { aL: 'hidden', aJ: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aB: 'mozHidden', ay: 'mozvisibilitychange' }
+		? { aL: 'mozHidden', aJ: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aB: 'msHidden', ay: 'msvisibilitychange' }
+		? { aL: 'msHidden', aJ: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aB: 'webkitHidden', ay: 'webkitvisibilitychange' }
-		: { aB: 'hidden', ay: 'visibilitychange' };
+		? { aL: 'webkitHidden', aJ: 'webkitvisibilitychange' }
+		: { aL: 'hidden', aJ: 'visibilitychange' };
 }
 
 
@@ -4331,7 +4331,7 @@ function _Browser_getElement(id)
 				d: _Browser_doc.documentElement.clientWidth,
 				c: _Browser_doc.documentElement.clientHeight
 			},
-			_: {
+			ab: {
 				t: x + rect.left,
 				u: y + rect.top,
 				d: rect.width,
@@ -4380,25 +4380,25 @@ var _Http_toTask = F3(function(router, toTask, request)
 	return _Scheduler_binding(function(callback)
 	{
 		function done(response) {
-			callback(toTask(request.az.a(response)));
+			callback(toTask(request.at.a(response)));
 		}
 
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('error', function() { done($elm$http$Http$NetworkError_); });
 		xhr.addEventListener('timeout', function() { done($elm$http$Http$Timeout_); });
-		xhr.addEventListener('load', function() { done(_Http_toResponse(request.az.b, xhr)); });
-		$elm$core$Maybe$isJust(request.au) && _Http_track(router, xhr, request.au.a);
+		xhr.addEventListener('load', function() { done(_Http_toResponse(request.at.b, xhr)); });
+		$elm$core$Maybe$isJust(request.aE) && _Http_track(router, xhr, request.aE.a);
 
 		try {
-			xhr.open(request.aE, request.aQ, true);
+			xhr.open(request.aO, request.aF, true);
 		} catch (e) {
-			return done($elm$http$Http$BadUrl_(request.aQ));
+			return done($elm$http$Http$BadUrl_(request.aF));
 		}
 
 		_Http_configureRequest(xhr, request);
 
-		request.X.a && xhr.setRequestHeader('Content-Type', request.X.a);
-		xhr.send(request.X.b);
+		request._.a && xhr.setRequestHeader('Content-Type', request._.a);
+		xhr.send(request._.b);
 
 		return function() { xhr.c = true; xhr.abort(); };
 	});
@@ -4409,13 +4409,13 @@ var _Http_toTask = F3(function(router, toTask, request)
 
 function _Http_configureRequest(xhr, request)
 {
-	for (var headers = request.am; headers.b; headers = headers.b) // WHILE_CONS
+	for (var headers = request.au; headers.b; headers = headers.b) // WHILE_CONS
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
-	xhr.timeout = request.aO.a || 0;
-	xhr.responseType = request.az.d;
-	xhr.withCredentials = request.aw;
+	xhr.timeout = request.aY.a || 0;
+	xhr.responseType = request.at.d;
+	xhr.withCredentials = request.aH;
 }
 
 
@@ -4436,10 +4436,10 @@ function _Http_toResponse(toBody, xhr)
 function _Http_toMetadata(xhr)
 {
 	return {
-		aQ: xhr.responseURL,
-		aL: xhr.status,
-		aM: xhr.statusText,
-		am: _Http_parseHeaders(xhr.getAllResponseHeaders())
+		aF: xhr.responseURL,
+		aV: xhr.status,
+		aW: xhr.statusText,
+		au: _Http_parseHeaders(xhr.getAllResponseHeaders())
 	};
 }
 
@@ -4534,15 +4534,15 @@ function _Http_track(router, xhr, tracker)
 	xhr.upload.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Sending({
-			aK: event.loaded,
-			at: event.total
+			aU: event.loaded,
+			aC: event.total
 		}))));
 	});
 	xhr.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Receiving({
-			aI: event.loaded,
-			at: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
+			aS: event.loaded,
+			aC: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
 		}))));
 	});
 }var $elm$core$Basics$EQ = 1;
@@ -5049,7 +5049,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {M: fragment, an: host, P: path, ap: port_, aq: protocol, S: query};
+		return {P: fragment, av: host, S: path, ax: port_, ay: protocol, V: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5328,10 +5328,16 @@ var $elm$core$Task$perform = F2(
 			A2($elm$core$Task$map, toMessage, task));
 	});
 var $elm$browser$Browser$element = _Browser_element;
+var $author$project$Main$Closed = {$: 1};
 var $author$project$Main$GotText = function (a) {
 	return {$: 0, a: a};
 };
 var $author$project$Main$Loading = {$: 1};
+var $author$project$Main$Model = F8(
+	function (resource, name, password, passwordAgain, status, updateDialog, changeStatusDialog, quotes) {
+		return {ae: changeStatusDialog, K: name, ag: password, ah: passwordAgain, N: quotes, ai: resource, O: status, aj: updateDialog};
+	});
+var $author$project$Main$QuoteLoading = {$: 1};
 var $elm$http$Http$BadStatus_ = F2(
 	function (a, b) {
 		return {$: 3, a: a, b: b};
@@ -5923,7 +5929,7 @@ var $elm$http$Http$resolve = F2(
 			case 3:
 				var metadata = response.a;
 				return $elm$core$Result$Err(
-					$elm$http$Http$BadStatus(metadata.aL));
+					$elm$http$Http$BadStatus(metadata.aV));
 			default:
 				var body = response.b;
 				return A2(
@@ -5944,7 +5950,7 @@ var $elm$http$Http$Request = function (a) {
 };
 var $elm$http$Http$State = F2(
 	function (reqs, subs) {
-		return {T: reqs, V: subs};
+		return {W: reqs, Y: subs};
 	});
 var $elm$http$Http$init = $elm$core$Task$succeed(
 	A2($elm$http$Http$State, $elm$core$Dict$empty, _List_Nil));
@@ -5988,7 +5994,7 @@ var $elm$http$Http$updateReqs = F3(
 					return A2(
 						$elm$core$Task$andThen,
 						function (pid) {
-							var _v4 = req.au;
+							var _v4 = req.aE;
 							if (_v4.$ === 1) {
 								return A3($elm$http$Http$updateReqs, router, otherCmds, reqs);
 							} else {
@@ -6018,7 +6024,7 @@ var $elm$http$Http$onEffects = F4(
 				return $elm$core$Task$succeed(
 					A2($elm$http$Http$State, reqs, subs));
 			},
-			A3($elm$http$Http$updateReqs, router, cmds, state.T));
+			A3($elm$http$Http$updateReqs, router, cmds, state.W));
 	});
 var $elm$core$List$maybeCons = F3(
 	function (f, mx, xs) {
@@ -6061,7 +6067,7 @@ var $elm$http$Http$onSelfMsg = F3(
 				A2(
 					$elm$core$List$filterMap,
 					A3($elm$http$Http$maybeSend, router, tracker, progress),
-					state.V)));
+					state.Y)));
 	});
 var $elm$http$Http$Cancel = function (a) {
 	return {$: 0, a: a};
@@ -6075,14 +6081,14 @@ var $elm$http$Http$cmdMap = F2(
 			var r = cmd.a;
 			return $elm$http$Http$Request(
 				{
-					aw: r.aw,
-					X: r.X,
-					az: A2(_Http_mapExpect, func, r.az),
-					am: r.am,
-					aE: r.aE,
-					aO: r.aO,
+					aH: r.aH,
+					_: r._,
+					at: A2(_Http_mapExpect, func, r.at),
 					au: r.au,
-					aQ: r.aQ
+					aO: r.aO,
+					aY: r.aY,
+					aE: r.aE,
+					aF: r.aF
 				});
 		}
 	});
@@ -6105,19 +6111,19 @@ var $elm$http$Http$subscription = _Platform_leaf('Http');
 var $elm$http$Http$request = function (r) {
 	return $elm$http$Http$command(
 		$elm$http$Http$Request(
-			{aw: false, X: r.X, az: r.az, am: r.am, aE: r.aE, aO: r.aO, au: r.au, aQ: r.aQ}));
+			{aH: false, _: r._, at: r.at, au: r.au, aO: r.aO, aY: r.aY, aE: r.aE, aF: r.aF}));
 };
 var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
-		{X: $elm$http$Http$emptyBody, az: r.az, am: _List_Nil, aE: 'GET', aO: $elm$core$Maybe$Nothing, au: $elm$core$Maybe$Nothing, aQ: r.aQ});
+		{_: $elm$http$Http$emptyBody, at: r.at, au: _List_Nil, aO: 'GET', aY: $elm$core$Maybe$Nothing, aE: $elm$core$Maybe$Nothing, aF: r.aF});
 };
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		$author$project$Main$Loading,
+		A8($author$project$Main$Model, $author$project$Main$Loading, '', '', '', $author$project$Main$Closed, $author$project$Main$Closed, $author$project$Main$Closed, $author$project$Main$QuoteLoading),
 		$elm$http$Http$get(
 			{
-				az: $elm$http$Http$expectString($author$project$Main$GotText),
-				aQ: 'https://elm-lang.org/assets/public-opinion.txt'
+				at: $elm$http$Http$expectString($author$project$Main$GotText),
+				aF: 'https://elm-lang.org/assets/public-opinion.txt'
 			}));
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -6126,70 +6132,255 @@ var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$none;
 };
 var $author$project$Main$Failure = {$: 0};
-var $author$project$Main$Hidden = {$: 3};
-var $author$project$Main$StatusDialogClose = {$: 6};
-var $author$project$Main$StatusDialogOpen = {$: 5};
+var $author$project$Main$Open = function (a) {
+	return {$: 0, a: a};
+};
+var $author$project$Main$QuoteFailure = {$: 0};
+var $author$project$Main$QuoteSuccess = function (a) {
+	return {$: 2, a: a};
+};
 var $author$project$Main$Success = function (a) {
 	return {$: 2, a: a};
 };
-var $author$project$Main$UpdateDialogClose = {$: 8};
-var $author$project$Main$UpdateDialogOpen = function (a) {
-	return {$: 7, a: a};
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
+		}
+	});
+var $elm$core$List$concat = function (lists) {
+	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
 };
-var $author$project$Main$Visible = {$: 4};
+var $author$project$Main$GotQuote = function (a) {
+	return {$: 9, a: a};
+};
+var $elm$json$Json$Decode$decodeString = _Json_runOnString;
+var $elm$http$Http$expectJson = F2(
+	function (toMsg, decoder) {
+		return A2(
+			$elm$http$Http$expectStringResponse,
+			toMsg,
+			$elm$http$Http$resolve(
+				function (string) {
+					return A2(
+						$elm$core$Result$mapError,
+						$elm$json$Json$Decode$errorToString,
+						A2($elm$json$Json$Decode$decodeString, decoder, string));
+				}));
+	});
+var $author$project$Main$Quote = F4(
+	function (quote, source, author, year) {
+		return {ap: author, az: quote, aD: source, aG: year};
+	});
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$int = _Json_decodeInt;
+var $elm$json$Json$Decode$map4 = _Json_map4;
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$Main$quoteDecoder = A5(
+	$elm$json$Json$Decode$map4,
+	$author$project$Main$Quote,
+	A2($elm$json$Json$Decode$field, 'quote', $elm$json$Json$Decode$string),
+	A2($elm$json$Json$Decode$field, 'source', $elm$json$Json$Decode$string),
+	A2($elm$json$Json$Decode$field, 'author', $elm$json$Json$Decode$string),
+	A2($elm$json$Json$Decode$field, 'year', $elm$json$Json$Decode$int));
+var $author$project$Main$getRandomQuote = $elm$http$Http$get(
+	{
+		at: A2($elm$http$Http$expectJson, $author$project$Main$GotQuote, $author$project$Main$quoteDecoder),
+		aF: 'https://elm-lang.org/api/random-quotes'
+	});
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
+			case 7:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{K: ''}),
+					$author$project$Main$getRandomQuote);
+			case 8:
+				return _Utils_Tuple2(model, $author$project$Main$getRandomQuote);
+			case 9:
+				var result = msg.a;
+				if (!result.$) {
+					var quote = result.a;
+					var _v2 = model.N;
+					switch (_v2.$) {
+						case 2:
+							var current = _v2.a;
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{
+										N: $author$project$Main$QuoteSuccess(
+											$elm$core$List$concat(
+												_List_fromArray(
+													[
+														_List_fromArray(
+														[quote]),
+														current
+													])))
+									}),
+								$elm$core$Platform$Cmd$none);
+						case 1:
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{
+										N: $author$project$Main$QuoteSuccess(
+											_List_fromArray(
+												[quote]))
+									}),
+								$elm$core$Platform$Cmd$none);
+						default:
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{
+										N: $author$project$Main$QuoteSuccess(
+											_List_fromArray(
+												[quote]))
+									}),
+								$elm$core$Platform$Cmd$none);
+					}
+				} else {
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{N: $author$project$Main$QuoteFailure}),
+						$elm$core$Platform$Cmd$none);
+				}
 			case 0:
 				var result = msg.a;
 				if (!result.$) {
 					var fullText = result.a;
 					return _Utils_Tuple2(
-						$author$project$Main$Success(fullText),
+						_Utils_update(
+							model,
+							{
+								ai: $author$project$Main$Success(fullText)
+							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
-					return _Utils_Tuple2($author$project$Main$Failure, $elm$core$Platform$Cmd$none);
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{ai: $author$project$Main$Failure}),
+						$elm$core$Platform$Cmd$none);
 				}
 			case 1:
-				return _Utils_Tuple2($author$project$Main$Failure, $elm$core$Platform$Cmd$none);
-			case 3:
-				return _Utils_Tuple2($author$project$Main$Hidden, $elm$core$Platform$Cmd$none);
-			case 2:
-				return _Utils_Tuple2($author$project$Main$Visible, $elm$core$Platform$Cmd$none);
-			case 4:
-				return _Utils_Tuple2($author$project$Main$StatusDialogOpen, $elm$core$Platform$Cmd$none);
-			case 5:
-				return _Utils_Tuple2($author$project$Main$StatusDialogClose, $elm$core$Platform$Cmd$none);
-			case 6:
+				var name = msg.a;
 				return _Utils_Tuple2(
-					$author$project$Main$UpdateDialogOpen(
-						{Y: ''}),
+					_Utils_update(
+						model,
+						{K: name}),
 					$elm$core$Platform$Cmd$none);
-			case 7:
-				return _Utils_Tuple2($author$project$Main$UpdateDialogClose, $elm$core$Platform$Cmd$none);
-			default:
-				var newContent = msg.a;
+			case 2:
+				var password = msg.a;
 				return _Utils_Tuple2(
-					$author$project$Main$UpdateDialogOpen(
-						{Y: newContent}),
+					_Utils_update(
+						model,
+						{ag: password}),
+					$elm$core$Platform$Cmd$none);
+			case 3:
+				var password = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{ah: password}),
+					$elm$core$Platform$Cmd$none);
+			case 4:
+				return _Utils_eq(model.O, $author$project$Main$Closed) ? _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							O: $author$project$Main$Open('visible html element')
+						}),
+					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{O: $author$project$Main$Closed}),
+					$elm$core$Platform$Cmd$none);
+			case 5:
+				return _Utils_eq(model.O, $author$project$Main$Closed) ? _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							ae: $author$project$Main$Open('change status')
+						}),
+					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{ae: $author$project$Main$Closed}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_eq(model.O, $author$project$Main$Closed) ? _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							aj: $author$project$Main$Open('add an update')
+						}),
+					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{aj: $author$project$Main$Closed}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
-var $author$project$Main$ChangeText = function (a) {
-	return {$: 8, a: a};
+var $author$project$Main$Name = function (a) {
+	return {$: 1, a: a};
 };
-var $author$project$Main$CloseStatus = {$: 5};
-var $author$project$Main$CloseUpdate = {$: 7};
-var $author$project$Main$MakeHidden = {$: 3};
-var $author$project$Main$MakeVisible = {$: 2};
-var $author$project$Main$OpenStatus = {$: 4};
-var $author$project$Main$OpenUpdate = {$: 6};
-var $author$project$Main$Placeholder = {$: 1};
-var $elm$html$Html$button = _VirtualDom_node('button');
+var $author$project$Main$Password = function (a) {
+	return {$: 2, a: a};
+};
+var $author$project$Main$PasswordAgain = function (a) {
+	return {$: 3, a: a};
+};
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$html$Html$h2 = _VirtualDom_node('h2');
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$html$Html$pre = _VirtualDom_node('pre');
+var $author$project$Main$viewBook = function (state) {
+	switch (state.$) {
+		case 0:
+			return A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Could not load state')
+					]));
+		case 1:
+			return A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Loading ... ')
+					]));
+		default:
+			var fullText = state.a;
+			return A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$pre,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(fullText)
+							]))
+					]));
+	}
+};
+var $author$project$Main$Toggle = {$: 4};
+var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 0, a: a};
 };
@@ -6207,6 +6398,8 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
+var $author$project$Main$Clear = {$: 7};
+var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
@@ -6220,12 +6413,10 @@ var $elm$html$Html$Events$stopPropagationOn = F2(
 			event,
 			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
 	});
-var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$at = F2(
 	function (fields, decoder) {
 		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
 	});
-var $elm$json$Json$Decode$string = _Json_decodeString;
 var $elm$html$Html$Events$targetValue = A2(
 	$elm$json$Json$Decode$at,
 	_List_fromArray(
@@ -6249,1179 +6440,324 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			$elm$json$Json$Encode$string(string));
 	});
 var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
-var $elm$html$Html$pre = _VirtualDom_node('pre');
-var $elm$core$String$reverse = _String_reverse;
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
-var $author$project$Main$view = function (model) {
-	switch (model.$) {
+var $author$project$Main$viewInput = F4(
+	function (t, p, v, toMsg) {
+		return A2(
+			$elm$html$Html$input,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$type_(t),
+					$elm$html$Html$Attributes$placeholder(p),
+					$elm$html$Html$Attributes$value(v),
+					$elm$html$Html$Events$onInput(toMsg)
+				]),
+			_List_Nil);
+	});
+var $author$project$Main$viewForm = F3(
+	function (req, desc, author) {
+		return A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A4($author$project$Main$viewInput, 'text', 'request', req, $author$project$Main$Name),
+					A4($author$project$Main$viewInput, 'text', 'description', desc, $author$project$Main$Name),
+					A4($author$project$Main$viewInput, 'text', 'made by...', author, $author$project$Main$Name),
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Events$onClick($author$project$Main$Clear)
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('create')
+						]))
+				]));
+	});
+var $author$project$Main$viewDialog = F4(
+	function (dialog, z, x, c) {
+		if (dialog.$ === 1) {
+			return A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onClick($author$project$Main$Toggle)
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('open')
+							]))
+					]));
+		} else {
+			var paragraph = dialog.a;
+			return A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(paragraph)
+							])),
+						A3($author$project$Main$viewForm, z, x, c),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$button,
+								_List_fromArray(
+									[
+										$elm$html$Html$Events$onClick($author$project$Main$Toggle)
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('close')
+									]))
+							]))
+					]));
+		}
+	});
+var $author$project$Main$MorePlease = {$: 8};
+var $elm$html$Html$blockquote = _VirtualDom_node('blockquote');
+var $elm$html$Html$cite = _VirtualDom_node('cite');
+var $elm$html$Html$p = _VirtualDom_node('p');
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $author$project$Main$ToggleStatusDialog = {$: 5};
+var $author$project$Main$ToggleUpdateDialog = {$: 6};
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $author$project$Main$viewMenuDialog = F4(
+	function (dialog, z, x, c) {
+		if (dialog.$ === 1) {
+			return A2($elm$html$Html$div, _List_Nil, _List_Nil);
+		} else {
+			var paragraph = dialog.a;
+			return A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(paragraph)
+							])),
+						A3($author$project$Main$viewForm, z, x, c)
+					]));
+		}
+	});
+var $author$project$Main$viewList = F4(
+	function (ql, name, changeStatusDialog, updateDialog) {
+		return A2(
+			$elm$core$List$map,
+			function (x) {
+				return A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$blockquote,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text(x.az)
+								])),
+							A2(
+							$elm$html$Html$p,
+							_List_fromArray(
+								[
+									A2($elm$html$Html$Attributes$style, 'text-align', 'right')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('-- '),
+									A2(
+									$elm$html$Html$cite,
+									_List_Nil,
+									_List_fromArray(
+										[
+											$elm$html$Html$text(x.aD)
+										])),
+									$elm$html$Html$text(
+									' by ' + (x.ap + (' (' + ($elm$core$String$fromInt(x.aG) + ')'))))
+								])),
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onClick($author$project$Main$ToggleStatusDialog)
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('change status')
+								])),
+							A4($author$project$Main$viewMenuDialog, changeStatusDialog, name, name, name),
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onClick($author$project$Main$ToggleUpdateDialog)
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('update request')
+								])),
+							A4($author$project$Main$viewMenuDialog, updateDialog, name, name, name)
+						]));
+			},
+			ql);
+	});
+var $author$project$Main$viewQuote = function (model) {
+	var _v0 = model.N;
+	switch (_v0.$) {
 		case 0:
 			return A2(
 				$elm$html$Html$div,
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('I was unable to load your book.'),
+						$elm$html$Html$text('I could not load a random quote for some reason.'),
 						A2(
-						$elm$html$Html$div,
-						_List_Nil,
+						$elm$html$Html$button,
 						_List_fromArray(
 							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('green')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
+								$elm$html$Html$Events$onClick($author$project$Main$MorePlease)
+							]),
 						_List_fromArray(
 							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('yellow')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('red')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$MakeVisible)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('show')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$MakeHidden)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('hide')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('create')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('delete')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('apply')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('update')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('change status')
-									]))
+								$elm$html$Html$text('Try Again!')
 							]))
 					]));
 		case 1:
-			return $elm$html$Html$text('Loading ... ');
-		case 2:
-			var fullText = model.a;
 			return A2(
 				$elm$html$Html$div,
 				_List_Nil,
 				_List_fromArray(
 					[
 						A2(
-						$elm$html$Html$pre,
-						_List_Nil,
+						$elm$html$Html$button,
 						_List_fromArray(
 							[
-								$elm$html$Html$text(fullText)
+								$elm$html$Html$Events$onClick($author$project$Main$MorePlease)
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('get a quote!')
 							])),
 						A2(
-						$elm$html$Html$div,
+						$elm$html$Html$blockquote,
 						_List_Nil,
 						_List_fromArray(
 							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('green')
-									]))
+								$elm$html$Html$text('Loading ...')
 							])),
 						A2(
-						$elm$html$Html$div,
-						_List_Nil,
+						$elm$html$Html$p,
 						_List_fromArray(
 							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('yellow')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
+								A2($elm$html$Html$Attributes$style, 'text-align', 'right')
+							]),
 						_List_fromArray(
 							[
+								$elm$html$Html$text('-- '),
 								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('red')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$MakeVisible)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('show')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$MakeHidden)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('hide')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('create')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('delete')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('apply')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('update')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('change status')
-									]))
-							]))
-					]));
-		case 3:
-			return A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('green')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('yellow')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('red')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$MakeVisible)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('show')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('delete')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('apply')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('update')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('change status')
-									]))
-							]))
-					]));
-		case 4:
-			return A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('green')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('yellow')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('red')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$MakeHidden)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('hide')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('create')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('delete')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('apply')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('update')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('change status')
-									]))
-							]))
-					]));
-		case 5:
-			return A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('green')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('yellow')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('red')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$MakeHidden)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('hide')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('create')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('delete')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('apply')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('update')
-									]))
-							]))
-					]));
-		case 6:
-			return A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$MakeHidden)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('hide')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('create')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('delete')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('apply')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('update')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('change status')
-									]))
-							]))
-					]));
-		case 7:
-			var userInput = model.a;
-			return A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('green')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('yellow')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('red')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$input,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$placeholder('Text to reverse'),
-										$elm$html$Html$Attributes$value(userInput.Y),
-										$elm$html$Html$Events$onInput($author$project$Main$ChangeText)
-									]),
-								_List_Nil),
-								A2(
-								$elm$html$Html$div,
+								$elm$html$Html$cite,
 								_List_Nil,
 								_List_fromArray(
 									[
-										$elm$html$Html$text(
-										$elm$core$String$reverse(userInput.Y))
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$MakeHidden)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('hide')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('create')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('delete')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('apply')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('change status')
-									]))
+										$elm$html$Html$text('....')
+									])),
+								$elm$html$Html$text('....')
 							]))
 					]));
 		default:
+			var quotelist = _v0.a;
 			return A2(
 				$elm$html$Html$div,
 				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
+				$elm$core$List$concat(
+					_List_fromArray(
+						[
+							_List_fromArray(
 							[
 								A2(
 								$elm$html$Html$button,
 								_List_fromArray(
 									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
+										$elm$html$Html$Events$onClick($author$project$Main$MorePlease)
 									]),
 								_List_fromArray(
 									[
-										$elm$html$Html$text('green')
+										$elm$html$Html$text('Another!')
 									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('yellow')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$CloseStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('red')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$MakeHidden)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('hide')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('create')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Placeholder)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('delete')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenUpdate)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('update')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$OpenStatus)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('change status')
-									]))
-							]))
-					]));
+							]),
+							A4($author$project$Main$viewList, quotelist, model.K, model.ae, model.aj)
+						])));
 	}
 };
+var $author$project$Main$viewValidation = function (model) {
+	return _Utils_eq(model.ag, model.ah) ? A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				A2($elm$html$Html$Attributes$style, 'color', 'green')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('OK')
+			])) : A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				A2($elm$html$Html$Attributes$style, 'color', 'red')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('Passwords do not match!')
+			]));
+};
+var $author$project$Main$view = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A4($author$project$Main$viewInput, 'text', 'Name', model.K, $author$project$Main$Name),
+				A4($author$project$Main$viewInput, 'password', 'Password', model.ag, $author$project$Main$Password),
+				A4($author$project$Main$viewInput, 'password', 'Re-enter Password', model.ah, $author$project$Main$PasswordAgain),
+				$author$project$Main$viewValidation(model),
+				A4($author$project$Main$viewDialog, model.O, model.K, model.K, model.K),
+				A2(
+				$elm$html$Html$h2,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Random Quotes')
+					])),
+				$author$project$Main$viewQuote(model),
+				$author$project$Main$viewBook(model.ai)
+			]));
+};
 var $author$project$Main$main = $elm$browser$Browser$element(
-	{aD: $author$project$Main$init, aN: $author$project$Main$subscriptions, aP: $author$project$Main$update, aR: $author$project$Main$view});
+	{aN: $author$project$Main$init, aX: $author$project$Main$subscriptions, aZ: $author$project$Main$update, a_: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
