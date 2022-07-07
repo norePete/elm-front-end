@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Browser
 import Html exposing (..)
-import Html.Attributes exposing (class, value, placeholder, style, type_)
+import Html.Attributes exposing (class, value, placeholder, style, type_, checked, name)
 import Http
 import Html.Events exposing (..)
 import Json.Decode exposing (Decoder, map4, field, int, string)
@@ -45,6 +45,7 @@ type alias Quote =
   , updateBuffer: String
   , changeStatusDialog: Dialog
   , updateList: (List String)
+  , urgency: Urgency
   }
 
 type alias RawQuote = 
@@ -57,6 +58,11 @@ type alias RawQuote =
 type Dialog = 
   Open String 
   | Closed
+
+type Urgency =
+    Low
+  | Medium
+  | High
 
 --declare data schema
 type alias Model = 
@@ -77,7 +83,6 @@ init _=
     }
   )
 
-
 --Update 
 type Msg 
   = GotText (Result Http.Error String)
@@ -93,6 +98,7 @@ type Msg
   | GotQuote (Result Http.Error RawQuote)
   | Buffer Quote String
   | SubmissionBuffer String
+  | SwitchTo Quote Urgency
 
 --declare type
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -102,7 +108,7 @@ update msg model =
     CreateRequest currentBuffer ->
       ({model | buffer = "", quotes = 
         QuoteSuccess (List.concat[
-          [Quote currentBuffer "created by ..." "me" 2020 Closed "" Closed ["created"]]
+          [Quote currentBuffer "created by ..." "me" 2020 Closed "" Closed ["created"] Low]
           , (case model.quotes of 
               QuoteSuccess ql -> ql
               QuoteLoading -> []
@@ -209,7 +215,7 @@ update msg model =
                  (List.map (\x -> 
                    case x == quote of 
                      True ->
-                       clearBuffer <| appendUpdate x quote.updateBuffer x.updateList
+                       resetUrgency <| clearBuffer <| appendUpdate x quote.updateBuffer x.updateList
                      False -> 
                        x
                      ) current) 
@@ -229,7 +235,30 @@ update msg model =
               (model, Cmd.none)
             QuoteLoading ->
               (model, Cmd.none)
+    SwitchTo quote urgencyLevel -> 
+          case model.quotes of 
+            QuoteSuccess current ->
+              ({ model | quotes = 
+               QuoteSuccess 
+                 (List.map (\x -> 
+                   case x == quote of 
+                     True ->
+                       {x  | urgency = urgencyLevel}
+                     False -> 
+                       x
+                     ) current) 
+               }
+              , Cmd.none)
+            QuoteFailure ->
+              (model, Cmd.none)
+            QuoteLoading ->
+              (model, Cmd.none)
+          
   
+resetUrgency: Quote -> Quote
+resetUrgency quote =
+  {quote | urgency = Low}
+
 clearBuffer: Quote -> Quote
 clearBuffer quote =
   {quote | updateBuffer = ""}
@@ -248,6 +277,7 @@ wrapQuote raw =
   , updateBuffer = ""
   , changeStatusDialog = Closed 
   , updateList = ["created"]
+  , urgency = Low
   }
 
 mutateStatusDialog: Quote -> Quote
@@ -323,6 +353,15 @@ viewQuote model =
         , viewList quotelist model.name  ])
 
 
+urgencyColour : Urgency -> String
+urgencyColour urgency = 
+  case urgency of 
+    Low ->
+      "green"
+    Medium ->
+      "yellow"
+    High ->
+      "red"
 
 
 viewList : List Quote -> String -> List (Html Msg)
@@ -330,7 +369,7 @@ viewList ql name =
           List.map (
             \x -> 
                 div [class "row"]
-                [ blockquote [][text x.quote]
+                [ blockquote [style "background-color" (urgencyColour x.urgency)][text x.quote]
                 , div [] (List.map (\y ->
                    blockquote [style "color" "green"][text y]) x.updateList)
                 , p [ style "text-align" "right" ]
@@ -341,23 +380,20 @@ viewList ql name =
                   ++ ")")
                   ]
                 , button [onClick (ToggleStatusDialog x)][text "change status"]
-                , viewDialog x.changeStatusDialog "text" "urgency" x.updateBuffer (Buffer x) (UpdateQuote x)
+                , viewDialog x.changeStatusDialog [viewRadio x]
                 , button [onClick (ToggleUpdateDialog x)][text "update request"]
-                , viewDialog x.updateDialog "text" "placeholder" x.updateBuffer (Buffer x) (UpdateQuote x)
+                , viewDialog x.updateDialog [viewForm "text" "placeholder" x.updateBuffer (Buffer x) (UpdateQuote x)]
                 , button [onClick (CloseRequest x)][text "close request"]
                 ]) ql
 
 
-viewDialog : Dialog -> String -> String -> String -> (String -> Msg) -> (String -> Msg) -> Html Msg
-viewDialog dialog inputType placeholder value callback onclick = 
+viewDialog : Dialog -> List (Html msg) -> Html msg 
+viewDialog dialog html = 
   case dialog of 
     Closed ->
-      div [][]
+      div[][]
     Open paragraph ->
-      div []
-      [  div [] [text paragraph ]
-      ,  viewForm inputType placeholder value callback onclick
-      ]
+      div [] html
 
 viewForm : String -> String -> String -> (String -> Msg) -> (String -> Msg) -> Html Msg
 viewForm inputType placeholder value callback onclick =
@@ -370,13 +406,34 @@ viewInput : String -> String -> String -> (String -> msg) -> Html msg
 viewInput t p v toMsg = 
       input [ type_ t, placeholder p, value v, onInput toMsg] []
 
---  case t of 
---    "text" ->
---      input [ type_ t, placeholder p, value v, onInput toMsg] []
---    "radio" ->
---      input [ type_ t, placeholder p, value v, onInput toMsg] []
---    _ ->
---      input [ type_ t, placeholder p, value v, onInput toMsg] []
+viewRadio : Quote -> Html Msg
+viewRadio quote =
+  div []
+    [ viewPicker 
+        [ ((quote.urgency == Low), "low", (SwitchTo quote) Low)
+        , ((quote.urgency == Medium), "Medium", (SwitchTo quote) Medium)
+        , ((quote.urgency == High), "high", (SwitchTo quote) High)
+        ]
+    ]
+
+viewPicker : List (Bool, String, msg) -> Html msg
+viewPicker options =
+  fieldset [] (List.map radio options)
+
+radio : (Bool, String, msg) -> Html msg
+radio (isChecked, choiceName, msg) =
+  label []
+    [ input 
+      [ type_ "radio"
+      , name choiceName
+      , onClick msg 
+      , checked isChecked
+      ] []
+    , (if isChecked then 
+        text choiceName
+      else 
+        text "")
+    ]
 
 viewBook : Load -> Html msg
 viewBook state =
@@ -387,8 +444,6 @@ viewBook state =
       div [] [ text "Loading ... "]
     Success fullText -> 
       div [] [ pre [] [text fullText]]
-
-
 
 
 -- HTTP
