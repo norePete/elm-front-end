@@ -42,7 +42,9 @@ type alias Quote =
   , author : String 
   , year : Int 
   , updateDialog: Dialog
+  , updateBuffer: String
   , changeStatusDialog: Dialog
+  , updateList: (List String)
   }
 
 type alias RawQuote = 
@@ -84,11 +86,13 @@ type Msg
   | ToggleStatusDialog Quote
   | ToggleUpdateDialog Quote
   | CloseRequest Quote
+  | UpdateQuote Quote String
   | Clear
   | CreateRequest String
   | MorePlease
   | GotQuote (Result Http.Error RawQuote)
-  | Buffer String
+  | Buffer Quote String
+  | SubmissionBuffer String
 
 --declare type
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -98,15 +102,33 @@ update msg model =
     CreateRequest currentBuffer ->
       ({model | buffer = "", quotes = 
         QuoteSuccess (List.concat[
-          [Quote currentBuffer "created by ..." "me" 2020 Closed Closed]
+          [Quote currentBuffer "created by ..." "me" 2020 Closed "" Closed ["created"]]
           , (case model.quotes of 
               QuoteSuccess ql -> ql
               QuoteLoading -> []
               QuoteFailure -> [])
           ])
       }, Cmd.none)
-    Buffer currentBuffer ->
+    SubmissionBuffer currentBuffer ->
       ({model | buffer = currentBuffer}, Cmd.none)
+    Buffer quote currentBuffer ->
+          case model.quotes of 
+            QuoteSuccess current ->
+              ({ model | quotes = 
+               QuoteSuccess 
+                 (List.map (\x -> 
+                   case x == quote of 
+                     True ->
+                       {x | updateBuffer = currentBuffer }
+                     False -> 
+                       x
+                     ) current) 
+               }
+              , Cmd.none)
+            QuoteFailure ->
+              (model, Cmd.none)
+            QuoteLoading ->
+              (model, Cmd.none)
     Clear ->
       ({model | name = ""}, getRandomQuote)
     MorePlease ->
@@ -179,6 +201,24 @@ update msg model =
               (model, Cmd.none)
             QuoteLoading ->
               (model, Cmd.none)
+    UpdateQuote quote pointlessString ->
+          case model.quotes of 
+            QuoteSuccess current ->
+              ({ model | quotes = 
+               QuoteSuccess 
+                 (List.map (\x -> 
+                   case x == quote of 
+                     True ->
+                       clearBuffer <| appendUpdate x quote.updateBuffer x.updateList
+                     False -> 
+                       x
+                     ) current) 
+               }
+              , Cmd.none)
+            QuoteFailure ->
+              (model, Cmd.none)
+            QuoteLoading ->
+              (model, Cmd.none)
     CloseRequest quote ->
           case model.quotes of 
             QuoteSuccess current ->
@@ -190,7 +230,13 @@ update msg model =
             QuoteLoading ->
               (model, Cmd.none)
   
+clearBuffer: Quote -> Quote
+clearBuffer quote =
+  {quote | updateBuffer = ""}
 
+appendUpdate: Quote -> String -> List String -> Quote
+appendUpdate quote buffer existingUpdates=
+  {quote | updateList = List.concat [existingUpdates,[buffer]]}
 
 wrapQuote : RawQuote -> Quote
 wrapQuote raw =
@@ -199,7 +245,9 @@ wrapQuote raw =
   , author = raw.author
   , year = raw.year
   , updateDialog = Closed
+  , updateBuffer = ""
   , changeStatusDialog = Closed 
+  , updateList = ["created"]
   }
 
 mutateStatusDialog: Quote -> Quote
@@ -228,12 +276,10 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
   div []
-  [ viewInput "text" "Name" model.name Name
-  , submissionForm model.status model.buffer
+  [ submissionForm model.status model.buffer
   , h2 [] [text "Random Quotes"]
   , viewQuote model
   , viewBook model.resource
-  --other components
   ]
 
 submissionForm : Dialog -> String -> Html Msg
@@ -242,7 +288,7 @@ submissionForm visibility buffer =
         Open t ->
           div []
           [ button [onClick Toggle][text "hide"]
-          , div [][viewInput "text" "description of request" buffer Buffer
+          , div [][viewInput "text" "description of request" buffer SubmissionBuffer
                   , button [onClick (CreateRequest buffer)][text "create"]
                   ]
           ] 
@@ -284,7 +330,9 @@ viewList ql name =
           List.map (
             \x -> 
                 div [class "row"]
-                [ blockquote [][ text x.quote ]
+                [ blockquote [][text x.quote]
+                , div [] (List.map (\y ->
+                   blockquote [style "color" "green"][text y]) x.updateList)
                 , p [ style "text-align" "right" ]
                   [ text "-- "
                   , cite [] [ text x.source ]
@@ -293,37 +341,42 @@ viewList ql name =
                   ++ ")")
                   ]
                 , button [onClick (ToggleStatusDialog x)][text "change status"]
-                , viewDialog x.changeStatusDialog "radio" name name name
+                , viewDialog x.changeStatusDialog "text" "urgency" x.updateBuffer (Buffer x) (UpdateQuote x)
                 , button [onClick (ToggleUpdateDialog x)][text "update request"]
-                , viewDialog x.updateDialog "text" name name name
+                , viewDialog x.updateDialog "text" "placeholder" x.updateBuffer (Buffer x) (UpdateQuote x)
                 , button [onClick (CloseRequest x)][text "close request"]
                 ]) ql
 
 
-
-viewDialog : Dialog -> String -> String -> String -> String -> Html Msg
-viewDialog dialog t z x c = 
+viewDialog : Dialog -> String -> String -> String -> (String -> Msg) -> (String -> Msg) -> Html Msg
+viewDialog dialog inputType placeholder value callback onclick = 
   case dialog of 
     Closed ->
       div [][]
     Open paragraph ->
       div []
       [  div [] [text paragraph ]
-      ,  viewForm t z x c
+      ,  viewForm inputType placeholder value callback onclick
       ]
 
-viewForm : String -> String -> String -> String -> Html Msg
-viewForm inputType req desc author =
+viewForm : String -> String -> String -> (String -> Msg) -> (String -> Msg) -> Html Msg
+viewForm inputType placeholder value callback onclick =
   div []
-  [ viewInput inputType "request" req Name 
-  , viewInput inputType "description" desc Name
-  , viewInput inputType "made by..." author Name
-  , button [onClick Clear][text "create"]
+  [ viewInput inputType placeholder value callback 
+  , button [onClick (onclick "pointlessString")][text "apply"]
   ] 
 
 viewInput : String -> String -> String -> (String -> msg) -> Html msg
 viewInput t p v toMsg = 
-  input [ type_ t, placeholder p, value v, onInput toMsg ] []
+      input [ type_ t, placeholder p, value v, onInput toMsg] []
+
+--  case t of 
+--    "text" ->
+--      input [ type_ t, placeholder p, value v, onInput toMsg] []
+--    "radio" ->
+--      input [ type_ t, placeholder p, value v, onInput toMsg] []
+--    _ ->
+--      input [ type_ t, placeholder p, value v, onInput toMsg] []
 
 viewBook : Load -> Html msg
 viewBook state =

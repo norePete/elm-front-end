@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.ap.ac === region.au.ac)
+	if (region.ar.ad === region.aw.ad)
 	{
-		return 'on line ' + region.ap.ac;
+		return 'on line ' + region.ar.ad;
 	}
-	return 'on lines ' + region.ap.ac + ' through ' + region.au.ac;
+	return 'on lines ' + region.ar.ad + ' through ' + region.aw.ad;
 }
 
 
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aM,
+		impl.aO,
+		impl.a_,
 		impl.aY,
-		impl.aW,
 		function() { return function() {} }
 	);
 });
@@ -2719,9 +2719,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		n: func(record.n),
-		aq: record.aq,
-		an: record.an
+		o: func(record.o),
+		as: record.as,
+		ap: record.ap
 	}
 });
 
@@ -2989,11 +2989,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.n;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aq;
+		var message = !tag ? value : tag < 3 ? value.a : value.o;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.as;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.an) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.ap) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3943,11 +3943,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aM,
+		impl.aO,
+		impl.a_,
 		impl.aY,
-		impl.aW,
 		function(sendToApp, initialModel) {
-			var view = impl.aZ;
+			var view = impl.a$;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3979,12 +3979,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aM,
+		impl.aO,
+		impl.a_,
 		impl.aY,
-		impl.aW,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.ao && impl.ao(sendToApp)
-			var view = impl.aZ;
+			var divertHrefToApp = impl.aq && impl.aq(sendToApp)
+			var view = impl.a$;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3992,7 +3992,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.Z);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc._);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
@@ -4053,12 +4053,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aO;
-	var onUrlRequest = impl.aP;
+	var onUrlChange = impl.aQ;
+	var onUrlRequest = impl.aR;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		ao: function(sendToApp)
+		aq: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.aA === next.aA
-							&& curr.ax === next.ax
-							&& curr.az.a === next.az.a
+							&& curr.aC === next.aC
+							&& curr.az === next.az
+							&& curr.aB.a === next.aB.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4084,13 +4084,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aM: function(flags)
+		aO: function(flags)
 		{
-			return A3(impl.aM, flags, _Browser_getUrl(), key);
+			return A3(impl.aO, flags, _Browser_getUrl(), key);
 		},
-		aZ: impl.aZ,
-		aY: impl.aY,
-		aW: impl.aW
+		a$: impl.a$,
+		a_: impl.a_,
+		aY: impl.aY
 	});
 }
 
@@ -4156,17 +4156,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aK: 'hidden', aI: 'visibilitychange' }
+		? { aM: 'hidden', aK: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aK: 'mozHidden', aI: 'mozvisibilitychange' }
+		? { aM: 'mozHidden', aK: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aK: 'msHidden', aI: 'msvisibilitychange' }
+		? { aM: 'msHidden', aK: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aK: 'webkitHidden', aI: 'webkitvisibilitychange' }
-		: { aK: 'hidden', aI: 'visibilitychange' };
+		? { aM: 'webkitHidden', aK: 'webkitvisibilitychange' }
+		: { aM: 'hidden', aK: 'visibilitychange' };
 }
 
 
@@ -4331,7 +4331,7 @@ function _Browser_getElement(id)
 				d: _Browser_doc.documentElement.clientWidth,
 				c: _Browser_doc.documentElement.clientHeight
 			},
-			ab: {
+			ac: {
 				u: x + rect.left,
 				v: y + rect.top,
 				d: rect.width,
@@ -4380,25 +4380,25 @@ var _Http_toTask = F3(function(router, toTask, request)
 	return _Scheduler_binding(function(callback)
 	{
 		function done(response) {
-			callback(toTask(request.av.a(response)));
+			callback(toTask(request.ax.a(response)));
 		}
 
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('error', function() { done($elm$http$Http$NetworkError_); });
 		xhr.addEventListener('timeout', function() { done($elm$http$Http$Timeout_); });
-		xhr.addEventListener('load', function() { done(_Http_toResponse(request.av.b, xhr)); });
-		$elm$core$Maybe$isJust(request.aE) && _Http_track(router, xhr, request.aE.a);
+		xhr.addEventListener('load', function() { done(_Http_toResponse(request.ax.b, xhr)); });
+		$elm$core$Maybe$isJust(request.aG) && _Http_track(router, xhr, request.aG.a);
 
 		try {
-			xhr.open(request.aN, request.aF, true);
+			xhr.open(request.aP, request.aH, true);
 		} catch (e) {
-			return done($elm$http$Http$BadUrl_(request.aF));
+			return done($elm$http$Http$BadUrl_(request.aH));
 		}
 
 		_Http_configureRequest(xhr, request);
 
-		request.Z.a && xhr.setRequestHeader('Content-Type', request.Z.a);
-		xhr.send(request.Z.b);
+		request._.a && xhr.setRequestHeader('Content-Type', request._.a);
+		xhr.send(request._.b);
 
 		return function() { xhr.c = true; xhr.abort(); };
 	});
@@ -4409,13 +4409,13 @@ var _Http_toTask = F3(function(router, toTask, request)
 
 function _Http_configureRequest(xhr, request)
 {
-	for (var headers = request.aw; headers.b; headers = headers.b) // WHILE_CONS
+	for (var headers = request.ay; headers.b; headers = headers.b) // WHILE_CONS
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
-	xhr.timeout = request.aX.a || 0;
-	xhr.responseType = request.av.d;
-	xhr.withCredentials = request.aG;
+	xhr.timeout = request.aZ.a || 0;
+	xhr.responseType = request.ax.d;
+	xhr.withCredentials = request.aI;
 }
 
 
@@ -4436,10 +4436,10 @@ function _Http_toResponse(toBody, xhr)
 function _Http_toMetadata(xhr)
 {
 	return {
-		aF: xhr.responseURL,
-		aU: xhr.status,
-		aV: xhr.statusText,
-		aw: _Http_parseHeaders(xhr.getAllResponseHeaders())
+		aH: xhr.responseURL,
+		aW: xhr.status,
+		aX: xhr.statusText,
+		ay: _Http_parseHeaders(xhr.getAllResponseHeaders())
 	};
 }
 
@@ -4534,15 +4534,15 @@ function _Http_track(router, xhr, tracker)
 	xhr.upload.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Sending({
-			aT: event.loaded,
-			aD: event.total
+			aV: event.loaded,
+			aF: event.total
 		}))));
 	});
 	xhr.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Receiving({
-			aR: event.loaded,
-			aD: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
+			aT: event.loaded,
+			aF: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
 		}))));
 	});
 }var $elm$core$Basics$EQ = 1;
@@ -4954,22 +4954,22 @@ var $elm$core$Array$builderToArray = F2(
 		if (!builder.f) {
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.h),
+				$elm$core$Elm$JsArray$length(builder.i),
 				$elm$core$Array$shiftStep,
 				$elm$core$Elm$JsArray$empty,
-				builder.h);
+				builder.i);
 		} else {
 			var treeLen = builder.f * $elm$core$Array$branchFactor;
 			var depth = $elm$core$Basics$floor(
 				A2($elm$core$Basics$logBase, $elm$core$Array$branchFactor, treeLen - 1));
-			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.j) : builder.j;
+			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.k) : builder.k;
 			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.f);
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.h) + treeLen,
+				$elm$core$Elm$JsArray$length(builder.i) + treeLen,
 				A2($elm$core$Basics$max, 5, depth * $elm$core$Array$shiftStep),
 				tree,
-				builder.h);
+				builder.i);
 		}
 	});
 var $elm$core$Basics$idiv = _Basics_idiv;
@@ -4982,7 +4982,7 @@ var $elm$core$Array$initializeHelp = F5(
 				return A2(
 					$elm$core$Array$builderToArray,
 					false,
-					{j: nodeList, f: (len / $elm$core$Array$branchFactor) | 0, h: tail});
+					{k: nodeList, f: (len / $elm$core$Array$branchFactor) | 0, i: tail});
 			} else {
 				var leaf = $elm$core$Array$Leaf(
 					A3($elm$core$Elm$JsArray$initialize, $elm$core$Array$branchFactor, fromIndex, fn));
@@ -5049,7 +5049,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {N: fragment, ax: host, Q: path, az: port_, aA: protocol, T: query};
+		return {O: fragment, az: host, R: path, aB: port_, aC: protocol, U: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5335,7 +5335,7 @@ var $author$project$Main$GotText = function (a) {
 var $author$project$Main$Loading = {$: 1};
 var $author$project$Main$Model = F5(
 	function (resource, name, status, quotes, buffer) {
-		return {ak: buffer, ad: name, p: quotes, am: resource, ag: status};
+		return {al: buffer, an: name, g: quotes, ao: resource, ag: status};
 	});
 var $author$project$Main$QuoteLoading = {$: 1};
 var $elm$http$Http$BadStatus_ = F2(
@@ -5929,7 +5929,7 @@ var $elm$http$Http$resolve = F2(
 			case 3:
 				var metadata = response.a;
 				return $elm$core$Result$Err(
-					$elm$http$Http$BadStatus(metadata.aU));
+					$elm$http$Http$BadStatus(metadata.aW));
 			default:
 				var body = response.b;
 				return A2(
@@ -5950,7 +5950,7 @@ var $elm$http$Http$Request = function (a) {
 };
 var $elm$http$Http$State = F2(
 	function (reqs, subs) {
-		return {U: reqs, W: subs};
+		return {V: reqs, X: subs};
 	});
 var $elm$http$Http$init = $elm$core$Task$succeed(
 	A2($elm$http$Http$State, $elm$core$Dict$empty, _List_Nil));
@@ -5994,7 +5994,7 @@ var $elm$http$Http$updateReqs = F3(
 					return A2(
 						$elm$core$Task$andThen,
 						function (pid) {
-							var _v4 = req.aE;
+							var _v4 = req.aG;
 							if (_v4.$ === 1) {
 								return A3($elm$http$Http$updateReqs, router, otherCmds, reqs);
 							} else {
@@ -6024,7 +6024,7 @@ var $elm$http$Http$onEffects = F4(
 				return $elm$core$Task$succeed(
 					A2($elm$http$Http$State, reqs, subs));
 			},
-			A3($elm$http$Http$updateReqs, router, cmds, state.U));
+			A3($elm$http$Http$updateReqs, router, cmds, state.V));
 	});
 var $elm$core$List$maybeCons = F3(
 	function (f, mx, xs) {
@@ -6067,7 +6067,7 @@ var $elm$http$Http$onSelfMsg = F3(
 				A2(
 					$elm$core$List$filterMap,
 					A3($elm$http$Http$maybeSend, router, tracker, progress),
-					state.W)));
+					state.X)));
 	});
 var $elm$http$Http$Cancel = function (a) {
 	return {$: 0, a: a};
@@ -6081,14 +6081,14 @@ var $elm$http$Http$cmdMap = F2(
 			var r = cmd.a;
 			return $elm$http$Http$Request(
 				{
+					aI: r.aI,
+					_: r._,
+					ax: A2(_Http_mapExpect, func, r.ax),
+					ay: r.ay,
+					aP: r.aP,
+					aZ: r.aZ,
 					aG: r.aG,
-					Z: r.Z,
-					av: A2(_Http_mapExpect, func, r.av),
-					aw: r.aw,
-					aN: r.aN,
-					aX: r.aX,
-					aE: r.aE,
-					aF: r.aF
+					aH: r.aH
 				});
 		}
 	});
@@ -6111,19 +6111,19 @@ var $elm$http$Http$subscription = _Platform_leaf('Http');
 var $elm$http$Http$request = function (r) {
 	return $elm$http$Http$command(
 		$elm$http$Http$Request(
-			{aG: false, Z: r.Z, av: r.av, aw: r.aw, aN: r.aN, aX: r.aX, aE: r.aE, aF: r.aF}));
+			{aI: false, _: r._, ax: r.ax, ay: r.ay, aP: r.aP, aZ: r.aZ, aG: r.aG, aH: r.aH}));
 };
 var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
-		{Z: $elm$http$Http$emptyBody, av: r.av, aw: _List_Nil, aN: 'GET', aX: $elm$core$Maybe$Nothing, aE: $elm$core$Maybe$Nothing, aF: r.aF});
+		{_: $elm$http$Http$emptyBody, ax: r.ax, ay: _List_Nil, aP: 'GET', aZ: $elm$core$Maybe$Nothing, aG: $elm$core$Maybe$Nothing, aH: r.aH});
 };
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		A5($author$project$Main$Model, $author$project$Main$Loading, '', $author$project$Main$Closed, $author$project$Main$QuoteLoading, ''),
 		$elm$http$Http$get(
 			{
-				av: $elm$http$Http$expectString($author$project$Main$GotText),
-				aF: 'https://elm-lang.org/assets/public-opinion.txt'
+				ax: $elm$http$Http$expectString($author$project$Main$GotText),
+				aH: 'https://elm-lang.org/assets/public-opinion.txt'
 			}));
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -6135,9 +6135,9 @@ var $author$project$Main$Failure = {$: 0};
 var $author$project$Main$Open = function (a) {
 	return {$: 0, a: a};
 };
-var $author$project$Main$Quote = F6(
-	function (quote, source, author, year, updateDialog, changeStatusDialog) {
-		return {Y: author, _: changeStatusDialog, ae: quote, af: source, ai: updateDialog, aj: year};
+var $author$project$Main$Quote = F8(
+	function (quote, source, author, year, updateDialog, updateBuffer, changeStatusDialog, updateList) {
+		return {Z: author, aa: changeStatusDialog, ae: quote, af: source, N: updateBuffer, ai: updateDialog, aj: updateList, ak: year};
 	});
 var $author$project$Main$QuoteFailure = {$: 0};
 var $author$project$Main$QuoteSuccess = function (a) {
@@ -6157,6 +6157,25 @@ var $elm$core$List$append = F2(
 var $elm$core$List$concat = function (lists) {
 	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
 };
+var $author$project$Main$appendUpdate = F3(
+	function (quote, buffer, existingUpdates) {
+		return _Utils_update(
+			quote,
+			{
+				aj: $elm$core$List$concat(
+					_List_fromArray(
+						[
+							existingUpdates,
+							_List_fromArray(
+							[buffer])
+						]))
+			});
+	});
+var $author$project$Main$clearBuffer = function (quote) {
+	return _Utils_update(
+		quote,
+		{N: ''});
+};
 var $elm$core$List$filter = F2(
 	function (isGood, list) {
 		return A3(
@@ -6169,7 +6188,7 @@ var $elm$core$List$filter = F2(
 			list);
 	});
 var $author$project$Main$GotQuote = function (a) {
-	return {$: 9, a: a};
+	return {$: 10, a: a};
 };
 var $elm$json$Json$Decode$decodeString = _Json_runOnString;
 var $elm$http$Http$expectJson = F2(
@@ -6187,7 +6206,7 @@ var $elm$http$Http$expectJson = F2(
 	});
 var $author$project$Main$RawQuote = F4(
 	function (quote, source, author, year) {
-		return {Y: author, ae: quote, af: source, aj: year};
+		return {Z: author, ae: quote, af: source, ak: year};
 	});
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$int = _Json_decodeInt;
@@ -6202,8 +6221,8 @@ var $author$project$Main$quoteDecoder = A5(
 	A2($elm$json$Json$Decode$field, 'year', $elm$json$Json$Decode$int));
 var $author$project$Main$getRandomQuote = $elm$http$Http$get(
 	{
-		av: A2($elm$http$Http$expectJson, $author$project$Main$GotQuote, $author$project$Main$quoteDecoder),
-		aF: 'https://elm-lang.org/api/random-quotes'
+		ax: A2($elm$http$Http$expectJson, $author$project$Main$GotQuote, $author$project$Main$quoteDecoder),
+		aH: 'https://elm-lang.org/api/random-quotes'
 	});
 var $author$project$Main$mutateDialog = function (dialog) {
 	return _Utils_eq(dialog, $author$project$Main$Closed) ? $author$project$Main$Open('dialog') : $author$project$Main$Closed;
@@ -6212,7 +6231,7 @@ var $author$project$Main$mutateStatusDialog = function (quote) {
 	return _Utils_update(
 		quote,
 		{
-			_: $author$project$Main$mutateDialog(quote._)
+			aa: $author$project$Main$mutateDialog(quote.aa)
 		});
 };
 var $author$project$Main$mutateUpdateDialog = function (quote) {
@@ -6226,28 +6245,48 @@ var $elm$core$Basics$neq = _Utils_notEqual;
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$wrapQuote = function (raw) {
-	return {Y: raw.Y, _: $author$project$Main$Closed, ae: raw.ae, af: raw.af, ai: $author$project$Main$Closed, aj: raw.aj};
+	return {
+		Z: raw.Z,
+		aa: $author$project$Main$Closed,
+		ae: raw.ae,
+		af: raw.af,
+		N: '',
+		ai: $author$project$Main$Closed,
+		aj: _List_fromArray(
+			['created']),
+		ak: raw.ak
+	};
 };
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
-			case 7:
+			case 8:
 				var currentBuffer = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							ak: '',
-							p: $author$project$Main$QuoteSuccess(
+							al: '',
+							g: $author$project$Main$QuoteSuccess(
 								$elm$core$List$concat(
 									_List_fromArray(
 										[
 											_List_fromArray(
 											[
-												A6($author$project$Main$Quote, currentBuffer, 'created by ...', 'me', 2020, $author$project$Main$Closed, $author$project$Main$Closed)
+												A8(
+												$author$project$Main$Quote,
+												currentBuffer,
+												'created by ...',
+												'me',
+												2020,
+												$author$project$Main$Closed,
+												'',
+												$author$project$Main$Closed,
+												_List_fromArray(
+													['created']))
 											]),
 											function () {
-											var _v1 = model.p;
+											var _v1 = model.g;
 											switch (_v1.$) {
 												case 2:
 													var ql = _v1.a;
@@ -6261,34 +6300,66 @@ var $author$project$Main$update = F2(
 										])))
 						}),
 					$elm$core$Platform$Cmd$none);
-			case 10:
+			case 12:
 				var currentBuffer = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{ak: currentBuffer}),
+						{al: currentBuffer}),
 					$elm$core$Platform$Cmd$none);
-			case 6:
+			case 11:
+				var quote = msg.a;
+				var currentBuffer = msg.b;
+				var _v2 = model.g;
+				switch (_v2.$) {
+					case 2:
+						var current = _v2.a;
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{
+									g: $author$project$Main$QuoteSuccess(
+										A2(
+											$elm$core$List$map,
+											function (x) {
+												var _v3 = _Utils_eq(x, quote);
+												if (_v3) {
+													return _Utils_update(
+														x,
+														{N: currentBuffer});
+												} else {
+													return x;
+												}
+											},
+											current))
+								}),
+							$elm$core$Platform$Cmd$none);
+					case 0:
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					default:
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
+			case 7:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{ad: ''}),
+						{an: ''}),
 					$author$project$Main$getRandomQuote);
-			case 8:
-				return _Utils_Tuple2(model, $author$project$Main$getRandomQuote);
 			case 9:
+				return _Utils_Tuple2(model, $author$project$Main$getRandomQuote);
+			case 10:
 				var result = msg.a;
 				if (!result.$) {
 					var rawquote = result.a;
-					var _v3 = model.p;
-					switch (_v3.$) {
+					var _v5 = model.g;
+					switch (_v5.$) {
 						case 2:
-							var current = _v3.a;
+							var current = _v5.a;
 							return _Utils_Tuple2(
 								_Utils_update(
 									model,
 									{
-										p: $author$project$Main$QuoteSuccess(
+										g: $author$project$Main$QuoteSuccess(
 											$elm$core$List$concat(
 												_List_fromArray(
 													[
@@ -6305,7 +6376,7 @@ var $author$project$Main$update = F2(
 								_Utils_update(
 									model,
 									{
-										p: $author$project$Main$QuoteSuccess(
+										g: $author$project$Main$QuoteSuccess(
 											_List_fromArray(
 												[
 													$author$project$Main$wrapQuote(rawquote)
@@ -6317,7 +6388,7 @@ var $author$project$Main$update = F2(
 								_Utils_update(
 									model,
 									{
-										p: $author$project$Main$QuoteSuccess(
+										g: $author$project$Main$QuoteSuccess(
 											_List_fromArray(
 												[
 													$author$project$Main$wrapQuote(rawquote)
@@ -6329,7 +6400,7 @@ var $author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{p: $author$project$Main$QuoteFailure}),
+							{g: $author$project$Main$QuoteFailure}),
 						$elm$core$Platform$Cmd$none);
 				}
 			case 0:
@@ -6340,14 +6411,14 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								am: $author$project$Main$Success(fullText)
+								ao: $author$project$Main$Success(fullText)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{am: $author$project$Main$Failure}),
+							{ao: $author$project$Main$Failure}),
 						$elm$core$Platform$Cmd$none);
 				}
 			case 1:
@@ -6355,7 +6426,7 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{ad: name}),
+						{an: name}),
 					$elm$core$Platform$Cmd$none);
 			case 2:
 				return _Utils_eq(model.ag, $author$project$Main$Closed) ? _Utils_Tuple2(
@@ -6371,20 +6442,20 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 3:
 				var quote = msg.a;
-				var _v5 = model.p;
-				switch (_v5.$) {
+				var _v7 = model.g;
+				switch (_v7.$) {
 					case 2:
-						var current = _v5.a;
+						var current = _v7.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									p: $author$project$Main$QuoteSuccess(
+									g: $author$project$Main$QuoteSuccess(
 										A2(
 											$elm$core$List$map,
 											function (x) {
-												var _v6 = _Utils_eq(x, quote);
-												if (_v6) {
+												var _v8 = _Utils_eq(x, quote);
+												if (_v8) {
 													return $author$project$Main$mutateStatusDialog(x);
 												} else {
 													return x;
@@ -6400,21 +6471,52 @@ var $author$project$Main$update = F2(
 				}
 			case 4:
 				var quote = msg.a;
-				var _v7 = model.p;
-				switch (_v7.$) {
+				var _v9 = model.g;
+				switch (_v9.$) {
 					case 2:
-						var current = _v7.a;
+						var current = _v9.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									p: $author$project$Main$QuoteSuccess(
+									g: $author$project$Main$QuoteSuccess(
 										A2(
 											$elm$core$List$map,
 											function (x) {
-												var _v8 = _Utils_eq(x, quote);
-												if (_v8) {
+												var _v10 = _Utils_eq(x, quote);
+												if (_v10) {
 													return $author$project$Main$mutateUpdateDialog(x);
+												} else {
+													return x;
+												}
+											},
+											current))
+								}),
+							$elm$core$Platform$Cmd$none);
+					case 0:
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					default:
+						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
+			case 6:
+				var quote = msg.a;
+				var pointlessString = msg.b;
+				var _v11 = model.g;
+				switch (_v11.$) {
+					case 2:
+						var current = _v11.a;
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{
+									g: $author$project$Main$QuoteSuccess(
+										A2(
+											$elm$core$List$map,
+											function (x) {
+												var _v12 = _Utils_eq(x, quote);
+												if (_v12) {
+													return $author$project$Main$clearBuffer(
+														A3($author$project$Main$appendUpdate, x, quote.N, x.aj));
 												} else {
 													return x;
 												}
@@ -6429,15 +6531,15 @@ var $author$project$Main$update = F2(
 				}
 			default:
 				var quote = msg.a;
-				var _v9 = model.p;
-				switch (_v9.$) {
+				var _v13 = model.g;
+				switch (_v13.$) {
 					case 2:
-						var current = _v9.a;
+						var current = _v13.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									p: $author$project$Main$QuoteSuccess(
+									g: $author$project$Main$QuoteSuccess(
 										A2(
 											$elm$core$List$filter,
 											function (x) {
@@ -6453,16 +6555,13 @@ var $author$project$Main$update = F2(
 				}
 		}
 	});
-var $author$project$Main$Name = function (a) {
-	return {$: 1, a: a};
-};
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
-var $author$project$Main$Buffer = function (a) {
-	return {$: 10, a: a};
-};
 var $author$project$Main$CreateRequest = function (a) {
-	return {$: 7, a: a};
+	return {$: 8, a: a};
+};
+var $author$project$Main$SubmissionBuffer = function (a) {
+	return {$: 12, a: a};
 };
 var $author$project$Main$Toggle = {$: 2};
 var $elm$html$Html$button = _VirtualDom_node('button');
@@ -6565,7 +6664,7 @@ var $author$project$Main$submissionForm = F2(
 						_List_Nil,
 						_List_fromArray(
 							[
-								A4($author$project$Main$viewInput, 'text', 'description of request', buffer, $author$project$Main$Buffer),
+								A4($author$project$Main$viewInput, 'text', 'description of request', buffer, $author$project$Main$SubmissionBuffer),
 								A2(
 								$elm$html$Html$button,
 								_List_fromArray(
@@ -6635,12 +6734,16 @@ var $author$project$Main$viewBook = function (state) {
 					]));
 	}
 };
-var $author$project$Main$MorePlease = {$: 8};
+var $author$project$Main$MorePlease = {$: 9};
 var $elm$html$Html$blockquote = _VirtualDom_node('blockquote');
 var $elm$html$Html$cite = _VirtualDom_node('cite');
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $author$project$Main$Buffer = F2(
+	function (a, b) {
+		return {$: 11, a: a, b: b};
+	});
 var $author$project$Main$CloseRequest = function (a) {
 	return {$: 5, a: a};
 };
@@ -6650,32 +6753,34 @@ var $author$project$Main$ToggleStatusDialog = function (a) {
 var $author$project$Main$ToggleUpdateDialog = function (a) {
 	return {$: 4, a: a};
 };
+var $author$project$Main$UpdateQuote = F2(
+	function (a, b) {
+		return {$: 6, a: a, b: b};
+	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
-var $author$project$Main$Clear = {$: 6};
-var $author$project$Main$viewForm = F4(
-	function (inputType, req, desc, author) {
+var $author$project$Main$viewForm = F5(
+	function (inputType, placeholder, value, callback, onclick) {
 		return A2(
 			$elm$html$Html$div,
 			_List_Nil,
 			_List_fromArray(
 				[
-					A4($author$project$Main$viewInput, inputType, 'request', req, $author$project$Main$Name),
-					A4($author$project$Main$viewInput, inputType, 'description', desc, $author$project$Main$Name),
-					A4($author$project$Main$viewInput, inputType, 'made by...', author, $author$project$Main$Name),
+					A4($author$project$Main$viewInput, inputType, placeholder, value, callback),
 					A2(
 					$elm$html$Html$button,
 					_List_fromArray(
 						[
-							$elm$html$Html$Events$onClick($author$project$Main$Clear)
+							$elm$html$Html$Events$onClick(
+							onclick('pointlessString'))
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text('create')
+							$elm$html$Html$text('apply')
 						]))
 				]));
 	});
-var $author$project$Main$viewDialog = F5(
-	function (dialog, t, z, x, c) {
+var $author$project$Main$viewDialog = F6(
+	function (dialog, inputType, placeholder, value, callback, onclick) {
 		if (dialog.$ === 1) {
 			return A2($elm$html$Html$div, _List_Nil, _List_Nil);
 		} else {
@@ -6692,7 +6797,7 @@ var $author$project$Main$viewDialog = F5(
 							[
 								$elm$html$Html$text(paragraph)
 							])),
-						A4($author$project$Main$viewForm, t, z, x, c)
+						A5($author$project$Main$viewForm, inputType, placeholder, value, callback, onclick)
 					]));
 		}
 	});
@@ -6717,6 +6822,24 @@ var $author$project$Main$viewList = F2(
 									$elm$html$Html$text(x.ae)
 								])),
 							A2(
+							$elm$html$Html$div,
+							_List_Nil,
+							A2(
+								$elm$core$List$map,
+								function (y) {
+									return A2(
+										$elm$html$Html$blockquote,
+										_List_fromArray(
+											[
+												A2($elm$html$Html$Attributes$style, 'color', 'green')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text(y)
+											]));
+								},
+								x.aj)),
+							A2(
 							$elm$html$Html$p,
 							_List_fromArray(
 								[
@@ -6733,7 +6856,7 @@ var $author$project$Main$viewList = F2(
 											$elm$html$Html$text(x.af)
 										])),
 									$elm$html$Html$text(
-									' by ' + (x.Y + (' (' + ($elm$core$String$fromInt(x.aj) + ')'))))
+									' by ' + (x.Z + (' (' + ($elm$core$String$fromInt(x.ak) + ')'))))
 								])),
 							A2(
 							$elm$html$Html$button,
@@ -6746,7 +6869,14 @@ var $author$project$Main$viewList = F2(
 								[
 									$elm$html$Html$text('change status')
 								])),
-							A5($author$project$Main$viewDialog, x._, 'radio', name, name, name),
+							A6(
+							$author$project$Main$viewDialog,
+							x.aa,
+							'text',
+							'urgency',
+							x.N,
+							$author$project$Main$Buffer(x),
+							$author$project$Main$UpdateQuote(x)),
 							A2(
 							$elm$html$Html$button,
 							_List_fromArray(
@@ -6758,7 +6888,14 @@ var $author$project$Main$viewList = F2(
 								[
 									$elm$html$Html$text('update request')
 								])),
-							A5($author$project$Main$viewDialog, x.ai, 'text', name, name, name),
+							A6(
+							$author$project$Main$viewDialog,
+							x.ai,
+							'text',
+							'placeholder',
+							x.N,
+							$author$project$Main$Buffer(x),
+							$author$project$Main$UpdateQuote(x)),
 							A2(
 							$elm$html$Html$button,
 							_List_fromArray(
@@ -6775,7 +6912,7 @@ var $author$project$Main$viewList = F2(
 			ql);
 	});
 var $author$project$Main$viewQuote = function (model) {
-	var _v0 = model.p;
+	var _v0 = model.g;
 	switch (_v0.$) {
 		case 0:
 			return A2(
@@ -6858,7 +6995,7 @@ var $author$project$Main$viewQuote = function (model) {
 										$elm$html$Html$text('Another!')
 									]))
 							]),
-							A2($author$project$Main$viewList, quotelist, model.ad)
+							A2($author$project$Main$viewList, quotelist, model.an)
 						])));
 	}
 };
@@ -6868,8 +7005,7 @@ var $author$project$Main$view = function (model) {
 		_List_Nil,
 		_List_fromArray(
 			[
-				A4($author$project$Main$viewInput, 'text', 'Name', model.ad, $author$project$Main$Name),
-				A2($author$project$Main$submissionForm, model.ag, model.ak),
+				A2($author$project$Main$submissionForm, model.ag, model.al),
 				A2(
 				$elm$html$Html$h2,
 				_List_Nil,
@@ -6878,10 +7014,10 @@ var $author$project$Main$view = function (model) {
 						$elm$html$Html$text('Random Quotes')
 					])),
 				$author$project$Main$viewQuote(model),
-				$author$project$Main$viewBook(model.am)
+				$author$project$Main$viewBook(model.ao)
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
-	{aM: $author$project$Main$init, aW: $author$project$Main$subscriptions, aY: $author$project$Main$update, aZ: $author$project$Main$view});
+	{aO: $author$project$Main$init, aY: $author$project$Main$subscriptions, a_: $author$project$Main$update, a$: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
