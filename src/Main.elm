@@ -20,14 +20,11 @@ main =
   , view = view 
   }
 
-
-
-
 --Model
-type Load = 
-  Failure
-  | Loading
-  | Success String 
+--type Load = 
+--  Failure
+--  | Loading
+--  | Success String 
 
 type QuoteState =
   QuoteFailure
@@ -48,12 +45,12 @@ type alias Quote =
   , urgency: Urgency
   }
 
-type alias RawQuote = 
-  { quote : String 
-  , source : String 
-  , author : String 
-  , year : Int 
-  }
+--type alias RawQuote = 
+--  { quote : String 
+--  , source : String 
+--  , author : String 
+--  , year : Int 
+--  }
 
 type Dialog = 
   Open String 
@@ -66,8 +63,9 @@ type Urgency =
 
 --declare data schema
 type alias Model = 
-  { resource: Load
-    , name: String
+  { 
+    --resource: Load
+     name: String
     , status: Dialog
     , quotes: QuoteState
     , buffer: String
@@ -76,17 +74,20 @@ type alias Model =
 --declare type
 init : () -> (Model, Cmd Msg)
 init _=
-  ( Model Loading "" Closed QuoteLoading ""
-  , Http.get
-    { url = "https://elm-lang.org/assets/public-opinion.txt"
-    , expect = Http.expectString GotText
-    }
-  )
+  (Model "" Closed QuoteLoading "", Cmd.none)
+--init _=
+--  ( Model Loading "" Closed QuoteLoading ""
+--  , Http.get
+--    { url = "https://elm-lang.org/assets/public-opinion.txt"
+--    , expect = Http.expectString GotText
+--    }
+--  )
 
 --Update 
 type Msg 
-  = GotText (Result Http.Error String)
-  | Name String
+  = 
+  Name String
+  --| GotText (Result Http.Error String)
   | Toggle 
   | ToggleStatusDialog Quote
   | ToggleUpdateDialog Quote
@@ -94,8 +95,8 @@ type Msg
   | UpdateQuote Quote String
   | Clear
   | CreateRequest String
-  | MorePlease
-  | GotQuote (Result Http.Error RawQuote)
+  --| MorePlease
+  --| GotQuote (Result Http.Error RawQuote)
   | Buffer Quote String
   | SubmissionBuffer String
   | SwitchTo Quote Urgency
@@ -136,34 +137,36 @@ update msg model =
             QuoteLoading ->
               (model, Cmd.none)
     Clear ->
-      ({model | name = ""}, getRandomQuote)
-    MorePlease ->
-      (model, getRandomQuote)
-    GotQuote result ->
-      case result of 
-        Ok rawquote -> 
-          case model.quotes of 
-            QuoteSuccess current ->
-              ({model | quotes = 
-                QuoteSuccess (List.concat [[wrapQuote rawquote], current])
-              }, Cmd.none)
-            QuoteLoading ->
-              ({model | quotes = 
-                QuoteSuccess [wrapQuote rawquote]
-              }, Cmd.none)
+      ({model | name = ""}, Cmd.none)
+    --MorePlease ->
+    --  (model, Cmd.none)
 
-            QuoteFailure ->
-              ({model | quotes = 
-                QuoteSuccess [wrapQuote rawquote]
-              }, Cmd.none)
-        Err _ -> 
-          ({model | quotes = QuoteFailure}, Cmd.none)
-    GotText result ->
-      case result of 
-        Ok fullText -> 
-          ({model | resource = Success fullText}, Cmd.none)
-        Err _-> 
-          ({model | resource = Failure}, Cmd.none)
+    --GotQuote result ->
+    --  case result of 
+    --    Ok rawquote -> 
+    --      case model.quotes of 
+    --        QuoteSuccess current ->
+    --          ({model | quotes = 
+    --            QuoteSuccess (List.concat [[wrapQuote rawquote], current])
+    --          }, Cmd.none)
+    --        QuoteLoading ->
+    --          ({model | quotes = 
+    --            QuoteSuccess [wrapQuote rawquote]
+    --          }, Cmd.none)
+
+    --        QuoteFailure ->
+    --          ({model | quotes = 
+    --            QuoteSuccess [wrapQuote rawquote]
+    --          }, Cmd.none)
+    --    Err _ -> 
+    --      ({model | quotes = QuoteFailure}, Cmd.none)
+
+    --GotText result ->
+    --  case result of 
+    --    Ok fullText -> 
+    --      ({model | resource = Success fullText}, Cmd.none)
+    --    Err _-> 
+    --      ({model | resource = Failure}, Cmd.none)
     Name name ->
       ({ model | name = name }, Cmd.none)
     Toggle ->
@@ -267,18 +270,18 @@ appendUpdate: Quote -> String -> List String -> Quote
 appendUpdate quote buffer existingUpdates=
   {quote | updateList = List.concat [existingUpdates,[buffer]]}
 
-wrapQuote : RawQuote -> Quote
-wrapQuote raw =
-  { quote = raw.quote
-  , source = raw.source
-  , author = raw.author
-  , year = raw.year
-  , updateDialog = Closed
-  , updateBuffer = ""
-  , changeStatusDialog = Closed 
-  , updateList = ["created"]
-  , urgency = Low
-  }
+--wrapQuote : RawQuote -> Quote
+--wrapQuote raw =
+--  { quote = raw.quote
+--  , source = raw.source
+--  , author = raw.author
+--  , year = raw.year
+--  , updateDialog = Closed
+--  , updateBuffer = ""
+--  , changeStatusDialog = Closed 
+--  , updateList = ["created"]
+--  , urgency = Low
+--  }
 
 mutateStatusDialog: Quote -> Quote
 mutateStatusDialog quote =
@@ -307,9 +310,8 @@ view : Model -> Html Msg
 view model =
   div []
   [ submissionForm model.status model.buffer
-  , h2 [] [text "Random Quotes"]
+  , h2 [] [text "Job Request"]
   , viewQuote model
-  , viewBook model.resource
   ]
 
 submissionForm : Dialog -> String -> Html Msg
@@ -332,25 +334,11 @@ viewQuote : Model -> Html Msg
 viewQuote model = 
   case model.quotes of 
     QuoteFailure ->
-      div []
-      [ text "I could not load a random quote for some reason."
-      , button [ onClick MorePlease ] [ text "Try Again!" ]
-      ]
+      div [] [blockquote [][text "Failed to reach database"]]
     QuoteLoading -> 
-      div []
-      [ button [ onClick MorePlease ] [ text "get a quote!" ]
-      , blockquote [][ text "Loading ..." ]
-      , p [ style "text-align" "right" ]
-        [ text "-- "
-        , cite [] [ text "...." ]
-        , text ("....")
-        ]
-      ]
+      div [] [blockquote [][text "Loading ..." ]]
     QuoteSuccess quotelist ->
-      div []
-      (List.concat[ 
-        [ button [onClick MorePlease][text "Another!"] ]
-        , viewList quotelist model.name  ])
+      div [] (viewList quotelist)
 
 
 urgencyColour : Urgency -> String
@@ -364,8 +352,8 @@ urgencyColour urgency =
       "red"
 
 
-viewList : List Quote -> String -> List (Html Msg)
-viewList ql name =
+viewList : List Quote -> List (Html Msg)
+viewList ql =
           List.map (
             \x -> 
                 div [class "row"]
@@ -435,31 +423,31 @@ radio (isChecked, choiceName, msg) =
         text "")
     ]
 
-viewBook : Load -> Html msg
-viewBook state =
-  case state of 
-    Failure -> 
-      div [] [ text "Could not load state"]
-    Loading -> 
-      div [] [ text "Loading ... "]
-    Success fullText -> 
-      div [] [ pre [] [text fullText]]
+--viewBook : Load -> Html msg
+--viewBook state =
+--  case state of 
+--    Failure -> 
+--      div [] [ text "Could not load state"]
+--    Loading -> 
+--      div [] [ text "Loading ... "]
+--    Success fullText -> 
+--      div [] [ pre [] [text fullText]]
 
 
 -- HTTP
 
-getRandomQuote : Cmd Msg
-getRandomQuote = 
-  Http.get
-  { url = "https://elm-lang.org/api/random-quotes"
-  , expect = Http.expectJson GotQuote quoteDecoder
-  }
-
-quoteDecoder : Decoder RawQuote
-quoteDecoder = 
-  map4 RawQuote
-    (field "quote" string)
-    (field "source" string)
-    (field "author" string)
-    (field "year" int)
+--getRandomQuote : Cmd Msg
+--getRandomQuote = 
+--  Http.get
+--  { url = "https://elm-lang.org/api/random-quotes"
+--  , expect = Http.expectJson GotQuote quoteDecoder
+--  }
+--
+--quoteDecoder : Decoder RawQuote
+--quoteDecoder = 
+--  map4 RawQuote
+--    (field "quote" string)
+--    (field "source" string)
+--    (field "author" string)
+--    (field "year" int)
 
