@@ -1,0 +1,93 @@
+body {
+  background-color: "pink";
+}
+.panel-active textarea {
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+}
+.panel-active input[type=text] {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  padding: 12px 20px;
+}
+
+
+.row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.request {
+  position: relative;
+  margin: 20px;
+  width: 50vw;
+  border-radius: 10px;
+  box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.51);
+-webkit-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.51);
+-moz-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.51);
+  margin-right: auto;
+
+}
+.request textarea {
+  width: 100%;
+  height: 200px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+}
+
+.update-dialog {
+  margin: 15px;
+  height: 280px;
+  width: 400px;
+}
+
+.request-body {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.panel-active {
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255,255,255,1);
+  box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.51);
+-webkit-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.51);
+-moz-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.51);
+  margin-left: auto;
+  height: 80vh;
+  padding: 15px;
+}
+
+.panel-hidden {
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  margin-left: auto;
+  height: 80vh;
+  padding: 15px;
+}
+
+.float-right {
+  margin-left: auto;
+}

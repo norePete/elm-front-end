@@ -77,7 +77,7 @@ function A9(fun, a, b, c, d, e, f, g, h, i) {
   return fun.a === 9 ? fun.f(a, b, c, d, e, f, g, h, i) : fun(a)(b)(c)(d)(e)(f)(g)(h)(i);
 }
 
-
+console.warn('Compiled in DEV mode. Follow the advice at https://elm-lang.org/0.19.1/optimize for better performance and smaller assets.');
 
 
 // EQUALITY
@@ -113,7 +113,7 @@ function _Utils_eqHelp(x, y, depth, stack)
 		return true;
 	}
 
-	/**_UNUSED/
+	/**/
 	if (x.$ === 'Set_elm_builtin')
 	{
 		x = $elm$core$Set$toList(x);
@@ -126,7 +126,7 @@ function _Utils_eqHelp(x, y, depth, stack)
 	}
 	//*/
 
-	/**/
+	/**_UNUSED/
 	if (x.$ < 0)
 	{
 		x = $elm$core$Dict$toList(x);
@@ -161,7 +161,7 @@ function _Utils_cmp(x, y, ord)
 		return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
 	}
 
-	/**_UNUSED/
+	/**/
 	if (x instanceof String)
 	{
 		var a = x.valueOf();
@@ -170,10 +170,10 @@ function _Utils_cmp(x, y, ord)
 	}
 	//*/
 
-	/**/
+	/**_UNUSED/
 	if (typeof x.$ === 'undefined')
 	//*/
-	/**_UNUSED/
+	/**/
 	if (x.$[0] === '#')
 	//*/
 	{
@@ -203,17 +203,17 @@ var _Utils_compare = F2(function(x, y)
 
 // COMMON VALUES
 
-var _Utils_Tuple0 = 0;
-var _Utils_Tuple0_UNUSED = { $: '#0' };
+var _Utils_Tuple0_UNUSED = 0;
+var _Utils_Tuple0 = { $: '#0' };
 
-function _Utils_Tuple2(a, b) { return { a: a, b: b }; }
-function _Utils_Tuple2_UNUSED(a, b) { return { $: '#2', a: a, b: b }; }
+function _Utils_Tuple2_UNUSED(a, b) { return { a: a, b: b }; }
+function _Utils_Tuple2(a, b) { return { $: '#2', a: a, b: b }; }
 
-function _Utils_Tuple3(a, b, c) { return { a: a, b: b, c: c }; }
-function _Utils_Tuple3_UNUSED(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
+function _Utils_Tuple3_UNUSED(a, b, c) { return { a: a, b: b, c: c }; }
+function _Utils_Tuple3(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
 
-function _Utils_chr(c) { return c; }
-function _Utils_chr_UNUSED(c) { return new String(c); }
+function _Utils_chr_UNUSED(c) { return c; }
+function _Utils_chr(c) { return new String(c); }
 
 
 // RECORDS
@@ -264,11 +264,11 @@ function _Utils_ap(xs, ys)
 
 
 
-var _List_Nil = { $: 0 };
-var _List_Nil_UNUSED = { $: '[]' };
+var _List_Nil_UNUSED = { $: 0 };
+var _List_Nil = { $: '[]' };
 
-function _List_Cons(hd, tl) { return { $: 1, a: hd, b: tl }; }
-function _List_Cons_UNUSED(hd, tl) { return { $: '::', a: hd, b: tl }; }
+function _List_Cons_UNUSED(hd, tl) { return { $: 1, a: hd, b: tl }; }
+function _List_Cons(hd, tl) { return { $: '::', a: hd, b: tl }; }
 
 
 var _List_cons = F2(_List_Cons);
@@ -499,12 +499,12 @@ var _JsArray_appendN = F3(function(n, dest, source)
 
 // LOG
 
-var _Debug_log = F2(function(tag, value)
+var _Debug_log_UNUSED = F2(function(tag, value)
 {
 	return value;
 });
 
-var _Debug_log_UNUSED = F2(function(tag, value)
+var _Debug_log = F2(function(tag, value)
 {
 	console.log(tag + ': ' + _Debug_toString(value));
 	return value;
@@ -530,12 +530,12 @@ function _Debug_todoCase(moduleName, region, value)
 
 // TO STRING
 
-function _Debug_toString(value)
+function _Debug_toString_UNUSED(value)
 {
 	return '<internals>';
 }
 
-function _Debug_toString_UNUSED(value)
+function _Debug_toString(value)
 {
 	return _Debug_toAnsiString(false, value);
 }
@@ -720,13 +720,13 @@ function _Debug_toHexDigit(n)
 // CRASH
 
 
-function _Debug_crash(identifier)
+function _Debug_crash_UNUSED(identifier)
 {
 	throw new Error('https://github.com/elm/core/blob/1.0.0/hints/' + identifier + '.md');
 }
 
 
-function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
+function _Debug_crash(identifier, fact1, fact2, fact3, fact4)
 {
 	switch(identifier)
 	{
@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.ao.ab === region.av.ab)
+	if (region.start.line === region.end.line)
 	{
-		return 'on line ' + region.ao.ab;
+		return 'on line ' + region.start.line;
 	}
-	return 'on lines ' + region.ao.ab + ' through ' + region.av.ab;
+	return 'on lines ' + region.start.line + ' through ' + region.end.line;
 }
 
 
@@ -1212,7 +1212,7 @@ function _Char_toLocaleLower(char)
 
 
 
-/**_UNUSED/
+/**/
 function _Json_errorToString(error)
 {
 	return $elm$json$Json$Decode$errorToString(error);
@@ -1616,11 +1616,11 @@ var _Json_encode = F2(function(indentLevel, value)
 	return JSON.stringify(_Json_unwrap(value), null, indentLevel) + '';
 });
 
-function _Json_wrap_UNUSED(value) { return { $: 0, a: value }; }
-function _Json_unwrap_UNUSED(value) { return value.a; }
+function _Json_wrap(value) { return { $: 0, a: value }; }
+function _Json_unwrap(value) { return value.a; }
 
-function _Json_wrap(value) { return value; }
-function _Json_unwrap(value) { return value; }
+function _Json_wrap_UNUSED(value) { return value; }
+function _Json_unwrap_UNUSED(value) { return value; }
 
 function _Json_emptyArray() { return []; }
 function _Json_emptyObject() { return {}; }
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aO,
-		impl.a_,
-		impl.aY,
+		impl.init,
+		impl.update,
+		impl.subscriptions,
 		function() { return function() {} }
 	);
 });
@@ -1872,7 +1872,7 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 function _Platform_initialize(flagDecoder, args, init, update, subscriptions, stepperBuilder)
 {
 	var result = A2(_Json_run, flagDecoder, _Json_wrap(args ? args['flags'] : undefined));
-	$elm$core$Result$isOk(result) || _Debug_crash(2 /**_UNUSED/, _Json_errorToString(result.a) /**/);
+	$elm$core$Result$isOk(result) || _Debug_crash(2 /**/, _Json_errorToString(result.a) /**/);
 	var managers = {};
 	var initPair = init(result.a);
 	var model = initPair.a;
@@ -2316,7 +2316,7 @@ function _Platform_setupIncomingPort(name, sendToApp)
 //
 
 
-function _Platform_export(exports)
+function _Platform_export_UNUSED(exports)
 {
 	scope['Elm']
 		? _Platform_mergeExportsProd(scope['Elm'], exports)
@@ -2337,7 +2337,7 @@ function _Platform_mergeExportsProd(obj, exports)
 }
 
 
-function _Platform_export_UNUSED(exports)
+function _Platform_export(exports)
 {
 	scope['Elm']
 		? _Platform_mergeExportsDebug('Elm', scope['Elm'], exports)
@@ -2377,10 +2377,10 @@ var _VirtualDom_init = F4(function(virtualNode, flagDecoder, debugMetadata, args
 {
 	// NOTE: this function needs _Platform_export available to work
 
-	/**/
+	/**_UNUSED/
 	var node = args['node'];
 	//*/
-	/**_UNUSED/
+	/**/
 	var node = args && args['node'] ? args['node'] : _Debug_crash(0);
 	//*/
 
@@ -2655,14 +2655,14 @@ function _VirtualDom_noInnerHtmlOrFormAction(key)
 function _VirtualDom_noJavaScriptUri(value)
 {
 	return _VirtualDom_RE_js.test(value)
-		? /**/''//*//**_UNUSED/'javascript:alert("This is an XSS vector. Please use ports or web components instead.")'//*/
+		? /**_UNUSED/''//*//**/'javascript:alert("This is an XSS vector. Please use ports or web components instead.")'//*/
 		: value;
 }
 
 function _VirtualDom_noJavaScriptOrHtmlUri(value)
 {
 	return _VirtualDom_RE_js_html.test(value)
-		? /**/''//*//**_UNUSED/'javascript:alert("This is an XSS vector. Please use ports or web components instead.")'//*/
+		? /**_UNUSED/''//*//**/'javascript:alert("This is an XSS vector. Please use ports or web components instead.")'//*/
 		: value;
 }
 
@@ -2670,7 +2670,7 @@ function _VirtualDom_noJavaScriptOrHtmlJson(value)
 {
 	return (typeof _Json_unwrap(value) === 'string' && _VirtualDom_RE_js_html.test(_Json_unwrap(value)))
 		? _Json_wrap(
-			/**/''//*//**_UNUSED/'javascript:alert("This is an XSS vector. Please use ports or web components instead.")'//*/
+			/**_UNUSED/''//*//**/'javascript:alert("This is an XSS vector. Please use ports or web components instead.")'//*/
 		) : value;
 }
 
@@ -2719,9 +2719,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		n: func(record.n),
-		ap: record.ap,
-		am: record.am
+		message: func(record.message),
+		stopPropagation: record.stopPropagation,
+		preventDefault: record.preventDefault
 	}
 });
 
@@ -2989,11 +2989,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.n;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.ap;
+		var message = !tag ? value : tag < 3 ? value.a : value.message;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.stopPropagation;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.am) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.preventDefault) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3943,15 +3943,15 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aO,
-		impl.a_,
-		impl.aY,
+		impl.init,
+		impl.update,
+		impl.subscriptions,
 		function(sendToApp, initialModel) {
-			var view = impl.a$;
-			/**/
+			var view = impl.view;
+			/**_UNUSED/
 			var domNode = args['node'];
 			//*/
-			/**_UNUSED/
+			/**/
 			var domNode = args && args['node'] ? args['node'] : _Debug_crash(0);
 			//*/
 			var currNode = _VirtualDom_virtualize(domNode);
@@ -3979,12 +3979,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aO,
-		impl.a_,
-		impl.aY,
+		impl.init,
+		impl.update,
+		impl.subscriptions,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.an && impl.an(sendToApp)
-			var view = impl.a$;
+			var divertHrefToApp = impl.setup && impl.setup(sendToApp)
+			var view = impl.view;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3992,12 +3992,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.Z);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.body);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.ad) && (_VirtualDom_doc.title = title = doc.ad);
+				(title !== doc.title) && (_VirtualDom_doc.title = title = doc.title);
 			});
 		}
 	);
@@ -4053,12 +4053,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aQ;
-	var onUrlRequest = impl.aR;
+	var onUrlChange = impl.onUrlChange;
+	var onUrlRequest = impl.onUrlRequest;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		an: function(sendToApp)
+		setup: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.aA === next.aA
-							&& curr.ax === next.ax
-							&& curr.az.a === next.az.a
+							&& curr.protocol === next.protocol
+							&& curr.host === next.host
+							&& curr.port_.a === next.port_.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4084,13 +4084,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aO: function(flags)
+		init: function(flags)
 		{
-			return A3(impl.aO, flags, _Browser_getUrl(), key);
+			return A3(impl.init, flags, _Browser_getUrl(), key);
 		},
-		a$: impl.a$,
-		a_: impl.a_,
-		aY: impl.aY
+		view: impl.view,
+		update: impl.update,
+		subscriptions: impl.subscriptions
 	});
 }
 
@@ -4156,17 +4156,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aM: 'hidden', aK: 'visibilitychange' }
+		? { hidden: 'hidden', change: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aM: 'mozHidden', aK: 'mozvisibilitychange' }
+		? { hidden: 'mozHidden', change: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aM: 'msHidden', aK: 'msvisibilitychange' }
+		? { hidden: 'msHidden', change: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aM: 'webkitHidden', aK: 'webkitvisibilitychange' }
-		: { aM: 'hidden', aK: 'visibilitychange' };
+		? { hidden: 'webkitHidden', change: 'webkitvisibilitychange' }
+		: { hidden: 'hidden', change: 'visibilitychange' };
 }
 
 
@@ -4247,12 +4247,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		C: _Browser_getScene(),
-		F: {
-			u: _Browser_window.pageXOffset,
-			v: _Browser_window.pageYOffset,
-			d: _Browser_doc.documentElement.clientWidth,
-			c: _Browser_doc.documentElement.clientHeight
+		scene: _Browser_getScene(),
+		viewport: {
+			x: _Browser_window.pageXOffset,
+			y: _Browser_window.pageYOffset,
+			width: _Browser_doc.documentElement.clientWidth,
+			height: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4262,8 +4262,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		d: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		c: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		width: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		height: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4286,15 +4286,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			C: {
-				d: node.scrollWidth,
-				c: node.scrollHeight
+			scene: {
+				width: node.scrollWidth,
+				height: node.scrollHeight
 			},
-			F: {
-				u: node.scrollLeft,
-				v: node.scrollTop,
-				d: node.clientWidth,
-				c: node.clientHeight
+			viewport: {
+				x: node.scrollLeft,
+				y: node.scrollTop,
+				width: node.clientWidth,
+				height: node.clientHeight
 			}
 		};
 	});
@@ -4324,18 +4324,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			C: _Browser_getScene(),
-			F: {
-				u: x,
-				v: y,
-				d: _Browser_doc.documentElement.clientWidth,
-				c: _Browser_doc.documentElement.clientHeight
+			scene: _Browser_getScene(),
+			viewport: {
+				x: x,
+				y: y,
+				width: _Browser_doc.documentElement.clientWidth,
+				height: _Browser_doc.documentElement.clientHeight
 			},
-			aa: {
-				u: x + rect.left,
-				v: y + rect.top,
-				d: rect.width,
-				c: rect.height
+			element: {
+				x: x + rect.left,
+				y: y + rect.top,
+				width: rect.width,
+				height: rect.height
 			}
 		};
 	});
@@ -4370,15 +4370,15 @@ function _Browser_load(url)
 		}
 	}));
 }
-var $elm$core$Basics$EQ = 1;
-var $elm$core$Basics$GT = 2;
-var $elm$core$Basics$LT = 0;
+var $elm$core$Basics$EQ = {$: 'EQ'};
+var $elm$core$Basics$GT = {$: 'GT'};
+var $elm$core$Basics$LT = {$: 'LT'};
 var $elm$core$List$cons = _List_cons;
 var $elm$core$Dict$foldr = F3(
 	function (func, acc, t) {
 		foldr:
 		while (true) {
-			if (t.$ === -2) {
+			if (t.$ === 'RBEmpty_elm_builtin') {
 				return acc;
 			} else {
 				var key = t.b;
@@ -4423,7 +4423,7 @@ var $elm$core$Dict$keys = function (dict) {
 		dict);
 };
 var $elm$core$Set$toList = function (_v0) {
-	var dict = _v0;
+	var dict = _v0.a;
 	return $elm$core$Dict$keys(dict);
 };
 var $elm$core$Elm$JsArray$foldr = _JsArray_foldr;
@@ -4433,7 +4433,7 @@ var $elm$core$Array$foldr = F3(
 		var tail = _v0.d;
 		var helper = F2(
 			function (node, acc) {
-				if (!node.$) {
+				if (node.$ === 'SubTree') {
 					var subTree = node.a;
 					return A3($elm$core$Elm$JsArray$foldr, helper, acc, subTree);
 				} else {
@@ -4451,32 +4451,32 @@ var $elm$core$Array$toList = function (array) {
 	return A3($elm$core$Array$foldr, $elm$core$List$cons, _List_Nil, array);
 };
 var $elm$core$Result$Err = function (a) {
-	return {$: 1, a: a};
+	return {$: 'Err', a: a};
 };
 var $elm$json$Json$Decode$Failure = F2(
 	function (a, b) {
-		return {$: 3, a: a, b: b};
+		return {$: 'Failure', a: a, b: b};
 	});
 var $elm$json$Json$Decode$Field = F2(
 	function (a, b) {
-		return {$: 0, a: a, b: b};
+		return {$: 'Field', a: a, b: b};
 	});
 var $elm$json$Json$Decode$Index = F2(
 	function (a, b) {
-		return {$: 1, a: a, b: b};
+		return {$: 'Index', a: a, b: b};
 	});
 var $elm$core$Result$Ok = function (a) {
-	return {$: 0, a: a};
+	return {$: 'Ok', a: a};
 };
 var $elm$json$Json$Decode$OneOf = function (a) {
-	return {$: 2, a: a};
+	return {$: 'OneOf', a: a};
 };
-var $elm$core$Basics$False = 1;
+var $elm$core$Basics$False = {$: 'False'};
 var $elm$core$Basics$add = _Basics_add;
 var $elm$core$Maybe$Just = function (a) {
-	return {$: 0, a: a};
+	return {$: 'Just', a: a};
 };
-var $elm$core$Maybe$Nothing = {$: 1};
+var $elm$core$Maybe$Nothing = {$: 'Nothing'};
 var $elm$core$String$all = _String_all;
 var $elm$core$Basics$and = _Basics_and;
 var $elm$core$Basics$append = _Utils_append;
@@ -4601,12 +4601,12 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 		errorToStringHelp:
 		while (true) {
 			switch (error.$) {
-				case 0:
+				case 'Field':
 					var f = error.a;
 					var err = error.b;
 					var isSimple = function () {
 						var _v1 = $elm$core$String$uncons(f);
-						if (_v1.$ === 1) {
+						if (_v1.$ === 'Nothing') {
 							return false;
 						} else {
 							var _v2 = _v1.a;
@@ -4621,7 +4621,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 					error = $temp$error;
 					context = $temp$context;
 					continue errorToStringHelp;
-				case 1:
+				case 'Index':
 					var i = error.a;
 					var err = error.b;
 					var indexName = '[' + ($elm$core$String$fromInt(i) + ']');
@@ -4630,7 +4630,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 					error = $temp$error;
 					context = $temp$context;
 					continue errorToStringHelp;
-				case 2:
+				case 'OneOf':
 					var errors = error.a;
 					if (!errors.b) {
 						return 'Ran into a Json.Decode.oneOf with no possibilities' + function () {
@@ -4694,7 +4694,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 var $elm$core$Array$branchFactor = 32;
 var $elm$core$Array$Array_elm_builtin = F4(
 	function (a, b, c, d) {
-		return {$: 0, a: a, b: b, c: c, d: d};
+		return {$: 'Array_elm_builtin', a: a, b: b, c: c, d: d};
 	});
 var $elm$core$Elm$JsArray$empty = _JsArray_empty;
 var $elm$core$Basics$ceiling = _Basics_ceiling;
@@ -4709,7 +4709,7 @@ var $elm$core$Array$shiftStep = $elm$core$Basics$ceiling(
 var $elm$core$Array$empty = A4($elm$core$Array$Array_elm_builtin, 0, $elm$core$Array$shiftStep, $elm$core$Elm$JsArray$empty, $elm$core$Elm$JsArray$empty);
 var $elm$core$Elm$JsArray$initialize = _JsArray_initialize;
 var $elm$core$Array$Leaf = function (a) {
-	return {$: 1, a: a};
+	return {$: 'Leaf', a: a};
 };
 var $elm$core$Basics$apL = F2(
 	function (f, x) {
@@ -4729,7 +4729,7 @@ var $elm$core$Basics$max = F2(
 	});
 var $elm$core$Basics$mul = _Basics_mul;
 var $elm$core$Array$SubTree = function (a) {
-	return {$: 0, a: a};
+	return {$: 'SubTree', a: a};
 };
 var $elm$core$Elm$JsArray$initializeFromList = _JsArray_initializeFromList;
 var $elm$core$Array$compressNodes = F2(
@@ -4776,25 +4776,25 @@ var $elm$core$Array$treeFromBuilder = F2(
 	});
 var $elm$core$Array$builderToArray = F2(
 	function (reverseNodeList, builder) {
-		if (!builder.f) {
+		if (!builder.nodeListSize) {
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.h),
+				$elm$core$Elm$JsArray$length(builder.tail),
 				$elm$core$Array$shiftStep,
 				$elm$core$Elm$JsArray$empty,
-				builder.h);
+				builder.tail);
 		} else {
-			var treeLen = builder.f * $elm$core$Array$branchFactor;
+			var treeLen = builder.nodeListSize * $elm$core$Array$branchFactor;
 			var depth = $elm$core$Basics$floor(
 				A2($elm$core$Basics$logBase, $elm$core$Array$branchFactor, treeLen - 1));
-			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.j) : builder.j;
-			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.f);
+			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.nodeList) : builder.nodeList;
+			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.nodeListSize);
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.h) + treeLen,
+				$elm$core$Elm$JsArray$length(builder.tail) + treeLen,
 				A2($elm$core$Basics$max, 5, depth * $elm$core$Array$shiftStep),
 				tree,
-				builder.h);
+				builder.tail);
 		}
 	});
 var $elm$core$Basics$idiv = _Basics_idiv;
@@ -4807,7 +4807,7 @@ var $elm$core$Array$initializeHelp = F5(
 				return A2(
 					$elm$core$Array$builderToArray,
 					false,
-					{j: nodeList, f: (len / $elm$core$Array$branchFactor) | 0, h: tail});
+					{nodeList: nodeList, nodeListSize: (len / $elm$core$Array$branchFactor) | 0, tail: tail});
 			} else {
 				var leaf = $elm$core$Array$Leaf(
 					A3($elm$core$Elm$JsArray$initialize, $elm$core$Array$branchFactor, fromIndex, fn));
@@ -4837,9 +4837,9 @@ var $elm$core$Array$initialize = F2(
 			return A5($elm$core$Array$initializeHelp, fn, initialFromIndex, len, _List_Nil, tail);
 		}
 	});
-var $elm$core$Basics$True = 0;
+var $elm$core$Basics$True = {$: 'True'};
 var $elm$core$Result$isOk = function (result) {
-	if (!result.$) {
+	if (result.$ === 'Ok') {
 		return true;
 	} else {
 		return false;
@@ -4850,31 +4850,33 @@ var $elm$json$Json$Decode$map2 = _Json_map2;
 var $elm$json$Json$Decode$succeed = _Json_succeed;
 var $elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 	switch (handler.$) {
-		case 0:
+		case 'Normal':
 			return 0;
-		case 1:
+		case 'MayStopPropagation':
 			return 1;
-		case 2:
+		case 'MayPreventDefault':
 			return 2;
 		default:
 			return 3;
 	}
 };
 var $elm$browser$Browser$External = function (a) {
-	return {$: 1, a: a};
+	return {$: 'External', a: a};
 };
 var $elm$browser$Browser$Internal = function (a) {
-	return {$: 0, a: a};
+	return {$: 'Internal', a: a};
 };
 var $elm$core$Basics$identity = function (x) {
 	return x;
 };
-var $elm$browser$Browser$Dom$NotFound = $elm$core$Basics$identity;
-var $elm$url$Url$Http = 0;
-var $elm$url$Url$Https = 1;
+var $elm$browser$Browser$Dom$NotFound = function (a) {
+	return {$: 'NotFound', a: a};
+};
+var $elm$url$Url$Http = {$: 'Http'};
+var $elm$url$Url$Https = {$: 'Https'};
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {O: fragment, ax: host, R: path, az: port_, aA: protocol, U: query};
+		return {fragment: fragment, host: host, path: path, port_: port_, protocol: protocol, query: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -4910,7 +4912,7 @@ var $elm$url$Url$chompBeforePath = F5(
 					var i = _v0.a;
 					var _v1 = $elm$core$String$toInt(
 						A2($elm$core$String$dropLeft, i + 1, str));
-					if (_v1.$ === 1) {
+					if (_v1.$ === 'Nothing') {
 						return $elm$core$Maybe$Nothing;
 					} else {
 						var port_ = _v1;
@@ -4993,24 +4995,26 @@ var $elm$core$String$startsWith = _String_startsWith;
 var $elm$url$Url$fromString = function (str) {
 	return A2($elm$core$String$startsWith, 'http://', str) ? A2(
 		$elm$url$Url$chompAfterProtocol,
-		0,
+		$elm$url$Url$Http,
 		A2($elm$core$String$dropLeft, 7, str)) : (A2($elm$core$String$startsWith, 'https://', str) ? A2(
 		$elm$url$Url$chompAfterProtocol,
-		1,
+		$elm$url$Url$Https,
 		A2($elm$core$String$dropLeft, 8, str)) : $elm$core$Maybe$Nothing);
 };
 var $elm$core$Basics$never = function (_v0) {
 	never:
 	while (true) {
-		var nvr = _v0;
+		var nvr = _v0.a;
 		var $temp$_v0 = nvr;
 		_v0 = $temp$_v0;
 		continue never;
 	}
 };
-var $elm$core$Task$Perform = $elm$core$Basics$identity;
+var $elm$core$Task$Perform = function (a) {
+	return {$: 'Perform', a: a};
+};
 var $elm$core$Task$succeed = _Scheduler_succeed;
-var $elm$core$Task$init = $elm$core$Task$succeed(0);
+var $elm$core$Task$init = $elm$core$Task$succeed(_Utils_Tuple0);
 var $elm$core$List$foldrHelper = F4(
 	function (fn, acc, ctr, ls) {
 		if (!ls.b) {
@@ -5116,7 +5120,7 @@ var $elm$core$Task$sequence = function (tasks) {
 var $elm$core$Platform$sendToApp = _Platform_sendToApp;
 var $elm$core$Task$spawnCmd = F2(
 	function (router, _v0) {
-		var task = _v0;
+		var task = _v0.a;
 		return _Scheduler_spawn(
 			A2(
 				$elm$core$Task$andThen,
@@ -5128,7 +5132,7 @@ var $elm$core$Task$onEffects = F3(
 		return A2(
 			$elm$core$Task$map,
 			function (_v0) {
-				return 0;
+				return _Utils_Tuple0;
 			},
 			$elm$core$Task$sequence(
 				A2(
@@ -5138,27 +5142,29 @@ var $elm$core$Task$onEffects = F3(
 	});
 var $elm$core$Task$onSelfMsg = F3(
 	function (_v0, _v1, _v2) {
-		return $elm$core$Task$succeed(0);
+		return $elm$core$Task$succeed(_Utils_Tuple0);
 	});
 var $elm$core$Task$cmdMap = F2(
 	function (tagger, _v0) {
-		var task = _v0;
-		return A2($elm$core$Task$map, tagger, task);
+		var task = _v0.a;
+		return $elm$core$Task$Perform(
+			A2($elm$core$Task$map, tagger, task));
 	});
 _Platform_effectManagers['Task'] = _Platform_createManager($elm$core$Task$init, $elm$core$Task$onEffects, $elm$core$Task$onSelfMsg, $elm$core$Task$cmdMap);
 var $elm$core$Task$command = _Platform_leaf('Task');
 var $elm$core$Task$perform = F2(
 	function (toMessage, task) {
 		return $elm$core$Task$command(
-			A2($elm$core$Task$map, toMessage, task));
+			$elm$core$Task$Perform(
+				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Main$Closed = {$: 1};
+var $author$project$Main$Closed = {$: 'Closed'};
 var $author$project$Main$Model = F4(
 	function (name, status, quotes, buffer) {
-		return {af: buffer, al: name, o: quotes, ac: status};
+		return {buffer: buffer, name: name, quotes: quotes, status: status};
 	});
-var $author$project$Main$QuoteLoading = {$: 1};
+var $author$project$Main$QuoteLoading = {$: 'QuoteLoading'};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$init = function (_v0) {
@@ -5171,16 +5177,16 @@ var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$none;
 };
-var $author$project$Main$Low = 0;
+var $author$project$Main$Low = {$: 'Low'};
 var $author$project$Main$Open = function (a) {
-	return {$: 0, a: a};
+	return {$: 'Open', a: a};
 };
 var $author$project$Main$Quote = F9(
 	function (quote, source, author, year, updateDialog, updateBuffer, changeStatusDialog, updateList, urgency) {
-		return {as: author, ag: changeStatusDialog, aB: quote, aF: source, ae: updateBuffer, ai: updateDialog, aj: updateList, N: urgency, aH: year};
+		return {author: author, changeStatusDialog: changeStatusDialog, quote: quote, source: source, updateBuffer: updateBuffer, updateDialog: updateDialog, updateList: updateList, urgency: urgency, year: year};
 	});
 var $author$project$Main$QuoteSuccess = function (a) {
-	return {$: 2, a: a};
+	return {$: 'QuoteSuccess', a: a};
 };
 var $elm$core$List$append = F2(
 	function (xs, ys) {
@@ -5198,7 +5204,7 @@ var $author$project$Main$appendUpdate = F3(
 		return _Utils_update(
 			quote,
 			{
-				aj: $elm$core$List$concat(
+				updateList: $elm$core$List$concat(
 					_List_fromArray(
 						[
 							existingUpdates,
@@ -5210,7 +5216,7 @@ var $author$project$Main$appendUpdate = F3(
 var $author$project$Main$clearBuffer = function (quote) {
 	return _Utils_update(
 		quote,
-		{ae: ''});
+		{updateBuffer: ''});
 };
 var $elm$core$List$filter = F2(
 	function (isGood, list) {
@@ -5230,33 +5236,34 @@ var $author$project$Main$mutateStatusDialog = function (quote) {
 	return _Utils_update(
 		quote,
 		{
-			ag: $author$project$Main$mutateDialog(quote.ag)
+			changeStatusDialog: $author$project$Main$mutateDialog(quote.changeStatusDialog)
 		});
 };
 var $author$project$Main$mutateUpdateDialog = function (quote) {
 	return _Utils_update(
 		quote,
 		{
-			ai: $author$project$Main$mutateDialog(quote.ai)
+			updateDialog: $author$project$Main$mutateDialog(quote.updateDialog)
 		});
 };
 var $elm$core$Basics$neq = _Utils_notEqual;
 var $author$project$Main$resetUrgency = function (quote) {
 	return _Utils_update(
 		quote,
-		{N: 0});
+		{urgency: $author$project$Main$Low});
 };
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
-			case 7:
+			case 'CreateRequest':
 				var currentBuffer = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							af: '',
-							o: $author$project$Main$QuoteSuccess(
+							buffer: '',
+							name: '',
+							quotes: $author$project$Main$QuoteSuccess(
 								$elm$core$List$concat(
 									_List_fromArray(
 										[
@@ -5265,23 +5272,23 @@ var $author$project$Main$update = F2(
 												A9(
 												$author$project$Main$Quote,
 												currentBuffer,
-												'created by ...',
-												'me',
+												'created...',
+												model.name,
 												2020,
 												$author$project$Main$Closed,
 												'',
 												$author$project$Main$Closed,
 												_List_fromArray(
 													['created']),
-												0)
+												$author$project$Main$Low)
 											]),
 											function () {
-											var _v1 = model.o;
+											var _v1 = model.quotes;
 											switch (_v1.$) {
-												case 2:
+												case 'QuoteSuccess':
 													var ql = _v1.a;
 													return ql;
-												case 1:
+												case 'QuoteLoading':
 													return _List_Nil;
 												default:
 													return _List_Nil;
@@ -5290,25 +5297,32 @@ var $author$project$Main$update = F2(
 										])))
 						}),
 					$elm$core$Platform$Cmd$none);
-			case 9:
+			case 'SubmissionBuffer':
 				var currentBuffer = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{af: currentBuffer}),
+						{buffer: currentBuffer}),
 					$elm$core$Platform$Cmd$none);
-			case 8:
+			case 'Name':
+				var name = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{name: name}),
+					$elm$core$Platform$Cmd$none);
+			case 'Buffer':
 				var quote = msg.a;
 				var currentBuffer = msg.b;
-				var _v2 = model.o;
+				var _v2 = model.quotes;
 				switch (_v2.$) {
-					case 2:
+					case 'QuoteSuccess':
 						var current = _v2.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									o: $author$project$Main$QuoteSuccess(
+									quotes: $author$project$Main$QuoteSuccess(
 										A2(
 											$elm$core$List$map,
 											function (x) {
@@ -5316,7 +5330,7 @@ var $author$project$Main$update = F2(
 												if (_v3) {
 													return _Utils_update(
 														x,
-														{ae: currentBuffer});
+														{updateBuffer: currentBuffer});
 												} else {
 													return x;
 												}
@@ -5324,47 +5338,34 @@ var $author$project$Main$update = F2(
 											current))
 								}),
 							$elm$core$Platform$Cmd$none);
-					case 0:
+					case 'QuoteFailure':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
-			case 6:
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{al: ''}),
-					$elm$core$Platform$Cmd$none);
-			case 0:
-				var name = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{al: name}),
-					$elm$core$Platform$Cmd$none);
-			case 1:
-				return _Utils_eq(model.ac, $author$project$Main$Closed) ? _Utils_Tuple2(
+			case 'Toggle':
+				return _Utils_eq(model.status, $author$project$Main$Closed) ? _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							ac: $author$project$Main$Open('visible html element')
+							status: $author$project$Main$Open('visible html element')
 						}),
 					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{ac: $author$project$Main$Closed}),
+						{status: $author$project$Main$Closed}),
 					$elm$core$Platform$Cmd$none);
-			case 2:
+			case 'ToggleStatusDialog':
 				var quote = msg.a;
-				var _v4 = model.o;
+				var _v4 = model.quotes;
 				switch (_v4.$) {
-					case 2:
+					case 'QuoteSuccess':
 						var current = _v4.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									o: $author$project$Main$QuoteSuccess(
+									quotes: $author$project$Main$QuoteSuccess(
 										A2(
 											$elm$core$List$map,
 											function (x) {
@@ -5378,22 +5379,22 @@ var $author$project$Main$update = F2(
 											current))
 								}),
 							$elm$core$Platform$Cmd$none);
-					case 0:
+					case 'QuoteFailure':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
-			case 3:
+			case 'ToggleUpdateDialog':
 				var quote = msg.a;
-				var _v6 = model.o;
+				var _v6 = model.quotes;
 				switch (_v6.$) {
-					case 2:
+					case 'QuoteSuccess':
 						var current = _v6.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									o: $author$project$Main$QuoteSuccess(
+									quotes: $author$project$Main$QuoteSuccess(
 										A2(
 											$elm$core$List$map,
 											function (x) {
@@ -5407,31 +5408,32 @@ var $author$project$Main$update = F2(
 											current))
 								}),
 							$elm$core$Platform$Cmd$none);
-					case 0:
+					case 'QuoteFailure':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
-			case 5:
+			case 'UpdateQuote':
 				var quote = msg.a;
 				var pointlessString = msg.b;
-				var _v8 = model.o;
+				var _v8 = model.quotes;
 				switch (_v8.$) {
-					case 2:
+					case 'QuoteSuccess':
 						var current = _v8.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									o: $author$project$Main$QuoteSuccess(
+									quotes: $author$project$Main$QuoteSuccess(
 										A2(
 											$elm$core$List$map,
 											function (x) {
 												var _v9 = _Utils_eq(x, quote);
 												if (_v9) {
-													return $author$project$Main$resetUrgency(
-														$author$project$Main$clearBuffer(
-															A3($author$project$Main$appendUpdate, x, quote.ae, x.aj)));
+													return $author$project$Main$mutateUpdateDialog(
+														$author$project$Main$resetUrgency(
+															$author$project$Main$clearBuffer(
+																A3($author$project$Main$appendUpdate, x, quote.updateBuffer, x.updateList))));
 												} else {
 													return x;
 												}
@@ -5439,22 +5441,22 @@ var $author$project$Main$update = F2(
 											current))
 								}),
 							$elm$core$Platform$Cmd$none);
-					case 0:
+					case 'QuoteFailure':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
-			case 4:
+			case 'CloseRequest':
 				var quote = msg.a;
-				var _v10 = model.o;
+				var _v10 = model.quotes;
 				switch (_v10.$) {
-					case 2:
+					case 'QuoteSuccess':
 						var current = _v10.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									o: $author$project$Main$QuoteSuccess(
+									quotes: $author$project$Main$QuoteSuccess(
 										A2(
 											$elm$core$List$filter,
 											function (x) {
@@ -5463,7 +5465,7 @@ var $author$project$Main$update = F2(
 											current))
 								}),
 							$elm$core$Platform$Cmd$none);
-					case 0:
+					case 'QuoteFailure':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
@@ -5471,15 +5473,15 @@ var $author$project$Main$update = F2(
 			default:
 				var quote = msg.a;
 				var urgencyLevel = msg.b;
-				var _v11 = model.o;
+				var _v11 = model.quotes;
 				switch (_v11.$) {
-					case 2:
+					case 'QuoteSuccess':
 						var current = _v11.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
 								{
-									o: $author$project$Main$QuoteSuccess(
+									quotes: $author$project$Main$QuoteSuccess(
 										A2(
 											$elm$core$List$map,
 											function (x) {
@@ -5487,7 +5489,7 @@ var $author$project$Main$update = F2(
 												if (_v12) {
 													return _Utils_update(
 														x,
-														{N: urgencyLevel});
+														{urgency: urgencyLevel});
 												} else {
 													return x;
 												}
@@ -5495,25 +5497,51 @@ var $author$project$Main$update = F2(
 											current))
 								}),
 							$elm$core$Platform$Cmd$none);
-					case 0:
+					case 'QuoteFailure':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
 		}
 	});
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $elm$core$Tuple$second = function (_v0) {
+	var y = _v0.b;
+	return y;
+};
+var $elm$html$Html$Attributes$classList = function (classes) {
+	return $elm$html$Html$Attributes$class(
+		A2(
+			$elm$core$String$join,
+			' ',
+			A2(
+				$elm$core$List$map,
+				$elm$core$Tuple$first,
+				A2($elm$core$List$filter, $elm$core$Tuple$second, classes))));
+};
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $author$project$Main$CreateRequest = function (a) {
-	return {$: 7, a: a};
+	return {$: 'CreateRequest', a: a};
+};
+var $author$project$Main$Name = function (a) {
+	return {$: 'Name', a: a};
 };
 var $author$project$Main$SubmissionBuffer = function (a) {
-	return {$: 9, a: a};
+	return {$: 'SubmissionBuffer', a: a};
 };
-var $author$project$Main$Toggle = {$: 1};
+var $author$project$Main$Toggle = {$: 'Toggle'};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 0, a: a};
+	return {$: 'Normal', a: a};
 };
 var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var $elm$html$Html$Events$on = F2(
@@ -5536,7 +5564,7 @@ var $elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
 var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
-	return {$: 1, a: a};
+	return {$: 'MayStopPropagation', a: a};
 };
 var $elm$html$Html$Events$stopPropagationOn = F2(
 	function (event, decoder) {
@@ -5565,14 +5593,6 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 			$elm$html$Html$Events$alwaysStop,
 			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
 };
-var $elm$json$Json$Encode$string = _Json_wrap;
-var $elm$html$Html$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$string(string));
-	});
 var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
@@ -5589,31 +5609,62 @@ var $author$project$Main$viewInput = F4(
 				]),
 			_List_Nil);
 	});
-var $author$project$Main$submissionForm = F2(
-	function (visibility, buffer) {
-		if (!visibility.$) {
+var $elm$html$Html$textarea = _VirtualDom_node('textarea');
+var $author$project$Main$viewTextArea = F3(
+	function (p, v, toMsg) {
+		return A2(
+			$elm$html$Html$textarea,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$placeholder(p),
+					$elm$html$Html$Attributes$value(v),
+					$elm$html$Html$Events$onInput(toMsg)
+				]),
+			_List_Nil);
+	});
+var $author$project$Main$submissionForm = F3(
+	function (visibility, buffer, name) {
+		if (visibility.$ === 'Open') {
 			var t = visibility.a;
 			return A2(
 				$elm$html$Html$div,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$classList(
+						_List_fromArray(
+							[
+								_Utils_Tuple2('request-button', true),
+								_Utils_Tuple2('panel-active', true)
+							]))
+					]),
 				_List_fromArray(
 					[
 						A2(
-						$elm$html$Html$button,
+						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								$elm$html$Html$Events$onClick($author$project$Main$Toggle)
+								$elm$html$Html$Attributes$class('float-right')
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text('hide')
+								A2(
+								$elm$html$Html$button,
+								_List_fromArray(
+									[
+										$elm$html$Html$Events$onClick($author$project$Main$Toggle)
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('hide')
+									]))
 							])),
 						A2(
 						$elm$html$Html$div,
 						_List_Nil,
 						_List_fromArray(
 							[
-								A4($author$project$Main$viewInput, 'text', 'description of request', buffer, $author$project$Main$SubmissionBuffer),
+								A3($author$project$Main$viewTextArea, 'description of request', buffer, $author$project$Main$SubmissionBuffer),
+								A4($author$project$Main$viewInput, 'text', 'name', name, $author$project$Main$Name),
 								A2(
 								$elm$html$Html$button,
 								_List_fromArray(
@@ -5630,7 +5681,15 @@ var $author$project$Main$submissionForm = F2(
 		} else {
 			return A2(
 				$elm$html$Html$div,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$classList(
+						_List_fromArray(
+							[
+								_Utils_Tuple2('request-button', true),
+								_Utils_Tuple2('panel-hidden', true)
+							]))
+					]),
 				_List_fromArray(
 					[
 						A2(
@@ -5650,71 +5709,45 @@ var $author$project$Main$submissionForm = F2(
 var $elm$html$Html$blockquote = _VirtualDom_node('blockquote');
 var $author$project$Main$Buffer = F2(
 	function (a, b) {
-		return {$: 8, a: a, b: b};
+		return {$: 'Buffer', a: a, b: b};
 	});
 var $author$project$Main$CloseRequest = function (a) {
-	return {$: 4, a: a};
-};
-var $author$project$Main$ToggleStatusDialog = function (a) {
-	return {$: 2, a: a};
+	return {$: 'CloseRequest', a: a};
 };
 var $author$project$Main$ToggleUpdateDialog = function (a) {
-	return {$: 3, a: a};
+	return {$: 'ToggleUpdateDialog', a: a};
 };
 var $author$project$Main$UpdateQuote = F2(
 	function (a, b) {
-		return {$: 5, a: a, b: b};
+		return {$: 'UpdateQuote', a: a, b: b};
 	});
-var $elm$html$Html$cite = _VirtualDom_node('cite');
-var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $author$project$Main$urgencyColour = function (urgency) {
-	switch (urgency) {
-		case 0:
-			return 'green';
-		case 1:
+	switch (urgency.$) {
+		case 'Low':
+			return 'rgba(2,247,23,0.5)';
+		case 'Medium':
 			return 'yellow';
 		default:
-			return 'red';
+			return 'rgba(243,2,23,0.5)';
 	}
 };
-var $author$project$Main$viewDialog = F2(
-	function (dialog, html) {
-		if (dialog.$ === 1) {
-			return A2($elm$html$Html$div, _List_Nil, _List_Nil);
+var $author$project$Main$viewDialog = F3(
+	function (dialog, html, hiddenHtml) {
+		if (dialog.$ === 'Closed') {
+			return A2($elm$html$Html$div, _List_Nil, hiddenHtml);
 		} else {
 			var paragraph = dialog.a;
 			return A2($elm$html$Html$div, _List_Nil, html);
 		}
 	});
-var $author$project$Main$viewForm = F5(
-	function (inputType, placeholder, value, callback, onclick) {
-		return A2(
-			$elm$html$Html$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A4($author$project$Main$viewInput, inputType, placeholder, value, callback),
-					A2(
-					$elm$html$Html$button,
-					_List_fromArray(
-						[
-							$elm$html$Html$Events$onClick(
-							onclick('pointlessString'))
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('apply')
-						]))
-				]));
-	});
-var $author$project$Main$High = 2;
-var $author$project$Main$Medium = 1;
+var $author$project$Main$High = {$: 'High'};
+var $author$project$Main$Medium = {$: 'Medium'};
 var $author$project$Main$SwitchTo = F2(
 	function (a, b) {
-		return {$: 10, a: a, b: b};
+		return {$: 'SwitchTo', a: a, b: b};
 	});
 var $elm$html$Html$fieldset = _VirtualDom_node('fieldset');
 var $elm$json$Json$Encode$bool = _Json_wrap;
@@ -5766,20 +5799,41 @@ var $author$project$Main$viewRadio = function (quote) {
 				_List_fromArray(
 					[
 						_Utils_Tuple3(
-						!quote.N,
+						_Utils_eq(quote.urgency, $author$project$Main$Low),
 						'low',
-						$author$project$Main$SwitchTo(quote)(0)),
+						$author$project$Main$SwitchTo(quote)($author$project$Main$Low)),
 						_Utils_Tuple3(
-						quote.N === 1,
+						_Utils_eq(quote.urgency, $author$project$Main$Medium),
 						'Medium',
-						$author$project$Main$SwitchTo(quote)(1)),
+						$author$project$Main$SwitchTo(quote)($author$project$Main$Medium)),
 						_Utils_Tuple3(
-						quote.N === 2,
+						_Utils_eq(quote.urgency, $author$project$Main$High),
 						'high',
-						$author$project$Main$SwitchTo(quote)(2))
+						$author$project$Main$SwitchTo(quote)($author$project$Main$High))
 					]))
 			]));
 };
+var $author$project$Main$viewUpdateForm = F4(
+	function (placeholder, value, callback, onclick) {
+		return A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3($author$project$Main$viewTextArea, placeholder, value, callback),
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Events$onClick(
+							onclick('pointlessString'))
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('done')
+						]))
+				]));
+	});
 var $author$project$Main$viewList = function (ql) {
 	return A2(
 		$elm$core$List$map,
@@ -5788,124 +5842,156 @@ var $author$project$Main$viewList = function (ql) {
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('row')
+						$elm$html$Html$Attributes$classList(
+						_List_fromArray(
+							[
+								_Utils_Tuple2('row', true),
+								_Utils_Tuple2('request', true)
+							]))
 					]),
 				_List_fromArray(
 					[
 						A2(
-						$elm$html$Html$blockquote,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$Attributes$style,
-								'background-color',
-								$author$project$Main$urgencyColour(x.N))
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text(x.aB)
-							])),
-						A2(
 						$elm$html$Html$div,
-						_List_Nil,
-						A2(
-							$elm$core$List$map,
-							function (y) {
-								return A2(
-									$elm$html$Html$blockquote,
-									_List_fromArray(
-										[
-											A2($elm$html$Html$Attributes$style, 'color', 'green')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text(y)
-										]));
-							},
-							x.aj)),
-						A2(
-						$elm$html$Html$p,
 						_List_fromArray(
 							[
-								A2($elm$html$Html$Attributes$style, 'text-align', 'right')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('-- '),
-								A2(
-								$elm$html$Html$cite,
-								_List_Nil,
+								$elm$html$Html$Attributes$classList(
 								_List_fromArray(
 									[
-										$elm$html$Html$text(x.aF)
+										_Utils_Tuple2('row', true),
+										_Utils_Tuple2('request-body', true)
+									]))
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('column')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$blockquote,
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$Attributes$style,
+												'background-color',
+												$author$project$Main$urgencyColour(x.urgency))
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text(x.quote)
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_Nil,
+										A2(
+											$elm$core$List$map,
+											function (y) {
+												return A2(
+													$elm$html$Html$blockquote,
+													_List_fromArray(
+														[
+															A2($elm$html$Html$Attributes$style, 'color', 'green')
+														]),
+													_List_fromArray(
+														[
+															$elm$html$Html$text(y)
+														]));
+											},
+											x.updateList))
 									])),
-								$elm$html$Html$text(
-								' by ' + (x.as + (' (' + ($elm$core$String$fromInt(x.aH) + ')'))))
+								A2(
+								$elm$html$Html$p,
+								_List_fromArray(
+									[
+										A2($elm$html$Html$Attributes$style, 'text-align', 'right')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('-- '),
+										$elm$html$Html$text(
+										x.author + ('  ' + $elm$core$String$fromInt(x.year)))
+									]))
 							])),
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Events$onClick(
-								$author$project$Main$ToggleStatusDialog(x))
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('change status')
-							])),
-						A2(
+						A3(
 						$author$project$Main$viewDialog,
-						x.ag,
+						x.updateDialog,
 						_List_fromArray(
 							[
-								$author$project$Main$viewRadio(x)
-							])),
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Events$onClick(
-								$author$project$Main$ToggleUpdateDialog(x))
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('update-dialog')
+									]),
+								_List_fromArray(
+									[
+										A4(
+										$author$project$Main$viewUpdateForm,
+										'What\'s the update on this request?',
+										x.updateBuffer,
+										$author$project$Main$Buffer(x),
+										$author$project$Main$UpdateQuote(x))
+									]))
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text('update request')
-							])),
-						A2(
-						$author$project$Main$viewDialog,
-						x.ai,
-						_List_fromArray(
-							[
-								A5(
-								$author$project$Main$viewForm,
-								'text',
-								'placeholder',
-								x.ae,
-								$author$project$Main$Buffer(x),
-								$author$project$Main$UpdateQuote(x))
-							])),
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Events$onClick(
-								$author$project$Main$CloseRequest(x))
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('close request')
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('row')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$button,
+										_List_fromArray(
+											[
+												$elm$html$Html$Events$onClick(
+												$author$project$Main$ToggleUpdateDialog(x))
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('update request')
+											])),
+										A2(
+										$elm$html$Html$button,
+										_List_fromArray(
+											[
+												$elm$html$Html$Events$onClick(
+												$author$project$Main$CloseRequest(x))
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('close request')
+											])),
+										$author$project$Main$viewRadio(x)
+									]))
 							]))
 					]));
 		},
 		ql);
 };
 var $author$project$Main$viewQuote = function (model) {
-	var _v0 = model.o;
+	var _v0 = model.quotes;
 	switch (_v0.$) {
-		case 0:
+		case 'QuoteFailure':
 			return A2(
 				$elm$html$Html$div,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$classList(
+						_List_fromArray(
+							[
+								_Utils_Tuple2('request-button', true),
+								_Utils_Tuple2('column', true)
+							]))
+					]),
 				_List_fromArray(
 					[
 						A2(
@@ -5916,10 +6002,18 @@ var $author$project$Main$viewQuote = function (model) {
 								$elm$html$Html$text('Failed to reach database')
 							]))
 					]));
-		case 1:
+		case 'QuoteLoading':
 			return A2(
 				$elm$html$Html$div,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$classList(
+						_List_fromArray(
+							[
+								_Utils_Tuple2('request-button', true),
+								_Utils_Tuple2('column', true)
+							]))
+					]),
 				_List_fromArray(
 					[
 						A2(
@@ -5934,17 +6028,31 @@ var $author$project$Main$viewQuote = function (model) {
 			var quotelist = _v0.a;
 			return A2(
 				$elm$html$Html$div,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$classList(
+						_List_fromArray(
+							[
+								_Utils_Tuple2('request-button', true),
+								_Utils_Tuple2('column', true)
+							]))
+					]),
 				$author$project$Main$viewList(quotelist));
 	}
 };
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
-		_List_Nil,
 		_List_fromArray(
 			[
-				A2($author$project$Main$submissionForm, model.ac, model.af),
+				$elm$html$Html$Attributes$classList(
+				_List_fromArray(
+					[
+						_Utils_Tuple2('column', true)
+					]))
+			]),
+		_List_fromArray(
+			[
 				A2(
 				$elm$html$Html$h2,
 				_List_Nil,
@@ -5952,10 +6060,24 @@ var $author$project$Main$view = function (model) {
 					[
 						$elm$html$Html$text('Job Request')
 					])),
-				$author$project$Main$viewQuote(model)
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$classList(
+						_List_fromArray(
+							[
+								_Utils_Tuple2('row', true)
+							]))
+					]),
+				_List_fromArray(
+					[
+						$author$project$Main$viewQuote(model),
+						A3($author$project$Main$submissionForm, model.status, model.buffer, model.name)
+					]))
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
-	{aO: $author$project$Main$init, aY: $author$project$Main$subscriptions, a_: $author$project$Main$update, a$: $author$project$Main$view});
+	{init: $author$project$Main$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));

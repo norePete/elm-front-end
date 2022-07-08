@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Browser
 import Html exposing (..)
-import Html.Attributes exposing (class, value, placeholder, style, type_, checked, name)
+import Html.Attributes exposing (classList, class, value, placeholder, style, type_, checked, name)
 import Http
 import Html.Events exposing (..)
 import Json.Decode exposing (Decoder, map4, field, int, string)
@@ -34,10 +34,10 @@ type QuoteState =
 --Move the status dialog and update dialog
 -- into the quote 
 type alias Quote = 
-  { quote : String 
-  , source : String 
-  , author : String 
-  , year : Int 
+  { quote: String 
+  , source: String 
+  , author: String
+  , year: Int 
   , updateDialog: Dialog
   , updateBuffer: String
   , changeStatusDialog: Dialog
@@ -65,7 +65,7 @@ type Urgency =
 type alias Model = 
   { 
     --resource: Load
-     name: String
+      name: String
     , status: Dialog
     , quotes: QuoteState
     , buffer: String
@@ -93,8 +93,7 @@ type Msg
   | ToggleUpdateDialog Quote
   | CloseRequest Quote
   | UpdateQuote Quote String
-  | Clear
-  | CreateRequest String
+  | CreateRequest String 
   --| MorePlease
   --| GotQuote (Result Http.Error RawQuote)
   | Buffer Quote String
@@ -106,10 +105,10 @@ update : Msg -> Model -> (Model, Cmd Msg)
 
 update msg model = 
   case msg of 
-    CreateRequest currentBuffer ->
-      ({model | buffer = "", quotes = 
+    CreateRequest currentBuffer->
+      ({model | name = "", buffer = "", quotes = 
         QuoteSuccess (List.concat[
-          [Quote currentBuffer "created by ..." "me" 2020 Closed "" Closed ["created"] Low]
+          [Quote currentBuffer "created..." model.name 2020 Closed "" Closed ["created"] Low]
           , (case model.quotes of 
               QuoteSuccess ql -> ql
               QuoteLoading -> []
@@ -118,6 +117,8 @@ update msg model =
       }, Cmd.none)
     SubmissionBuffer currentBuffer ->
       ({model | buffer = currentBuffer}, Cmd.none)
+    Name name ->
+      ({model | name = name}, Cmd.none)
     Buffer quote currentBuffer ->
           case model.quotes of 
             QuoteSuccess current ->
@@ -136,8 +137,6 @@ update msg model =
               (model, Cmd.none)
             QuoteLoading ->
               (model, Cmd.none)
-    Clear ->
-      ({model | name = ""}, Cmd.none)
     --MorePlease ->
     --  (model, Cmd.none)
 
@@ -167,8 +166,6 @@ update msg model =
     --      ({model | resource = Success fullText}, Cmd.none)
     --    Err _-> 
     --      ({model | resource = Failure}, Cmd.none)
-    Name name ->
-      ({ model | name = name }, Cmd.none)
     Toggle ->
       if model.status == Closed  then
         ({model | status = Open "visible html element" }, Cmd.none)
@@ -218,7 +215,10 @@ update msg model =
                  (List.map (\x -> 
                    case x == quote of 
                      True ->
-                       resetUrgency <| clearBuffer <| appendUpdate x quote.updateBuffer x.updateList
+                        mutateUpdateDialog 
+                        <| resetUrgency 
+                        <| clearBuffer 
+                        <| appendUpdate x quote.updateBuffer x.updateList
                      False -> 
                        x
                      ) current) 
@@ -308,86 +308,128 @@ subscriptions model =
 --declare type
 view : Model -> Html Msg
 view model =
-  div []
-  [ submissionForm model.status model.buffer
-  , h2 [] [text "Job Request"]
-  , viewQuote model
-  ]
+      div [classList
+        [ ("column", True)
+        ]
+      ]
+      [ h2 [][text "Job Request"]
+      , div [classList [("row", True)]]
+        [ viewQuote model
+        , submissionForm model.status model.buffer model.name
+        ]
+      ]
+  
 
-submissionForm : Dialog -> String -> Html Msg
-submissionForm visibility buffer =
+submissionForm : Dialog -> String -> String -> Html Msg
+submissionForm visibility buffer name =
       case visibility of 
         Open t ->
-          div []
-          [ button [onClick Toggle][text "hide"]
-          , div [][viewInput "text" "description of request" buffer SubmissionBuffer
+          div [classList
+            [ ("request-button", True)
+            , ("panel-active", True)
+            ]
+          ]
+          [ div [class "float-right"][ button [onClick Toggle][text "hide"]]
+          , div [][ viewTextArea "description of request" buffer SubmissionBuffer
+                  , viewInput "text" "name" name Name
                   , button [onClick (CreateRequest buffer)][text "create"]
                   ]
           ] 
         Closed -> 
-          div []
+          div [classList
+            [ ("request-button", True)
+            , ("panel-hidden", True)
+            ]
+          ]
           [ button [onClick Toggle][text "show"]
           , div [][]
           ] 
+
+viewTextArea : String -> String -> (String -> msg) -> Html msg
+viewTextArea p v toMsg = 
+      textarea [ placeholder p, value v, onInput toMsg] []
 
 viewQuote : Model -> Html Msg
 viewQuote model = 
   case model.quotes of 
     QuoteFailure ->
-      div [] [blockquote [][text "Failed to reach database"]]
+          div [classList
+            [ ("request-button", True)
+            , ("column", True)
+            ]
+          ][blockquote [][text "Failed to reach database"]]
     QuoteLoading -> 
-      div [] [blockquote [][text "Loading ..." ]]
+          div [classList
+            [ ("request-button", True)
+            , ("column", True)
+            ]
+          ][blockquote [][text "Loading ..." ]]
     QuoteSuccess quotelist ->
-      div [] (viewList quotelist)
+          div [classList
+            [ ("request-button", True)
+            , ("column", True)
+            ]
+          ](viewList quotelist)
 
 
 urgencyColour : Urgency -> String
 urgencyColour urgency = 
   case urgency of 
     Low ->
-      "green"
+      "rgba(2,247,23,0.5)"
     Medium ->
       "yellow"
     High ->
-      "red"
+      "rgba(243,2,23,0.5)"
 
 
 viewList : List Quote -> List (Html Msg)
 viewList ql =
           List.map (
             \x -> 
-                div [class "row"]
-                [ blockquote [style "background-color" (urgencyColour x.urgency)][text x.quote]
-                , div [] (List.map (\y ->
-                   blockquote [style "color" "green"][text y]) x.updateList)
-                , p [ style "text-align" "right" ]
-                  [ text "-- "
-                  , cite [] [ text x.source ]
-                  , text (" by " ++ x.author ++ " (" 
-                  ++ String.fromInt x.year
-                  ++ ")")
+                div [classList [("row", True),("request", True)]]
+                [ div [classList [("row", True), ("request-body", True)]][
+                    div [class "column"]
+                    [ blockquote [style "background-color" (urgencyColour x.urgency)][text x.quote]
+                    , div [] (List.map (\y ->
+                       blockquote [style "color" "green"][text y]) x.updateList)
+                    ]
+                  , p [ style "text-align" "right" ]
+                    [ text "-- "
+                    , text (x.author ++ "  " ++ String.fromInt x.year)
+                    ]
+                  ] 
+               -- , button [onClick (ToggleStatusDialog x)][text "change status"]
+               -- , viewDialog x.changeStatusDialog [viewRadio x] [div[][]]
+                , viewDialog x.updateDialog 
+                  [div[class "update-dialog"][
+                    viewUpdateForm 
+                    "What's the update on this request?" 
+                    x.updateBuffer 
+                    (Buffer x) 
+                    (UpdateQuote x)]
                   ]
-                , button [onClick (ToggleStatusDialog x)][text "change status"]
-                , viewDialog x.changeStatusDialog [viewRadio x]
-                , button [onClick (ToggleUpdateDialog x)][text "update request"]
-                , viewDialog x.updateDialog [viewForm "text" "placeholder" x.updateBuffer (Buffer x) (UpdateQuote x)]
-                , button [onClick (CloseRequest x)][text "close request"]
+                  [div [class "row"][ button [onClick (ToggleUpdateDialog x)][text "update request"]
+                  , button [onClick (CloseRequest x)][text "close request"]
+                  , viewRadio x
+                  ]]
+                --, button [onClick (CloseRequest x)][text "close request"]
                 ]) ql
 
 
-viewDialog : Dialog -> List (Html msg) -> Html msg 
-viewDialog dialog html = 
+viewDialog : Dialog -> List (Html msg) -> List (Html msg) -> Html msg 
+viewDialog dialog html hiddenHtml = 
   case dialog of 
     Closed ->
-      div[][]
+      div[] hiddenHtml
     Open paragraph ->
       div [] html
 
-viewForm : String -> String -> String -> (String -> Msg) -> (String -> Msg) -> Html Msg
-viewForm inputType placeholder value callback onclick =
+viewUpdateForm : String -> String -> (String -> Msg) -> (String -> Msg) -> Html Msg
+viewUpdateForm placeholder value callback onclick =
   div []
-  [ viewInput inputType placeholder value callback 
-  , button [onClick (onclick "pointlessString")][text "apply"]
+  [ viewTextArea placeholder value callback 
+  , button [onClick (onclick "pointlessString")][text "done"]
   ] 
 
 viewInput : String -> String -> String -> (String -> msg) -> Html msg
