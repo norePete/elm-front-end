@@ -115,13 +115,13 @@ update msg model =
     CreateRequest currentBuffer->
       ({model | name = "", buffer = "", quotes = 
         QuoteSuccess (List.concat[
-          [Quote currentBuffer "created..." model.name 2020 Closed "" Closed ["created"] Low (ID 1234)]
+          [requestFactory currentBuffer model.name]
           , (case model.quotes of 
               QuoteSuccess ql -> ql
               QuoteLoading -> []
               QuoteFailure -> [])
           ])
-      }, Cmd.none)
+      }, postNewRequest (requestFactory currentBuffer model.name))
     SubmissionBuffer currentBuffer ->
       ({model | buffer = currentBuffer}, Cmd.none)
     Name name ->
@@ -230,7 +230,7 @@ update msg model =
                        x
                      ) current) 
                }
-              , Cmd.none)
+              , postUpdate <| resetUrgency quote)
             QuoteFailure ->
               (model, Cmd.none)
             QuoteLoading ->
@@ -240,12 +240,11 @@ update msg model =
             QuoteSuccess current ->
               ({ model | quotes = 
                QuoteSuccess (List.filter (\x -> x /= quote) current) }
-              , Cmd.none)
+              , postCloseRequest quote)
             QuoteFailure ->
               (model, Cmd.none)
             QuoteLoading ->
               (model, Cmd.none)
-
     Sent result ->
       case result of 
         Result.Ok ok ->
@@ -262,7 +261,6 @@ update msg model =
               (model, Cmd.none)
             Http.BadBody code ->
               (model, Cmd.none)
-
     SwitchTo quote urgencyLevel -> 
           case model.quotes of 
             QuoteSuccess current ->
@@ -276,15 +274,16 @@ update msg model =
                        x
                      ) current) 
                }
-              , Cmd.none)
+              , postStatusChange quote)
             QuoteFailure ->
               (model, Cmd.none)
             QuoteLoading ->
               (model, Cmd.none)
 
+requestFactory: String -> String -> Quote
+requestFactory buffer name =
+  Quote buffer "created..." name 2020 Closed "" Closed ["created"] Low (ID 1234)
 
-          
-  
 resetUrgency: Quote -> Quote
 resetUrgency quote =
   {quote | urgency = Low}
@@ -296,19 +295,6 @@ clearBuffer quote =
 appendUpdate: Quote -> String -> List String -> Quote
 appendUpdate quote buffer existingUpdates=
   {quote | updateList = List.concat [existingUpdates,[buffer]]}
-
---wrapQuote : RawQuote -> Quote
---wrapQuote raw =
---  { quote = raw.quote
---  , source = raw.source
---  , author = raw.author
---  , year = raw.year
---  , updateDialog = Closed
---  , updateBuffer = ""
---  , changeStatusDialog = Closed 
---  , updateList = ["created"]
---  , urgency = Low
---  }
 
 mutateStatusDialog: Quote -> Quote
 mutateStatusDialog quote =
@@ -341,8 +327,8 @@ view model =
       ]
       [ h2 [][text "Job Request"]
       , div [classList [("row", True)]]
-        [ viewQuote model
-        , submissionForm model.status model.buffer model.name
+        [ submissionForm model.status model.buffer model.name
+        , viewQuote model
         ]
       ]
   
@@ -354,9 +340,10 @@ submissionForm visibility buffer name =
           div [classList
             [ ("request-button", True)
             , ("panel-active", True)
+            , ("float-left", True)
             ]
           ]
-          [ div [class "float-right"][ button [onClick Toggle][text "hide"]]
+          [ div [class "float-left"][ button [onClick Toggle][text "hide"]]
           , div [][ viewTextArea "description of request" buffer SubmissionBuffer
                   , viewInput "text" "name" name Name
                   , button [onClick (CreateRequest buffer)][text "create"]
@@ -366,6 +353,7 @@ submissionForm visibility buffer name =
           div [classList
             [ ("request-button", True)
             , ("panel-hidden", True)
+            , ("float-left", True)
             ]
           ]
           [ button [onClick Toggle][text "show"]
@@ -436,7 +424,7 @@ viewList ql =
                     (Buffer x) 
                     (UpdateQuote x)]
                   ]
-                  [ div [classList [("row", True),("float-right", True)]][ button [id "update-button", onClick (ToggleUpdateDialog x)][]
+                  [ div [classList [("row", True),("float-left", True)]][ button [id "update-button", onClick (ToggleUpdateDialog x)][]
                   , button [id "close-button", onClick (CloseRequest x)][]]
                   , viewRadio x
                   ]
@@ -491,17 +479,6 @@ radio (isChecked, choiceName, msg) =
         text "")
     ]
 
---viewBook : Load -> Html msg
---viewBook state =
---  case state of 
---    Failure -> 
---      div [] [ text "Could not load state"]
---    Loading -> 
---      div [] [ text "Loading ... "]
---    Success fullText -> 
---      div [] [ pre [] [text fullText]]
-
-
 -- HTTP
 
 
@@ -511,7 +488,7 @@ postNewRequest quote =
     { 
       body = newRequestEncoder quote |> Http.jsonBody
     , expect = Http.expectWhatever Sent
-    , url = "http://localhost/new"
+    , url = "http://127.0.0.2:5000/new"
     }
 postUpdate: Quote -> Cmd Msg
 postUpdate quote = 
@@ -519,7 +496,7 @@ postUpdate quote =
     { 
       body = updateEncoder quote |> Http.jsonBody
     , expect = Http.expectWhatever Sent 
-    , url = "http://localhost/update"
+    , url = "http://127.0.0.1:5000/update"
     }
 postStatusChange: Quote -> Cmd Msg
 postStatusChange quote = 
@@ -527,15 +504,15 @@ postStatusChange quote =
     { 
       body = statusEncoder quote |> Http.jsonBody
     , expect = Http.expectWhatever Sent
-    , url = "http://localhost/status"
+    , url = "http://127.0.0.1:5000/status"
     }
-closeRequest: Quote -> Cmd Msg
-closeRequest quote =
+postCloseRequest: Quote -> Cmd Msg
+postCloseRequest quote =
   Http.post
     { 
       body = statusEncoder quote |> Http.jsonBody
     , expect = Http.expectWhatever Sent
-    , url = "http://localhost/close"
+    , url = "http://127.0.0.1:5000/close"
     }
 
 newRequestEncoder : Quote -> Encode.Value
@@ -554,12 +531,13 @@ updateEncoder quote =
   Encode.object
     [ ("id", encodeId quote.id)
     , ("updateList", encodeUpdateList quote.updateList)
+    , ("urgency", encodeUrgency quote.urgency)
     ]
 statusEncoder : Quote -> Encode.Value
 statusEncoder quote =
   Encode.object
     [ ("id", encodeId quote.id)
-    , ("status", encodeUrgency quote.urgency)
+    , ("urgency", encodeUrgency quote.urgency)
     ]
 encodeId: ID-> Encode.Value
 encodeId id = 
@@ -580,14 +558,6 @@ encodeUrgency urgency =
       Encode.string "closed"
 
 
-
---getRandomQuote : Cmd Msg
---getRandomQuote = 
---  Http.get
---  { url = "https://elm-lang.org/api/random-quotes"
---  , expect = Http.expectJson GotQuote quoteDecoder
---  }
---
 --quoteDecoder : Decoder RawQuote
 --quoteDecoder = 
 --  map4 RawQuote

@@ -44,6 +44,7 @@ input[type=radio] {
 .row {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   width: 100%;
 }
 
@@ -53,6 +54,9 @@ input[type=radio] {
 }
 
 .request {
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
   position: relative;
   margin: 20px;
   width: 60vw;
@@ -60,7 +64,6 @@ input[type=radio] {
   box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.51);
 -webkit-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.51);
 -moz-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.51);
-  margin-right: auto;
 }
 
 .request textarea {
@@ -82,10 +85,10 @@ input[type=radio] {
 
 .request-body {
   flex: 1;
-  margin-right: 30px;
 }
 
 .panel-active {
+  display: flex;
   margin-right: 20px;
   display: flex;
   flex-direction: column;
@@ -93,12 +96,13 @@ input[type=radio] {
   box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.51);
 -webkit-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.51);
 -moz-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.51);
-  margin-left: auto;
   height: 80vh;
+  margin-left: auto;
   padding: 15px;
 }
 
 .panel-hidden {
+  display: flex;
   margin-right: 20px;
   display: flex;
   flex-direction: column;
@@ -110,7 +114,11 @@ input[type=radio] {
 
 .float-right {
   margin-left: auto;
-  justify-content: end;
+  justify-content: start;
+}
+.float-left {
+  margin-right: auto;
+  justify-content: start;
 }
 
 #close-button {
