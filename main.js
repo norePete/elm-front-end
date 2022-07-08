@@ -5177,14 +5177,34 @@ var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$none;
 };
+var $author$project$Main$ID = function (id) {
+	return {id: id};
+};
 var $author$project$Main$Low = {$: 'Low'};
 var $author$project$Main$Open = function (a) {
 	return {$: 'Open', a: a};
 };
-var $author$project$Main$Quote = F9(
-	function (quote, source, author, year, updateDialog, updateBuffer, changeStatusDialog, updateList, urgency) {
-		return {author: author, changeStatusDialog: changeStatusDialog, quote: quote, source: source, updateBuffer: updateBuffer, updateDialog: updateDialog, updateList: updateList, urgency: urgency, year: year};
-	});
+var $author$project$Main$Quote = function (quote) {
+	return function (source) {
+		return function (author) {
+			return function (year) {
+				return function (updateDialog) {
+					return function (updateBuffer) {
+						return function (changeStatusDialog) {
+							return function (updateList) {
+								return function (urgency) {
+									return function (id) {
+										return {author: author, changeStatusDialog: changeStatusDialog, id: id, quote: quote, source: source, updateBuffer: updateBuffer, updateDialog: updateDialog, updateList: updateList, urgency: urgency, year: year};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var $author$project$Main$QuoteSuccess = function (a) {
 	return {$: 'QuoteSuccess', a: a};
 };
@@ -5269,18 +5289,10 @@ var $author$project$Main$update = F2(
 										[
 											_List_fromArray(
 											[
-												A9(
-												$author$project$Main$Quote,
-												currentBuffer,
-												'created...',
-												model.name,
-												2020,
-												$author$project$Main$Closed,
-												'',
-												$author$project$Main$Closed,
+												$author$project$Main$Quote(currentBuffer)('created...')(model.name)(2020)($author$project$Main$Closed)('')($author$project$Main$Closed)(
 												_List_fromArray(
-													['created']),
-												$author$project$Main$Low)
+													['created']))($author$project$Main$Low)(
+												$author$project$Main$ID(1234))
 											]),
 											function () {
 											var _v1 = model.quotes;
@@ -5470,13 +5482,36 @@ var $author$project$Main$update = F2(
 					default:
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
+			case 'Sent':
+				var result = msg.a;
+				if (result.$ === 'Ok') {
+					var ok = result.a;
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				} else {
+					var notOk = result.a;
+					switch (notOk.$) {
+						case 'BadUrl':
+							var err = notOk.a;
+							return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+						case 'Timeout':
+							return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+						case 'NetworkError':
+							return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+						case 'BadStatus':
+							var code = notOk.a;
+							return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+						default:
+							var code = notOk.a;
+							return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					}
+				}
 			default:
 				var quote = msg.a;
 				var urgencyLevel = msg.b;
-				var _v11 = model.quotes;
-				switch (_v11.$) {
+				var _v13 = model.quotes;
+				switch (_v13.$) {
 					case 'QuoteSuccess':
-						var current = _v11.a;
+						var current = _v13.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
@@ -5485,8 +5520,8 @@ var $author$project$Main$update = F2(
 										A2(
 											$elm$core$List$map,
 											function (x) {
-												var _v12 = _Utils_eq(x, quote);
-												if (_v12) {
+												var _v14 = _Utils_eq(x, quote);
+												if (_v14) {
 													return _Utils_update(
 														x,
 														{urgency: urgencyLevel});
@@ -5721,6 +5756,7 @@ var $author$project$Main$UpdateQuote = F2(
 	function (a, b) {
 		return {$: 'UpdateQuote', a: a, b: b};
 	});
+var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
@@ -5730,8 +5766,10 @@ var $author$project$Main$urgencyColour = function (urgency) {
 			return 'rgba(2,247,23,0.5)';
 		case 'Medium':
 			return 'yellow';
-		default:
+		case 'High':
 			return 'rgba(243,2,23,0.5)';
+		default:
+			return 'rgba(0,0,0,0.4)';
 	}
 };
 var $author$project$Main$viewDialog = F3(
@@ -5786,31 +5824,28 @@ var $author$project$Main$radio = function (_v0) {
 var $author$project$Main$viewPicker = function (options) {
 	return A2(
 		$elm$html$Html$fieldset,
-		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('radio-picker')
+			]),
 		A2($elm$core$List$map, $author$project$Main$radio, options));
 };
 var $author$project$Main$viewRadio = function (quote) {
-	return A2(
-		$elm$html$Html$div,
-		_List_Nil,
+	return $author$project$Main$viewPicker(
 		_List_fromArray(
 			[
-				$author$project$Main$viewPicker(
-				_List_fromArray(
-					[
-						_Utils_Tuple3(
-						_Utils_eq(quote.urgency, $author$project$Main$Low),
-						'low',
-						$author$project$Main$SwitchTo(quote)($author$project$Main$Low)),
-						_Utils_Tuple3(
-						_Utils_eq(quote.urgency, $author$project$Main$Medium),
-						'Medium',
-						$author$project$Main$SwitchTo(quote)($author$project$Main$Medium)),
-						_Utils_Tuple3(
-						_Utils_eq(quote.urgency, $author$project$Main$High),
-						'high',
-						$author$project$Main$SwitchTo(quote)($author$project$Main$High))
-					]))
+				_Utils_Tuple3(
+				_Utils_eq(quote.urgency, $author$project$Main$Low),
+				'low',
+				$author$project$Main$SwitchTo(quote)($author$project$Main$Low)),
+				_Utils_Tuple3(
+				_Utils_eq(quote.urgency, $author$project$Main$Medium),
+				'Medium',
+				$author$project$Main$SwitchTo(quote)($author$project$Main$Medium)),
+				_Utils_Tuple3(
+				_Utils_eq(quote.urgency, $author$project$Main$High),
+				'high',
+				$author$project$Main$SwitchTo(quote)($author$project$Main$High))
 			]));
 };
 var $author$project$Main$viewUpdateForm = F4(
@@ -5825,6 +5860,7 @@ var $author$project$Main$viewUpdateForm = F4(
 					$elm$html$Html$button,
 					_List_fromArray(
 						[
+							$elm$html$Html$Attributes$id('done-button'),
 							$elm$html$Html$Events$onClick(
 							onclick('pointlessString'))
 						]),
@@ -5860,7 +5896,11 @@ var $author$project$Main$viewList = function (ql) {
 									[
 										_Utils_Tuple2('row', true),
 										_Utils_Tuple2('request-body', true)
-									]))
+									])),
+								A2(
+								$elm$html$Html$Attributes$style,
+								'background-color',
+								$author$project$Main$urgencyColour(x.urgency))
 							]),
 						_List_fromArray(
 							[
@@ -5868,22 +5908,30 @@ var $author$project$Main$viewList = function (ql) {
 								$elm$html$Html$div,
 								_List_fromArray(
 									[
-										$elm$html$Html$Attributes$class('column')
+										$elm$html$Html$Attributes$class('column'),
+										A2($elm$html$Html$Attributes$style, 'width', '100%')
 									]),
 								_List_fromArray(
 									[
 										A2(
-										$elm$html$Html$blockquote,
+										$elm$html$Html$div,
 										_List_fromArray(
 											[
-												A2(
-												$elm$html$Html$Attributes$style,
-												'background-color',
-												$author$project$Main$urgencyColour(x.urgency))
+												$elm$html$Html$Attributes$class('row')
 											]),
 										_List_fromArray(
 											[
-												$elm$html$Html$text(x.quote)
+												A2(
+												$elm$html$Html$blockquote,
+												_List_fromArray(
+													[
+														A2($elm$html$Html$Attributes$style, 'font-size', '20px'),
+														A2($elm$html$Html$Attributes$style, 'width', '80%')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text(x.quote)
+													]))
 											])),
 										A2(
 										$elm$html$Html$div,
@@ -5892,29 +5940,41 @@ var $author$project$Main$viewList = function (ql) {
 											$elm$core$List$map,
 											function (y) {
 												return A2(
-													$elm$html$Html$blockquote,
+													$elm$html$Html$div,
 													_List_fromArray(
 														[
-															A2($elm$html$Html$Attributes$style, 'color', 'green')
+															$elm$html$Html$Attributes$class('row'),
+															A2($elm$html$Html$Attributes$style, 'width', '80%')
 														]),
 													_List_fromArray(
 														[
-															$elm$html$Html$text(y)
+															A2(
+															$elm$html$Html$blockquote,
+															_List_fromArray(
+																[
+																	A2($elm$html$Html$Attributes$style, 'color', 'green'),
+																	A2($elm$html$Html$Attributes$style, 'font-size', '16px')
+																]),
+															_List_fromArray(
+																[
+																	$elm$html$Html$text(y)
+																])),
+															A2(
+															$elm$html$Html$p,
+															_List_fromArray(
+																[
+																	A2($elm$html$Html$Attributes$style, 'margin-left', 'auto'),
+																	A2($elm$html$Html$Attributes$style, 'text-align', 'right'),
+																	A2($elm$html$Html$Attributes$style, 'font-size', '14px')
+																]),
+															_List_fromArray(
+																[
+																	$elm$html$Html$text(
+																	x.author + (' ' + $elm$core$String$fromInt(x.year)))
+																]))
 														]));
 											},
 											x.updateList))
-									])),
-								A2(
-								$elm$html$Html$p,
-								_List_fromArray(
-									[
-										A2($elm$html$Html$Attributes$style, 'text-align', 'right')
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('-- '),
-										$elm$html$Html$text(
-										x.author + ('  ' + $elm$core$String$fromInt(x.year)))
 									]))
 							])),
 						A3(
@@ -5944,7 +6004,12 @@ var $author$project$Main$viewList = function (ql) {
 								$elm$html$Html$div,
 								_List_fromArray(
 									[
-										$elm$html$Html$Attributes$class('row')
+										$elm$html$Html$Attributes$classList(
+										_List_fromArray(
+											[
+												_Utils_Tuple2('row', true),
+												_Utils_Tuple2('float-right', true)
+											]))
 									]),
 								_List_fromArray(
 									[
@@ -5952,26 +6017,22 @@ var $author$project$Main$viewList = function (ql) {
 										$elm$html$Html$button,
 										_List_fromArray(
 											[
+												$elm$html$Html$Attributes$id('update-button'),
 												$elm$html$Html$Events$onClick(
 												$author$project$Main$ToggleUpdateDialog(x))
 											]),
-										_List_fromArray(
-											[
-												$elm$html$Html$text('update request')
-											])),
+										_List_Nil),
 										A2(
 										$elm$html$Html$button,
 										_List_fromArray(
 											[
+												$elm$html$Html$Attributes$id('close-button'),
 												$elm$html$Html$Events$onClick(
 												$author$project$Main$CloseRequest(x))
 											]),
-										_List_fromArray(
-											[
-												$elm$html$Html$text('close request')
-											])),
-										$author$project$Main$viewRadio(x)
-									]))
+										_List_Nil)
+									])),
+								$author$project$Main$viewRadio(x)
 							]))
 					]));
 		},
@@ -5988,7 +6049,6 @@ var $author$project$Main$viewQuote = function (model) {
 						$elm$html$Html$Attributes$classList(
 						_List_fromArray(
 							[
-								_Utils_Tuple2('request-button', true),
 								_Utils_Tuple2('column', true)
 							]))
 					]),
@@ -6010,7 +6070,6 @@ var $author$project$Main$viewQuote = function (model) {
 						$elm$html$Html$Attributes$classList(
 						_List_fromArray(
 							[
-								_Utils_Tuple2('request-button', true),
 								_Utils_Tuple2('column', true)
 							]))
 					]),
@@ -6033,7 +6092,6 @@ var $author$project$Main$viewQuote = function (model) {
 						$elm$html$Html$Attributes$classList(
 						_List_fromArray(
 							[
-								_Utils_Tuple2('request-button', true),
 								_Utils_Tuple2('column', true)
 							]))
 					]),

@@ -2,10 +2,11 @@ module Main exposing (..)
 
 import Browser
 import Html exposing (..)
-import Html.Attributes exposing (classList, class, value, placeholder, style, type_, checked, name)
+import Html.Attributes exposing (classList, class, value, placeholder, id, style, type_, checked, name)
 import Http
 import Html.Events exposing (..)
 import Json.Decode exposing (Decoder, map4, field, int, string)
+import Json.Encode as Encode
 
 
 --Main
@@ -31,6 +32,9 @@ type QuoteState =
   | QuoteLoading 
   | QuoteSuccess (List Quote)
 
+type alias ID = 
+  { id: Int }
+
 --Move the status dialog and update dialog
 -- into the quote 
 type alias Quote = 
@@ -43,6 +47,7 @@ type alias Quote =
   , changeStatusDialog: Dialog
   , updateList: (List String)
   , urgency: Urgency
+  , id: ID
   }
 
 --type alias RawQuote = 
@@ -60,6 +65,7 @@ type Urgency =
     Low
   | Medium
   | High
+  | ClosedOut
 
 --declare data schema
 type alias Model = 
@@ -94,6 +100,7 @@ type Msg
   | CloseRequest Quote
   | UpdateQuote Quote String
   | CreateRequest String 
+  | Sent (Result Http.Error ())
   --| MorePlease
   --| GotQuote (Result Http.Error RawQuote)
   | Buffer Quote String
@@ -108,7 +115,7 @@ update msg model =
     CreateRequest currentBuffer->
       ({model | name = "", buffer = "", quotes = 
         QuoteSuccess (List.concat[
-          [Quote currentBuffer "created..." model.name 2020 Closed "" Closed ["created"] Low]
+          [Quote currentBuffer "created..." model.name 2020 Closed "" Closed ["created"] Low (ID 1234)]
           , (case model.quotes of 
               QuoteSuccess ql -> ql
               QuoteLoading -> []
@@ -238,6 +245,24 @@ update msg model =
               (model, Cmd.none)
             QuoteLoading ->
               (model, Cmd.none)
+
+    Sent result ->
+      case result of 
+        Result.Ok ok ->
+          (model, Cmd.none)
+        Result.Err notOk ->
+          case notOk of
+            Http.BadUrl err ->
+              (model, Cmd.none)
+            Http.Timeout ->
+              (model, Cmd.none)
+            Http.NetworkError ->
+              (model, Cmd.none)
+            Http.BadStatus code ->
+              (model, Cmd.none)
+            Http.BadBody code ->
+              (model, Cmd.none)
+
     SwitchTo quote urgencyLevel -> 
           case model.quotes of 
             QuoteSuccess current ->
@@ -256,6 +281,8 @@ update msg model =
               (model, Cmd.none)
             QuoteLoading ->
               (model, Cmd.none)
+
+
           
   
 resetUrgency: Quote -> Quote
@@ -354,20 +381,17 @@ viewQuote model =
   case model.quotes of 
     QuoteFailure ->
           div [classList
-            [ ("request-button", True)
-            , ("column", True)
+            [ ("column", True)
             ]
           ][blockquote [][text "Failed to reach database"]]
     QuoteLoading -> 
           div [classList
-            [ ("request-button", True)
-            , ("column", True)
+            [ ("column", True)
             ]
           ][blockquote [][text "Loading ..." ]]
     QuoteSuccess quotelist ->
           div [classList
-            [ ("request-button", True)
-            , ("column", True)
+            [ ("column", True)
             ]
           ](viewList quotelist)
 
@@ -381,6 +405,8 @@ urgencyColour urgency =
       "yellow"
     High ->
       "rgba(243,2,23,0.5)"
+    ClosedOut ->
+      "rgba(0,0,0,0.4)"
 
 
 viewList : List Quote -> List (Html Msg)
@@ -388,19 +414,20 @@ viewList ql =
           List.map (
             \x -> 
                 div [classList [("row", True),("request", True)]]
-                [ div [classList [("row", True), ("request-body", True)]][
-                    div [class "column"]
-                    [ blockquote [style "background-color" (urgencyColour x.urgency)][text x.quote]
+                [ div [classList [("row", True), ("request-body", True)]
+                  , style "background-color" (urgencyColour x.urgency)]
+                  [
+                    div [class "column", style "width" "100%"]
+                    [ 
+                      div [class "row"]
+                      [ blockquote [style "font-size" "20px", style "width" "80%"][text x.quote]]
                     , div [] (List.map (\y ->
-                       blockquote [style "color" "green"][text y]) x.updateList)
-                    ]
-                  , p [ style "text-align" "right" ]
-                    [ text "-- "
-                    , text (x.author ++ "  " ++ String.fromInt x.year)
+                       div [class "row", style "width" "80%"]
+                       [ blockquote [style "color" "green", style "font-size" "16px"][text y]
+                       , p [ style "margin-left" "auto", style "text-align" "right", style "font-size" "14px" ]
+                       [ text (x.author ++ " " ++ String.fromInt x.year)]]) x.updateList)
                     ]
                   ] 
-               -- , button [onClick (ToggleStatusDialog x)][text "change status"]
-               -- , viewDialog x.changeStatusDialog [viewRadio x] [div[][]]
                 , viewDialog x.updateDialog 
                   [div[class "update-dialog"][
                     viewUpdateForm 
@@ -409,11 +436,10 @@ viewList ql =
                     (Buffer x) 
                     (UpdateQuote x)]
                   ]
-                  [div [class "row"][ button [onClick (ToggleUpdateDialog x)][text "update request"]
-                  , button [onClick (CloseRequest x)][text "close request"]
+                  [ div [classList [("row", True),("float-right", True)]][ button [id "update-button", onClick (ToggleUpdateDialog x)][]
+                  , button [id "close-button", onClick (CloseRequest x)][]]
                   , viewRadio x
-                  ]]
-                --, button [onClick (CloseRequest x)][text "close request"]
+                  ]
                 ]) ql
 
 
@@ -429,7 +455,7 @@ viewUpdateForm : String -> String -> (String -> Msg) -> (String -> Msg) -> Html 
 viewUpdateForm placeholder value callback onclick =
   div []
   [ viewTextArea placeholder value callback 
-  , button [onClick (onclick "pointlessString")][text "done"]
+  , button [id "done-button", onClick (onclick "pointlessString")][text "done"]
   ] 
 
 viewInput : String -> String -> String -> (String -> msg) -> Html msg
@@ -438,17 +464,17 @@ viewInput t p v toMsg =
 
 viewRadio : Quote -> Html Msg
 viewRadio quote =
-  div []
-    [ viewPicker 
+
+     viewPicker 
         [ ((quote.urgency == Low), "low", (SwitchTo quote) Low)
         , ((quote.urgency == Medium), "Medium", (SwitchTo quote) Medium)
         , ((quote.urgency == High), "high", (SwitchTo quote) High)
         ]
-    ]
+    
 
 viewPicker : List (Bool, String, msg) -> Html msg
 viewPicker options =
-  fieldset [] (List.map radio options)
+  fieldset [class "radio-picker"] (List.map radio options)
 
 radio : (Bool, String, msg) -> Html msg
 radio (isChecked, choiceName, msg) =
@@ -477,6 +503,83 @@ radio (isChecked, choiceName, msg) =
 
 
 -- HTTP
+
+
+postNewRequest: Quote -> Cmd Msg
+postNewRequest quote = 
+  Http.post
+    { 
+      body = newRequestEncoder quote |> Http.jsonBody
+    , expect = Http.expectWhatever Sent
+    , url = "http://localhost/new"
+    }
+postUpdate: Quote -> Cmd Msg
+postUpdate quote = 
+  Http.post
+    { 
+      body = updateEncoder quote |> Http.jsonBody
+    , expect = Http.expectWhatever Sent 
+    , url = "http://localhost/update"
+    }
+postStatusChange: Quote -> Cmd Msg
+postStatusChange quote = 
+  Http.post
+    { 
+      body = statusEncoder quote |> Http.jsonBody
+    , expect = Http.expectWhatever Sent
+    , url = "http://localhost/status"
+    }
+closeRequest: Quote -> Cmd Msg
+closeRequest quote =
+  Http.post
+    { 
+      body = statusEncoder quote |> Http.jsonBody
+    , expect = Http.expectWhatever Sent
+    , url = "http://localhost/close"
+    }
+
+newRequestEncoder : Quote -> Encode.Value
+newRequestEncoder quote =
+  Encode.object
+    [ ("id", encodeId quote.id)
+    , ("quote", Encode.string quote.quote)
+    , ("source", Encode.string quote.source)
+    , ("author", Encode.string quote.author)
+    , ("year", Encode.int quote.year)
+    , ("updateList", encodeUpdateList quote.updateList)
+    , ("urgency", encodeUrgency quote.urgency)
+    ]
+updateEncoder : Quote -> Encode.Value
+updateEncoder quote =
+  Encode.object
+    [ ("id", encodeId quote.id)
+    , ("updateList", encodeUpdateList quote.updateList)
+    ]
+statusEncoder : Quote -> Encode.Value
+statusEncoder quote =
+  Encode.object
+    [ ("id", encodeId quote.id)
+    , ("status", encodeUrgency quote.urgency)
+    ]
+encodeId: ID-> Encode.Value
+encodeId id = 
+  Encode.int id.id
+encodeUpdateList: (List String) -> Encode.Value
+encodeUpdateList updateList =
+  Encode.list Encode.string updateList
+encodeUrgency: Urgency -> Encode.Value
+encodeUrgency urgency =
+  case urgency of
+    Low ->
+      Encode.string "low"
+    Medium ->
+      Encode.string "medium"
+    High -> 
+      Encode.string "high"
+    ClosedOut ->
+      Encode.string "closed"
+
+
 
 --getRandomQuote : Cmd Msg
 --getRandomQuote = 

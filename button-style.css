@@ -17,4 +17,22 @@
 .request-button:active button {
   transform: translate3d(0, 1px, 0);
 }
-
+#done-button{
+  margin: 7px;
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(39deg, rgba(16,16,213,1) 0%, rgba(59,40,235,1) 100%);
+  border-radius: 6px;
+  height: 45px;
+  padding: 0 30px;
+  color: rgba(255,255,255,1);
+  font-family: Lato, Arial, sans-serif;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+#done-button:hover {
+  filter: opacity(0.8);
+}
+#done-button:active {
+  transform: translate3d(0, 1px, 0);
+}
