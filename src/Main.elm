@@ -498,21 +498,14 @@ newRequestDecoder =
     |> required "source" string
     |> required "author" string
     |> required "year" int
-    |> hardcoded "updateDialog" decodeToClosed
-    |> hardcoded "updateBuffer" decodeToEmptyString 
-    |> hardcoded "changeStatusDialog" decodeToClosed
+    |> hardcoded (Closed)
+    |> hardcoded "" 
+    |> hardcoded (Closed)
     |> required "updateList" updateListDecoder
     |> required "urgency" urgencyDecoder
     |> required "id" idDecoder
 
 --  Quote buffer "created..." name 2020 Closed "" Closed ["created"] Low (ID 1234)
-
-decodeToClosed: Decoder Dialog
-decodeToClosed = 
-  Decode.succeed Closed
-decodeToEmptyString: Decoder String
-decodeToEmptyString = 
-  Decode.succeed ""
 
 idDecoder: Decoder ID
 idDecoder = 
