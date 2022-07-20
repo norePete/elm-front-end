@@ -5335,92 +5335,120 @@ var $elm$core$Task$perform = F2(
 	});
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Main$Closed = {$: 'Closed'};
+var $author$project$Main$DataReceived = function (a) {
+	return {$: 'DataReceived', a: a};
+};
 var $author$project$Main$Model = F4(
 	function (name, status, quotes, buffer) {
 		return {buffer: buffer, name: name, quotes: quotes, status: status};
 	});
 var $author$project$Main$QuoteLoading = {$: 'QuoteLoading'};
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
-var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$Main$init = function (_v0) {
-	return _Utils_Tuple2(
-		A4($author$project$Main$Model, '', $author$project$Main$Closed, $author$project$Main$QuoteLoading, ''),
-		$elm$core$Platform$Cmd$none);
+var $elm$json$Json$Decode$list = _Json_decodeList;
+var $author$project$Main$Quote = function (quote) {
+	return function (source) {
+		return function (author) {
+			return function (year) {
+				return function (updateDialog) {
+					return function (updateBuffer) {
+						return function (changeStatusDialog) {
+							return function (updateList) {
+								return function (urgency) {
+									return function (id) {
+										return {author: author, changeStatusDialog: changeStatusDialog, id: id, quote: quote, source: source, updateBuffer: updateBuffer, updateDialog: updateDialog, updateList: updateList, urgency: urgency, year: year};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
 };
-var $elm$core$Platform$Sub$batch = _Platform_batch;
-var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
-var $author$project$Main$subscriptions = function (model) {
-	return $elm$core$Platform$Sub$none;
+var $elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
+	});
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom = $elm$json$Json$Decode$map2($elm$core$Basics$apR);
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded = A2($elm$core$Basics$composeR, $elm$json$Json$Decode$succeed, $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom);
+var $elm$json$Json$Decode$andThen = _Json_andThen;
+var $author$project$Main$ID = function (id) {
+	return {id: id};
 };
+var $author$project$Main$idFromInt = function (id) {
+	return $elm$json$Json$Decode$succeed(
+		$author$project$Main$ID(id));
+};
+var $elm$json$Json$Decode$int = _Json_decodeInt;
+var $author$project$Main$idDecoder = A2($elm$json$Json$Decode$andThen, $author$project$Main$idFromInt, $elm$json$Json$Decode$int);
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
+	function (key, valDecoder, decoder) {
+		return A2(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom,
+			A2($elm$json$Json$Decode$field, key, valDecoder),
+			decoder);
+	});
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$Main$updateListDecoder = $elm$json$Json$Decode$list($elm$json$Json$Decode$string);
 var $author$project$Main$ClosedOut = {$: 'ClosedOut'};
-var $author$project$Main$Open = function (a) {
-	return {$: 'Open', a: a};
+var $author$project$Main$High = {$: 'High'};
+var $author$project$Main$Low = {$: 'Low'};
+var $author$project$Main$Medium = {$: 'Medium'};
+var $author$project$Main$urgencyFromString = function (urgency) {
+	switch (urgency) {
+		case 'low':
+			return $elm$json$Json$Decode$succeed($author$project$Main$Low);
+		case 'medium':
+			return $elm$json$Json$Decode$succeed($author$project$Main$Medium);
+		case 'high':
+			return $elm$json$Json$Decode$succeed($author$project$Main$High);
+		default:
+			return $elm$json$Json$Decode$succeed($author$project$Main$ClosedOut);
+	}
 };
-var $author$project$Main$QuoteSuccess = function (a) {
-	return {$: 'QuoteSuccess', a: a};
-};
-var $elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
-		}
-	});
-var $elm$core$List$concat = function (lists) {
-	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
-};
-var $author$project$Main$appendUpdate = F3(
-	function (quote, buffer, existingUpdates) {
-		return _Utils_update(
-			quote,
-			{
-				updateList: $elm$core$List$concat(
-					_List_fromArray(
-						[
-							existingUpdates,
-							_List_fromArray(
-							[buffer])
-						]))
-			});
-	});
-var $author$project$Main$clearBuffer = function (quote) {
-	return _Utils_update(
-		quote,
-		{updateBuffer: ''});
-};
-var $elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
-	});
-var $author$project$Main$mutateDialog = function (dialog) {
-	return _Utils_eq(dialog, $author$project$Main$Closed) ? $author$project$Main$Open('dialog') : $author$project$Main$Closed;
-};
-var $author$project$Main$mutateStatusDialog = function (quote) {
-	return _Utils_update(
-		quote,
-		{
-			changeStatusDialog: $author$project$Main$mutateDialog(quote.changeStatusDialog)
-		});
-};
-var $author$project$Main$mutateUpdateDialog = function (quote) {
-	return _Utils_update(
-		quote,
-		{
-			updateDialog: $author$project$Main$mutateDialog(quote.updateDialog)
-		});
-};
-var $elm$core$Basics$neq = _Utils_notEqual;
-var $author$project$Main$Sent = function (a) {
-	return {$: 'Sent', a: a};
-};
+var $author$project$Main$urgencyDecoder = A2($elm$json$Json$Decode$andThen, $author$project$Main$urgencyFromString, $elm$json$Json$Decode$string);
+var $author$project$Main$newRequestDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'id',
+	$author$project$Main$idDecoder,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'urgency',
+		$author$project$Main$urgencyDecoder,
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'updateList',
+			$author$project$Main$updateListDecoder,
+			A2(
+				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded,
+				$author$project$Main$Closed,
+				A2(
+					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded,
+					'',
+					A2(
+						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded,
+						$author$project$Main$Closed,
+						A3(
+							$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+							'year',
+							$elm$json$Json$Decode$int,
+							A3(
+								$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+								'author',
+								$elm$json$Json$Decode$string,
+								A3(
+									$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+									'source',
+									$elm$json$Json$Decode$string,
+									A3(
+										$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+										'quote',
+										$elm$json$Json$Decode$string,
+										$elm$json$Json$Decode$succeed($author$project$Main$Quote)))))))))));
+var $author$project$Main$decodeState = $elm$json$Json$Decode$list($author$project$Main$newRequestDecoder);
+var $elm$json$Json$Decode$decodeString = _Json_runOnString;
 var $elm$http$Http$BadStatus_ = F2(
 	function (a, b) {
 		return {$: 'BadStatus_', a: a, b: b};
@@ -5963,18 +5991,24 @@ var $elm$core$Dict$update = F3(
 			return A2($elm$core$Dict$remove, targetKey, dictionary);
 		}
 	});
-var $elm$core$Basics$composeR = F3(
-	function (f, g, x) {
-		return g(
-			f(x));
-	});
-var $elm$http$Http$expectBytesResponse = F2(
+var $elm$http$Http$expectStringResponse = F2(
 	function (toMsg, toResult) {
 		return A3(
 			_Http_expect,
-			'arraybuffer',
-			_Http_toDataView,
+			'',
+			$elm$core$Basics$identity,
 			A2($elm$core$Basics$composeR, toResult, toMsg));
+	});
+var $elm$core$Result$mapError = F2(
+	function (f, result) {
+		if (result.$ === 'Ok') {
+			var v = result.a;
+			return $elm$core$Result$Ok(v);
+		} else {
+			var e = result.a;
+			return $elm$core$Result$Err(
+				f(e));
+		}
 	});
 var $elm$http$Http$BadBody = function (a) {
 	return {$: 'BadBody', a: a};
@@ -5987,17 +6021,6 @@ var $elm$http$Http$BadUrl = function (a) {
 };
 var $elm$http$Http$NetworkError = {$: 'NetworkError'};
 var $elm$http$Http$Timeout = {$: 'Timeout'};
-var $elm$core$Result$mapError = F2(
-	function (f, result) {
-		if (result.$ === 'Ok') {
-			var v = result.a;
-			return $elm$core$Result$Ok(v);
-		} else {
-			var e = result.a;
-			return $elm$core$Result$Err(
-				f(e));
-		}
-	});
 var $elm$http$Http$resolve = F2(
 	function (toResult, response) {
 		switch (response.$) {
@@ -6021,21 +6044,20 @@ var $elm$http$Http$resolve = F2(
 					toResult(body));
 		}
 	});
-var $elm$http$Http$expectWhatever = function (toMsg) {
-	return A2(
-		$elm$http$Http$expectBytesResponse,
-		toMsg,
-		$elm$http$Http$resolve(
-			function (_v0) {
-				return $elm$core$Result$Ok(_Utils_Tuple0);
-			}));
-};
-var $elm$http$Http$jsonBody = function (value) {
-	return A2(
-		_Http_pair,
-		'application/json',
-		A2($elm$json$Json$Encode$encode, 0, value));
-};
+var $elm$http$Http$expectJson = F2(
+	function (toMsg, decoder) {
+		return A2(
+			$elm$http$Http$expectStringResponse,
+			toMsg,
+			$elm$http$Http$resolve(
+				function (string) {
+					return A2(
+						$elm$core$Result$mapError,
+						$elm$json$Json$Decode$errorToString,
+						A2($elm$json$Json$Decode$decodeString, decoder, string));
+				}));
+	});
+var $elm$http$Http$emptyBody = _Http_emptyBody;
 var $elm$http$Http$Request = function (a) {
 	return {$: 'Request', a: a};
 };
@@ -6204,6 +6226,117 @@ var $elm$http$Http$request = function (r) {
 		$elm$http$Http$Request(
 			{allowCookiesFromOtherDomains: false, body: r.body, expect: r.expect, headers: r.headers, method: r.method, timeout: r.timeout, tracker: r.tracker, url: r.url}));
 };
+var $elm$http$Http$get = function (r) {
+	return $elm$http$Http$request(
+		{body: $elm$http$Http$emptyBody, expect: r.expect, headers: _List_Nil, method: 'GET', timeout: $elm$core$Maybe$Nothing, tracker: $elm$core$Maybe$Nothing, url: r.url});
+};
+var $author$project$Main$init = function (_v0) {
+	return _Utils_Tuple2(
+		A4($author$project$Main$Model, '', $author$project$Main$Closed, $author$project$Main$QuoteLoading, ''),
+		$elm$http$Http$get(
+			{
+				expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeState),
+				url: 'http://127.0.0.1:5000/active'
+			}));
+};
+var $elm$core$Platform$Sub$batch = _Platform_batch;
+var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
+var $author$project$Main$subscriptions = function (model) {
+	return $elm$core$Platform$Sub$none;
+};
+var $author$project$Main$Open = function (a) {
+	return {$: 'Open', a: a};
+};
+var $author$project$Main$QuoteSuccess = function (a) {
+	return {$: 'QuoteSuccess', a: a};
+};
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
+		}
+	});
+var $elm$core$List$concat = function (lists) {
+	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
+};
+var $author$project$Main$appendUpdate = F3(
+	function (quote, buffer, existingUpdates) {
+		return _Utils_update(
+			quote,
+			{
+				updateList: $elm$core$List$concat(
+					_List_fromArray(
+						[
+							existingUpdates,
+							_List_fromArray(
+							[buffer])
+						]))
+			});
+	});
+var $author$project$Main$clearBuffer = function (quote) {
+	return _Utils_update(
+		quote,
+		{updateBuffer: ''});
+};
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $author$project$Main$mutateDialog = function (dialog) {
+	return _Utils_eq(dialog, $author$project$Main$Closed) ? $author$project$Main$Open('dialog') : $author$project$Main$Closed;
+};
+var $author$project$Main$mutateStatusDialog = function (quote) {
+	return _Utils_update(
+		quote,
+		{
+			changeStatusDialog: $author$project$Main$mutateDialog(quote.changeStatusDialog)
+		});
+};
+var $author$project$Main$mutateUpdateDialog = function (quote) {
+	return _Utils_update(
+		quote,
+		{
+			updateDialog: $author$project$Main$mutateDialog(quote.updateDialog)
+		});
+};
+var $elm$core$Basics$neq = _Utils_notEqual;
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $author$project$Main$Sent = function (a) {
+	return {$: 'Sent', a: a};
+};
+var $elm$http$Http$expectBytesResponse = F2(
+	function (toMsg, toResult) {
+		return A3(
+			_Http_expect,
+			'arraybuffer',
+			_Http_toDataView,
+			A2($elm$core$Basics$composeR, toResult, toMsg));
+	});
+var $elm$http$Http$expectWhatever = function (toMsg) {
+	return A2(
+		$elm$http$Http$expectBytesResponse,
+		toMsg,
+		$elm$http$Http$resolve(
+			function (_v0) {
+				return $elm$core$Result$Ok(_Utils_Tuple0);
+			}));
+};
+var $elm$http$Http$jsonBody = function (value) {
+	return A2(
+		_Http_pair,
+		'application/json',
+		A2($elm$json$Json$Encode$encode, 0, value));
+};
 var $elm$http$Http$post = function (r) {
 	return $elm$http$Http$request(
 		{body: r.body, expect: r.expect, headers: _List_Nil, method: 'POST', timeout: $elm$core$Maybe$Nothing, tracker: $elm$core$Maybe$Nothing, url: r.url});
@@ -6304,7 +6437,7 @@ var $author$project$Main$postNewRequest = function (quote) {
 			body: $elm$http$Http$jsonBody(
 				$author$project$Main$newRequestEncoder(quote)),
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://127.0.0.2:5000/new'
+			url: 'http://127.0.0.1:5000/new'
 		});
 };
 var $author$project$Main$postStatusChange = function (quote) {
@@ -6339,31 +6472,6 @@ var $author$project$Main$postUpdate = function (quote) {
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
 			url: 'http://127.0.0.1:5000/update'
 		});
-};
-var $author$project$Main$ID = function (id) {
-	return {id: id};
-};
-var $author$project$Main$Low = {$: 'Low'};
-var $author$project$Main$Quote = function (quote) {
-	return function (source) {
-		return function (author) {
-			return function (year) {
-				return function (updateDialog) {
-					return function (updateBuffer) {
-						return function (changeStatusDialog) {
-							return function (updateList) {
-								return function (urgency) {
-									return function (id) {
-										return {author: author, changeStatusDialog: changeStatusDialog, id: id, quote: quote, source: source, updateBuffer: updateBuffer, updateDialog: updateDialog, updateList: updateList, urgency: urgency, year: year};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
 };
 var $author$project$Main$requestFactory = F2(
 	function (buffer, name) {
@@ -6613,13 +6721,39 @@ var $author$project$Main$update = F2(
 							return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					}
 				}
+			case 'DataReceived':
+				var result = msg.a;
+				if (result.$ === 'Ok') {
+					var data = result.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								quotes: $author$project$Main$QuoteSuccess(data)
+							}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					var httpError = result.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								quotes: $author$project$Main$QuoteSuccess(
+									_List_fromArray(
+										[
+											$author$project$Main$Quote('ERROR')('')('')(2022)($author$project$Main$Closed)('')($author$project$Main$Closed)(_List_Nil)($author$project$Main$High)(
+											$author$project$Main$ID(1000))
+										]))
+							}),
+						$elm$core$Platform$Cmd$none);
+				}
 			default:
 				var quote = msg.a;
 				var urgencyLevel = msg.b;
-				var _v13 = model.quotes;
-				switch (_v13.$) {
+				var _v14 = model.quotes;
+				switch (_v14.$) {
 					case 'QuoteSuccess':
-						var current = _v13.a;
+						var current = _v14.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
@@ -6628,8 +6762,8 @@ var $author$project$Main$update = F2(
 										A2(
 											$elm$core$List$map,
 											function (x) {
-												var _v14 = _Utils_eq(x, quote);
-												if (_v14) {
+												var _v15 = _Utils_eq(x, quote);
+												if (_v15) {
 													return _Utils_update(
 														x,
 														{urgency: urgencyLevel});
@@ -6718,12 +6852,10 @@ var $elm$html$Html$Events$stopPropagationOn = F2(
 			event,
 			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
 	});
-var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$at = F2(
 	function (fields, decoder) {
 		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
 	});
-var $elm$json$Json$Decode$string = _Json_decodeString;
 var $elm$html$Html$Events$targetValue = A2(
 	$elm$json$Json$Decode$at,
 	_List_fromArray(
@@ -6893,8 +7025,6 @@ var $author$project$Main$viewDialog = F3(
 			return A2($elm$html$Html$div, _List_Nil, html);
 		}
 	});
-var $author$project$Main$High = {$: 'High'};
-var $author$project$Main$Medium = {$: 'Medium'};
 var $author$project$Main$SwitchTo = F2(
 	function (a, b) {
 		return {$: 'SwitchTo', a: a, b: b};

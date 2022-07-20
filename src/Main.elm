@@ -5,8 +5,9 @@ import Html exposing (..)
 import Html.Attributes exposing (classList, class, value, placeholder, id, style, type_, checked, name)
 import Http
 import Html.Events exposing (..)
-import Json.Decode exposing (Decoder, map4, field, int, string)
+import Json.Decode as Decode exposing (Decoder, decodeString, float, int, nullable, string, field, map4)
 import Json.Decode as Decode
+import Json.Decode.Pipeline exposing (required, optional, hardcoded)
 import Json.Encode as Encode
 
 
@@ -22,11 +23,6 @@ main =
   , view = view 
   }
 
---Model
---type Load = 
---  Failure
---  | Loading
---  | Success String 
 
 type QuoteState =
   QuoteFailure
@@ -51,13 +47,6 @@ type alias Quote =
   , id: ID
   }
 
---type alias RawQuote = 
---  { quote : String 
---  , source : String 
---  , author : String 
---  , year : Int 
---  }
-
 type Dialog = 
   Open String 
   | Closed
@@ -80,15 +69,15 @@ type alias Model =
 
 --declare type
 init : () -> (Model, Cmd Msg)
-init _=
-  (Model "" Closed QuoteLoading "", Cmd.none)
 --init _=
---  ( Model Loading "" Closed QuoteLoading ""
---  , Http.get
---    { url = "https://elm-lang.org/assets/public-opinion.txt"
---    , expect = Http.expectString GotText
---    }
---  )
+ -- (Model "" Closed QuoteLoading "", Cmd.none)
+init _=
+  (Model "" Closed QuoteLoading ""
+  , Http.get
+    { url = "http://127.0.0.1:5000/active"
+    , expect = Http.expectJson DataReceived decodeState
+    }
+  )
 
 --Update 
 type Msg 
@@ -102,7 +91,7 @@ type Msg
   | UpdateQuote Quote String
   | CreateRequest String 
   | Sent (Result Http.Error ())
-  | DataReceived (Result Http.Error String)
+  | DataReceived (Result Http.Error (List Quote))
   --| MorePlease
   --| GotQuote (Result Http.Error RawQuote)
   | Buffer Quote String
@@ -254,7 +243,7 @@ update msg model =
         Result.Err notOk ->
           case notOk of
             Http.BadUrl err ->
-              (model, Cmd.none)
+              ( model, Cmd.none)
             Http.Timeout ->
               (model, Cmd.none)
             Http.NetworkError ->
@@ -266,9 +255,9 @@ update msg model =
     DataReceived result ->
       case result of 
         Ok data ->
-          ({ model | quotes = data }, Cmd.none)
+          ({ model | quotes = (QuoteSuccess data) }, Cmd.none)
         Err httpError -> 
-          (model, Cmd.none)
+          ({ model | quotes = (QuoteSuccess [Quote "ERROR" "" "" 2022 Closed "" Closed [] High (ID 1000)])}, Cmd.none)
     SwitchTo quote urgencyLevel -> 
           case model.quotes of 
             QuoteSuccess current ->
@@ -493,25 +482,37 @@ radio (isChecked, choiceName, msg) =
 
 getCurrentState: Model -> Cmd Msg
 getCurrentState model =
-  Http.post
+  Http.get
   {
-    url = "http://127.0.0.1:5000/state"
+    url = "http://127.0.0.1:5000/active"
   , expect = Http.expectJson DataReceived decodeState
   }
 
 decodeState: Decoder (List Quote)
-decodeState = 
+decodeState = Decode.list newRequestDecoder
 
-newRequestEncoder : Quote -> Encode.Value
-newRequestEncoder quote =
-  map7 Quote
-  (field "id" idDecoder)
-  (field "quote" string)
-  (field "source" string)
-  (field "author" string)
-  (field "year" int)
-  (field "updateList" updateListDecoder)
-  (field "urgency" urgencyDecoder)
+newRequestDecoder : Decoder Quote
+newRequestDecoder =
+  Decode.succeed Quote
+    |> required "quote" string
+    |> required "source" string
+    |> required "author" string
+    |> required "year" int
+    |> hardcoded "updateDialog" decodeToClosed
+    |> hardcoded "updateBuffer" decodeToEmptyString 
+    |> hardcoded "changeStatusDialog" decodeToClosed
+    |> required "updateList" updateListDecoder
+    |> required "urgency" urgencyDecoder
+    |> required "id" idDecoder
+
+--  Quote buffer "created..." name 2020 Closed "" Closed ["created"] Low (ID 1234)
+
+decodeToClosed: Decoder Dialog
+decodeToClosed = 
+  Decode.succeed Closed
+decodeToEmptyString: Decoder String
+decodeToEmptyString = 
+  Decode.succeed ""
 
 idDecoder: Decoder ID
 idDecoder = 
@@ -519,13 +520,19 @@ idDecoder =
 
 idFromInt: Int -> Decoder ID
 idFromInt id =
-  ID id
+  Decode.succeed (ID id)
+
+updateListDecoder: Decoder (List String)
+updateListDecoder = 
+  Decode.list Decode.string
+
+
 
 urgencyDecoder: Decoder Urgency
 urgencyDecoder =
   Decode.string |> Decode.andThen urgencyFromString
 
-urgencyFromString: String -> Decoder Direction
+urgencyFromString: String -> Decoder Urgency
 urgencyFromString urgency = 
   case urgency of
     "low" -> Decode.succeed Low
