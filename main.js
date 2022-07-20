@@ -5343,170 +5343,6 @@ var $author$project$Main$Model = F4(
 		return {buffer: buffer, name: name, quotes: quotes, status: status};
 	});
 var $author$project$Main$QuoteLoading = {$: 'QuoteLoading'};
-var $elm$json$Json$Decode$list = _Json_decodeList;
-var $author$project$Main$Quote = function (quote) {
-	return function (source) {
-		return function (author) {
-			return function (year) {
-				return function (updateDialog) {
-					return function (updateBuffer) {
-						return function (changeStatusDialog) {
-							return function (updateList) {
-								return function (urgency) {
-									return function (id) {
-										return {author: author, changeStatusDialog: changeStatusDialog, id: id, quote: quote, source: source, updateBuffer: updateBuffer, updateDialog: updateDialog, updateList: updateList, urgency: urgency, year: year};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-};
-var $author$project$Main$decodeToClosed = $elm$json$Json$Decode$succeed($author$project$Main$Closed);
-var $author$project$Main$decodeToEmptyString = $elm$json$Json$Decode$succeed('');
-var $elm$json$Json$Decode$andThen = _Json_andThen;
-var $author$project$Main$ID = function (id) {
-	return {id: id};
-};
-var $author$project$Main$idFromInt = function (id) {
-	return $elm$json$Json$Decode$succeed(
-		$author$project$Main$ID(id));
-};
-var $elm$json$Json$Decode$int = _Json_decodeInt;
-var $author$project$Main$idDecoder = A2($elm$json$Json$Decode$andThen, $author$project$Main$idFromInt, $elm$json$Json$Decode$int);
-var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom = $elm$json$Json$Decode$map2($elm$core$Basics$apR);
-var $elm$json$Json$Decode$field = _Json_decodeField;
-var $elm$json$Json$Decode$at = F2(
-	function (fields, decoder) {
-		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
-	});
-var $elm$json$Json$Decode$decodeValue = _Json_run;
-var $elm$json$Json$Decode$null = _Json_decodeNull;
-var $elm$json$Json$Decode$oneOf = _Json_oneOf;
-var $elm$json$Json$Decode$value = _Json_decodeValue;
-var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optionalDecoder = F3(
-	function (path, valDecoder, fallback) {
-		var nullOr = function (decoder) {
-			return $elm$json$Json$Decode$oneOf(
-				_List_fromArray(
-					[
-						decoder,
-						$elm$json$Json$Decode$null(fallback)
-					]));
-		};
-		var handleResult = function (input) {
-			var _v0 = A2(
-				$elm$json$Json$Decode$decodeValue,
-				A2($elm$json$Json$Decode$at, path, $elm$json$Json$Decode$value),
-				input);
-			if (_v0.$ === 'Ok') {
-				var rawValue = _v0.a;
-				var _v1 = A2(
-					$elm$json$Json$Decode$decodeValue,
-					nullOr(valDecoder),
-					rawValue);
-				if (_v1.$ === 'Ok') {
-					var finalResult = _v1.a;
-					return $elm$json$Json$Decode$succeed(finalResult);
-				} else {
-					return A2(
-						$elm$json$Json$Decode$at,
-						path,
-						nullOr(valDecoder));
-				}
-			} else {
-				return $elm$json$Json$Decode$succeed(fallback);
-			}
-		};
-		return A2($elm$json$Json$Decode$andThen, handleResult, $elm$json$Json$Decode$value);
-	});
-var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional = F4(
-	function (key, valDecoder, fallback, decoder) {
-		return A2(
-			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom,
-			A3(
-				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optionalDecoder,
-				_List_fromArray(
-					[key]),
-				valDecoder,
-				fallback),
-			decoder);
-	});
-var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
-	function (key, valDecoder, decoder) {
-		return A2(
-			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom,
-			A2($elm$json$Json$Decode$field, key, valDecoder),
-			decoder);
-	});
-var $elm$json$Json$Decode$string = _Json_decodeString;
-var $author$project$Main$updateListDecoder = $elm$json$Json$Decode$list($elm$json$Json$Decode$string);
-var $author$project$Main$ClosedOut = {$: 'ClosedOut'};
-var $author$project$Main$High = {$: 'High'};
-var $author$project$Main$Low = {$: 'Low'};
-var $author$project$Main$Medium = {$: 'Medium'};
-var $author$project$Main$urgencyFromString = function (urgency) {
-	switch (urgency) {
-		case 'low':
-			return $elm$json$Json$Decode$succeed($author$project$Main$Low);
-		case 'medium':
-			return $elm$json$Json$Decode$succeed($author$project$Main$Medium);
-		case 'high':
-			return $elm$json$Json$Decode$succeed($author$project$Main$High);
-		default:
-			return $elm$json$Json$Decode$succeed($author$project$Main$ClosedOut);
-	}
-};
-var $author$project$Main$urgencyDecoder = A2($elm$json$Json$Decode$andThen, $author$project$Main$urgencyFromString, $elm$json$Json$Decode$string);
-var $author$project$Main$newRequestDecoder = A3(
-	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-	'id',
-	$author$project$Main$idDecoder,
-	A3(
-		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-		'urgency',
-		$author$project$Main$urgencyDecoder,
-		A3(
-			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-			'updateList',
-			$author$project$Main$updateListDecoder,
-			A4(
-				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-				'changeStatusDialog',
-				$author$project$Main$decodeToClosed,
-				$author$project$Main$Closed,
-				A4(
-					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-					'updateBuffer',
-					$author$project$Main$decodeToEmptyString,
-					'',
-					A4(
-						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-						'updateDialog',
-						$author$project$Main$decodeToClosed,
-						$author$project$Main$Closed,
-						A3(
-							$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-							'year',
-							$elm$json$Json$Decode$int,
-							A3(
-								$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-								'author',
-								$elm$json$Json$Decode$string,
-								A3(
-									$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-									'source',
-									$elm$json$Json$Decode$string,
-									A3(
-										$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-										'quote',
-										$elm$json$Json$Decode$string,
-										$elm$json$Json$Decode$succeed($author$project$Main$Quote)))))))))));
-var $author$project$Main$decodeState = $elm$json$Json$Decode$list($author$project$Main$newRequestDecoder);
-var $elm$json$Json$Decode$decodeString = _Json_runOnString;
 var $elm$http$Http$BadStatus_ = F2(
 	function (a, b) {
 		return {$: 'BadStatus_', a: a, b: b};
@@ -6062,17 +5898,6 @@ var $elm$http$Http$expectStringResponse = F2(
 			$elm$core$Basics$identity,
 			A2($elm$core$Basics$composeR, toResult, toMsg));
 	});
-var $elm$core$Result$mapError = F2(
-	function (f, result) {
-		if (result.$ === 'Ok') {
-			var v = result.a;
-			return $elm$core$Result$Ok(v);
-		} else {
-			var e = result.a;
-			return $elm$core$Result$Err(
-				f(e));
-		}
-	});
 var $elm$http$Http$BadBody = function (a) {
 	return {$: 'BadBody', a: a};
 };
@@ -6084,6 +5909,17 @@ var $elm$http$Http$BadUrl = function (a) {
 };
 var $elm$http$Http$NetworkError = {$: 'NetworkError'};
 var $elm$http$Http$Timeout = {$: 'Timeout'};
+var $elm$core$Result$mapError = F2(
+	function (f, result) {
+		if (result.$ === 'Ok') {
+			var v = result.a;
+			return $elm$core$Result$Ok(v);
+		} else {
+			var e = result.a;
+			return $elm$core$Result$Err(
+				f(e));
+		}
+	});
 var $elm$http$Http$resolve = F2(
 	function (toResult, response) {
 		switch (response.$) {
@@ -6107,19 +5943,12 @@ var $elm$http$Http$resolve = F2(
 					toResult(body));
 		}
 	});
-var $elm$http$Http$expectJson = F2(
-	function (toMsg, decoder) {
-		return A2(
-			$elm$http$Http$expectStringResponse,
-			toMsg,
-			$elm$http$Http$resolve(
-				function (string) {
-					return A2(
-						$elm$core$Result$mapError,
-						$elm$json$Json$Decode$errorToString,
-						A2($elm$json$Json$Decode$decodeString, decoder, string));
-				}));
-	});
+var $elm$http$Http$expectString = function (toMsg) {
+	return A2(
+		$elm$http$Http$expectStringResponse,
+		toMsg,
+		$elm$http$Http$resolve($elm$core$Result$Ok));
+};
 var $elm$http$Http$emptyBody = _Http_emptyBody;
 var $elm$http$Http$Request = function (a) {
 	return {$: 'Request', a: a};
@@ -6298,7 +6127,7 @@ var $author$project$Main$init = function (_v0) {
 		A4($author$project$Main$Model, '', $author$project$Main$Closed, $author$project$Main$QuoteLoading, ''),
 		$elm$http$Http$get(
 			{
-				expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeState),
+				expect: $elm$http$Http$expectString($author$project$Main$DataReceived),
 				url: 'http://127.0.0.1:5000/active'
 			}));
 };
@@ -6307,8 +6136,34 @@ var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$none;
 };
+var $author$project$Main$ClosedOut = {$: 'ClosedOut'};
+var $author$project$Main$High = {$: 'High'};
+var $author$project$Main$ID = function (id) {
+	return {id: id};
+};
 var $author$project$Main$Open = function (a) {
 	return {$: 'Open', a: a};
+};
+var $author$project$Main$Quote = function (quote) {
+	return function (source) {
+		return function (author) {
+			return function (year) {
+				return function (updateDialog) {
+					return function (updateBuffer) {
+						return function (changeStatusDialog) {
+							return function (updateList) {
+								return function (urgency) {
+									return function (id) {
+										return {author: author, changeStatusDialog: changeStatusDialog, id: id, quote: quote, source: source, updateBuffer: updateBuffer, updateDialog: updateDialog, updateList: updateList, urgency: urgency, year: year};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
 };
 var $author$project$Main$QuoteSuccess = function (a) {
 	return {$: 'QuoteSuccess', a: a};
@@ -6536,6 +6391,7 @@ var $author$project$Main$postUpdate = function (quote) {
 			url: 'http://127.0.0.1:5000/update'
 		});
 };
+var $author$project$Main$Low = {$: 'Low'};
 var $author$project$Main$requestFactory = F2(
 	function (buffer, name) {
 		return $author$project$Main$Quote(buffer)('created...')(name)(2020)($author$project$Main$Closed)('')($author$project$Main$Closed)(
@@ -6792,7 +6648,12 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								quotes: $author$project$Main$QuoteSuccess(data)
+								quotes: $author$project$Main$QuoteSuccess(
+									_List_fromArray(
+										[
+											$author$project$Main$Quote(data)('')('')(2022)($author$project$Main$Closed)('')($author$project$Main$Closed)(_List_Nil)($author$project$Main$High)(
+											$author$project$Main$ID(1000))
+										]))
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
@@ -6915,6 +6776,12 @@ var $elm$html$Html$Events$stopPropagationOn = F2(
 			event,
 			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
 	});
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$string = _Json_decodeString;
 var $elm$html$Html$Events$targetValue = A2(
 	$elm$json$Json$Decode$at,
 	_List_fromArray(
@@ -7084,6 +6951,7 @@ var $author$project$Main$viewDialog = F3(
 			return A2($elm$html$Html$div, _List_Nil, html);
 		}
 	});
+var $author$project$Main$Medium = {$: 'Medium'};
 var $author$project$Main$SwitchTo = F2(
 	function (a, b) {
 		return {$: 'SwitchTo', a: a, b: b};

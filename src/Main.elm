@@ -75,7 +75,7 @@ init _=
   (Model "" Closed QuoteLoading ""
   , Http.get
     { url = "http://127.0.0.1:5000/active"
-    , expect = Http.expectJson DataReceived decodeState
+    , expect = Http.expectString DataReceived 
     }
   )
 
@@ -91,7 +91,7 @@ type Msg
   | UpdateQuote Quote String
   | CreateRequest String 
   | Sent (Result Http.Error ())
-  | DataReceived (Result Http.Error (List Quote))
+  | DataReceived (Result Http.Error String)
   --| MorePlease
   --| GotQuote (Result Http.Error RawQuote)
   | Buffer Quote String
@@ -255,7 +255,7 @@ update msg model =
     DataReceived result ->
       case result of 
         Ok data ->
-          ({ model | quotes = (QuoteSuccess data) }, Cmd.none)
+          ({ model | quotes = (QuoteSuccess [Quote data "" "" 2022 Closed "" Closed [] High (ID 1000)])}, Cmd.none)
         Err httpError -> 
           ({ model | quotes = (QuoteSuccess [Quote "ERROR" "" "" 2022 Closed "" Closed [] High (ID 1000)])}, Cmd.none)
     SwitchTo quote urgencyLevel -> 
@@ -485,7 +485,7 @@ getCurrentState model =
   Http.get
   {
     url = "http://127.0.0.1:5000/active"
-  , expect = Http.expectJson DataReceived decodeState
+  , expect = Http.expectString DataReceived 
   }
 
 decodeState: Decoder (List Quote)
@@ -505,7 +505,7 @@ newRequestDecoder =
     |> required "urgency" urgencyDecoder
     |> required "id" idDecoder
 
---  Quote buffer "created..." name 2020 Closed "" Closed ["created"] Low (ID 1234)
+--  Quote buffer "created..." name 2020 Closed "" Closed ["created"] Low ()
 
 decodeToClosed: Decoder Dialog
 decodeToClosed = 
