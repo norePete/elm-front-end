@@ -498,9 +498,9 @@ newRequestDecoder =
     |> required "source" string
     |> required "author" string
     |> required "year" int
-    |> hardcoded "updateDialog" decodeToClosed
-    |> hardcoded "updateBuffer" decodeToEmptyString 
-    |> hardcoded "changeStatusDialog" decodeToClosed
+    |> optional "updateDialog" decodeToClosed Closed
+    |> optional "updateBuffer" decodeToEmptyString ""
+    |> optional "changeStatusDialog" decodeToClosed Closed
     |> required "updateList" updateListDecoder
     |> required "urgency" urgencyDecoder
     |> required "id" idDecoder
