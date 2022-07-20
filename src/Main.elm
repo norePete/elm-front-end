@@ -6,6 +6,7 @@ import Html.Attributes exposing (classList, class, value, placeholder, id, style
 import Http
 import Html.Events exposing (..)
 import Json.Decode exposing (Decoder, map4, field, int, string)
+import Json.Decode as Decode
 import Json.Encode as Encode
 
 
@@ -101,6 +102,7 @@ type Msg
   | UpdateQuote Quote String
   | CreateRequest String 
   | Sent (Result Http.Error ())
+  | DataReceived (Result Http.Error String)
   --| MorePlease
   --| GotQuote (Result Http.Error RawQuote)
   | Buffer Quote String
@@ -230,7 +232,7 @@ update msg model =
                        x
                      ) current) 
                }
-              , postUpdate <| resetUrgency quote)
+              , postUpdate <| resetUrgency <| appendUpdate quote quote.updateBuffer quote.updateList )
             QuoteFailure ->
               (model, Cmd.none)
             QuoteLoading ->
@@ -240,7 +242,7 @@ update msg model =
             QuoteSuccess current ->
               ({ model | quotes = 
                QuoteSuccess (List.filter (\x -> x /= quote) current) }
-              , postCloseRequest quote)
+              , postCloseRequest {quote | urgency = ClosedOut})
             QuoteFailure ->
               (model, Cmd.none)
             QuoteLoading ->
@@ -261,6 +263,12 @@ update msg model =
               (model, Cmd.none)
             Http.BadBody code ->
               (model, Cmd.none)
+    DataReceived result ->
+      case result of 
+        Ok data ->
+          ({ model | quotes = data }, Cmd.none)
+        Err httpError -> 
+          (model, Cmd.none)
     SwitchTo quote urgencyLevel -> 
           case model.quotes of 
             QuoteSuccess current ->
@@ -274,7 +282,7 @@ update msg model =
                        x
                      ) current) 
                }
-              , postStatusChange quote)
+              , postStatusChange <| {quote | urgency = urgencyLevel})
             QuoteFailure ->
               (model, Cmd.none)
             QuoteLoading ->
@@ -481,14 +489,58 @@ radio (isChecked, choiceName, msg) =
 
 -- HTTP
 
+--GET REQUESTS
 
+getCurrentState: Model -> Cmd Msg
+getCurrentState model =
+  Http.post
+  {
+    url = "http://127.0.0.1:5000/state"
+  , expect = Http.expectJson DataReceived decodeState
+  }
+
+decodeState: Decoder (List Quote)
+decodeState = 
+
+newRequestEncoder : Quote -> Encode.Value
+newRequestEncoder quote =
+  map7 Quote
+  (field "id" idDecoder)
+  (field "quote" string)
+  (field "source" string)
+  (field "author" string)
+  (field "year" int)
+  (field "updateList" updateListDecoder)
+  (field "urgency" urgencyDecoder)
+
+idDecoder: Decoder ID
+idDecoder = 
+  Decode.int |> Decode.andThen idFromInt
+
+idFromInt: Int -> Decoder ID
+idFromInt id =
+  ID id
+
+urgencyDecoder: Decoder Urgency
+urgencyDecoder =
+  Decode.string |> Decode.andThen urgencyFromString
+
+urgencyFromString: String -> Decoder Direction
+urgencyFromString urgency = 
+  case urgency of
+    "low" -> Decode.succeed Low
+    "medium" -> Decode.succeed Medium
+    "high" -> Decode.succeed High
+    _ -> Decode.succeed ClosedOut
+
+-- POST REQUESTS
 postNewRequest: Quote -> Cmd Msg
 postNewRequest quote = 
   Http.post
     { 
       body = newRequestEncoder quote |> Http.jsonBody
     , expect = Http.expectWhatever Sent
-    , url = "http://127.0.0.2:5000/new"
+    , url = "http://127.0.0.1:5000/new"
     }
 postUpdate: Quote -> Cmd Msg
 postUpdate quote = 
@@ -542,6 +594,7 @@ statusEncoder quote =
 encodeId: ID-> Encode.Value
 encodeId id = 
   Encode.int id.id
+
 encodeUpdateList: (List String) -> Encode.Value
 encodeUpdateList updateList =
   Encode.list Encode.string updateList
@@ -557,12 +610,4 @@ encodeUrgency urgency =
     ClosedOut ->
       Encode.string "closed"
 
-
---quoteDecoder : Decoder RawQuote
---quoteDecoder = 
---  map4 RawQuote
---    (field "quote" string)
---    (field "source" string)
---    (field "author" string)
---    (field "year" int)
 

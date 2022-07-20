@@ -5352,6 +5352,7 @@ var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $author$project$Main$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$none;
 };
+var $author$project$Main$ClosedOut = {$: 'ClosedOut'};
 var $author$project$Main$Open = function (a) {
 	return {$: 'Open', a: a};
 };
@@ -6555,7 +6556,8 @@ var $author$project$Main$update = F2(
 											current))
 								}),
 							$author$project$Main$postUpdate(
-								$author$project$Main$resetUrgency(quote)));
+								$author$project$Main$resetUrgency(
+									A3($author$project$Main$appendUpdate, quote, quote.updateBuffer, quote.updateList))));
 					case 'QuoteFailure':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
@@ -6579,7 +6581,10 @@ var $author$project$Main$update = F2(
 											},
 											current))
 								}),
-							$author$project$Main$postCloseRequest(quote));
+							$author$project$Main$postCloseRequest(
+								_Utils_update(
+									quote,
+									{urgency: $author$project$Main$ClosedOut})));
 					case 'QuoteFailure':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
@@ -6634,7 +6639,10 @@ var $author$project$Main$update = F2(
 											},
 											current))
 								}),
-							$author$project$Main$postStatusChange(quote));
+							$author$project$Main$postStatusChange(
+								_Utils_update(
+									quote,
+									{urgency: urgencyLevel})));
 					case 'QuoteFailure':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
