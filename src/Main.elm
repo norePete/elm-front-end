@@ -1,13 +1,13 @@
 module Main exposing (..)
 
+import Random
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (classList, class, value, placeholder, id, style, type_, checked, name)
 import Http
 import Html.Events exposing (..)
 import Json.Decode as Decode exposing (Decoder, decodeString, float, int, nullable, string, field, map4)
-import Json.Decode as Decode
-import Json.Decode.Pipeline exposing (required, optional, hardcoded)
+import Json.Decode.Pipeline as JP exposing (required, optional, hardcoded)
 import Json.Encode as Encode
 
 
@@ -31,6 +31,7 @@ type QuoteState =
 
 type alias ID = 
   { id: Int }
+
 
 --Move the status dialog and update dialog
 -- into the quote 
@@ -75,7 +76,7 @@ init _=
   (Model "" Closed QuoteLoading ""
   , Http.get
     { url = "http://127.0.0.1:5000/active"
-    , expect = Http.expectString DataReceived 
+    , expect = Http.expectJson DataReceived decodeListQuote
     }
   )
 
@@ -91,28 +92,31 @@ type Msg
   | UpdateQuote Quote String
   | CreateRequest String 
   | Sent (Result Http.Error ())
-  | DataReceived (Result Http.Error String)
+  | DataReceived (Result Http.Error (List Quote))
   --| MorePlease
   --| GotQuote (Result Http.Error RawQuote)
   | Buffer Quote String
   | SubmissionBuffer String
   | SwitchTo Quote Urgency
+  | NewNumber String Int 
 
 --declare type
 update : Msg -> Model -> (Model, Cmd Msg)
 
 update msg model = 
   case msg of 
-    CreateRequest currentBuffer->
+    CreateRequest currentBuffer ->
+      (model, (newId currentBuffer))
+    NewNumber buff id ->
       ({model | name = "", buffer = "", quotes = 
         QuoteSuccess (List.concat[
-          [requestFactory currentBuffer model.name]
+          [requestFactory buff model.name id]
           , (case model.quotes of 
               QuoteSuccess ql -> ql
               QuoteLoading -> []
               QuoteFailure -> [])
           ])
-      }, postNewRequest (requestFactory currentBuffer model.name))
+      }, postNewRequest (requestFactory buff model.name id))
     SubmissionBuffer currentBuffer ->
       ({model | buffer = currentBuffer}, Cmd.none)
     Name name ->
@@ -255,7 +259,7 @@ update msg model =
     DataReceived result ->
       case result of 
         Ok data ->
-          ({ model | quotes = (QuoteSuccess [Quote data "" "" 2022 Closed "" Closed [] High (ID 1000)])}, Cmd.none)
+          ({ model | quotes = (QuoteSuccess data)}, Cmd.none)
         Err httpError -> 
           ({ model | quotes = (QuoteSuccess [Quote "ERROR" "" "" 2022 Closed "" Closed [] High (ID 1000)])}, Cmd.none)
     SwitchTo quote urgencyLevel -> 
@@ -277,9 +281,27 @@ update msg model =
             QuoteLoading ->
               (model, Cmd.none)
 
-requestFactory: String -> String -> Quote
-requestFactory buffer name =
-  Quote buffer "created..." name 2020 Closed "" Closed ["created"] Low (ID 1234)
+requestFactory: String -> String -> Int -> Quote
+requestFactory buffer name id =
+  Quote 
+  buffer 
+  "created..." 
+  name 
+  2020 
+  Closed 
+  "" 
+  Closed 
+  ["created"] 
+  Low 
+  (ID id)
+
+randomNumber: Random.Generator Int
+randomNumber = 
+  Random.int 1 9999
+
+newId:String -> Cmd Msg
+newId buffer = 
+  Random.generate (NewNumber buffer) randomNumber
 
 resetUrgency: Quote -> Quote
 resetUrgency quote =
@@ -485,8 +507,56 @@ getCurrentState model =
   Http.get
   {
     url = "http://127.0.0.1:5000/active"
-  , expect = Http.expectString DataReceived 
+  , expect = Http.expectJson DataReceived decodeListQuote
   }
+
+decodeListQuote: Decoder (List Quote)
+decodeListQuote = Decode.list decodeSingleQuote
+    
+
+--  TROUBLE SHOOTING 
+decodeSingleQuote: Decoder Quote 
+decodeSingleQuote = Decode.succeed Quote
+    |> required "quote" Decode.string
+    |> required "source" Decode.string
+    |> required "author" Decode.string
+    |> required "year" Decode.int
+    |> hardcoded (Closed)
+    |> hardcoded ""
+    |> hardcoded Closed
+    |> required "updateList" pipeUpdateList
+    |> required "urgency" pipeUrgency
+    |> required "id" numberToID
+
+numberToID:Decoder ID
+numberToID = 
+  Decode.int |> Decode.andThen (\id -> 
+    case id of 
+      _ -> Decode.succeed (ID id)
+    )
+
+pipeUpdateList: Decoder (List String)
+pipeUpdateList = 
+  Decode.list Decode.string
+
+pipeUrgency: Decoder Urgency
+pipeUrgency = 
+  Decode.string |> Decode.andThen (\urgencyString ->
+    case urgencyString of 
+      "low" -> Decode.succeed Low
+      "medium" -> Decode.succeed Medium
+      "high" -> Decode.succeed High
+      _ -> Decode.succeed ClosedOut
+      )
+
+--idDecoder: Decoder ID
+--idDecoder = 
+--  Decode.int |> Decode.andThen idFromInt
+--
+--idFromInt: Int -> Decoder ID
+--idFromInt id =
+--  Decode.succeed (ID id)
+-- TROUBLE SHOOTING 
 
 decodeState: Decoder (List Quote)
 decodeState = Decode.list newRequestDecoder
