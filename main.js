@@ -5421,9 +5421,9 @@ var $author$project$Main$Closed = {$: 'Closed'};
 var $author$project$Main$DataReceived = function (a) {
 	return {$: 'DataReceived', a: a};
 };
-var $author$project$Main$Model = F4(
-	function (name, status, quotes, buffer) {
-		return {buffer: buffer, name: name, quotes: quotes, status: status};
+var $author$project$Main$Model = F5(
+	function (name, status, quotes, buffer, deadbool) {
+		return {buffer: buffer, deadbool: deadbool, name: name, quotes: quotes, status: status};
 	});
 var $author$project$Main$QuoteLoading = {$: 'QuoteLoading'};
 var $author$project$Main$Quote = function (quote) {
@@ -6319,7 +6319,7 @@ var $elm$http$Http$get = function (r) {
 };
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		A4($author$project$Main$Model, '', $author$project$Main$Closed, $author$project$Main$QuoteLoading, ''),
+		A5($author$project$Main$Model, '', $author$project$Main$Closed, $author$project$Main$QuoteLoading, '', 1),
 		$elm$http$Http$get(
 			{
 				expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
@@ -6831,6 +6831,24 @@ var $author$project$Main$update = F2(
 						model,
 						{status: $author$project$Main$Closed}),
 					$elm$core$Platform$Cmd$none);
+			case 'ToggleDead':
+				return (model.deadbool === 1) ? _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{deadbool: 0}),
+					$elm$http$Http$get(
+						{
+							expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
+							url: 'http://127.0.0.1:5000/inactive'
+						})) : _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{deadbool: 1}),
+					$elm$http$Http$get(
+						{
+							expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
+							url: 'http://127.0.0.1:5000/active'
+						}));
 			case 'ToggleStatusDialog':
 				var quote = msg.a;
 				var _v4 = model.quotes;
@@ -7071,6 +7089,7 @@ var $author$project$Main$SubmissionBuffer = function (a) {
 	return {$: 'SubmissionBuffer', a: a};
 };
 var $author$project$Main$Toggle = {$: 'Toggle'};
+var $author$project$Main$ToggleDead = {$: 'ToggleDead'};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
@@ -7187,6 +7206,16 @@ var $author$project$Main$submissionForm = F3(
 								_List_fromArray(
 									[
 										$elm$html$Html$text('hide')
+									])),
+								A2(
+								$elm$html$Html$button,
+								_List_fromArray(
+									[
+										$elm$html$Html$Events$onClick($author$project$Main$ToggleDead)
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('closed requests')
 									]))
 							])),
 						A2(
@@ -7232,7 +7261,7 @@ var $author$project$Main$submissionForm = F3(
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text('show')
+								$elm$html$Html$text('menu')
 							])),
 						A2($elm$html$Html$div, _List_Nil, _List_Nil)
 					]));

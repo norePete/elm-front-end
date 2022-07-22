@@ -66,6 +66,7 @@ type alias Model =
     , status: Dialog
     , quotes: QuoteState
     , buffer: String
+    , deadbool: Int
   }
 
 --declare type
@@ -73,7 +74,7 @@ init : () -> (Model, Cmd Msg)
 --init _=
  -- (Model "" Closed QuoteLoading "", Cmd.none)
 init _=
-  (Model "" Closed QuoteLoading ""
+  (Model "" Closed QuoteLoading "" 1
   , Http.get
     { url = "http://127.0.0.1:5000/active"
     , expect = Http.expectJson DataReceived decodeListQuote
@@ -86,6 +87,7 @@ type Msg
   Name String
   --| GotText (Result Http.Error String)
   | Toggle 
+  | ToggleDead
   | ToggleStatusDialog Quote
   | ToggleUpdateDialog Quote
   | CloseRequest Quote
@@ -139,40 +141,22 @@ update msg model =
               (model, Cmd.none)
             QuoteLoading ->
               (model, Cmd.none)
-    --MorePlease ->
-    --  (model, Cmd.none)
-
-    --GotQuote result ->
-    --  case result of 
-    --    Ok rawquote -> 
-    --      case model.quotes of 
-    --        QuoteSuccess current ->
-    --          ({model | quotes = 
-    --            QuoteSuccess (List.concat [[wrapQuote rawquote], current])
-    --          }, Cmd.none)
-    --        QuoteLoading ->
-    --          ({model | quotes = 
-    --            QuoteSuccess [wrapQuote rawquote]
-    --          }, Cmd.none)
-
-    --        QuoteFailure ->
-    --          ({model | quotes = 
-    --            QuoteSuccess [wrapQuote rawquote]
-    --          }, Cmd.none)
-    --    Err _ -> 
-    --      ({model | quotes = QuoteFailure}, Cmd.none)
-
-    --GotText result ->
-    --  case result of 
-    --    Ok fullText -> 
-    --      ({model | resource = Success fullText}, Cmd.none)
-    --    Err _-> 
-    --      ({model | resource = Failure}, Cmd.none)
     Toggle ->
       if model.status == Closed  then
         ({model | status = Open "visible html element" }, Cmd.none)
       else 
         ({model | status = Closed }, Cmd.none)
+    ToggleDead ->
+      if model.deadbool == 1 then
+        ({model | deadbool = 0}, Http.get
+        { url = "http://127.0.0.1:5000/inactive"
+        , expect = Http.expectJson DataReceived decodeListQuote
+        })
+      else 
+        ({model | deadbool = 1}, Http.get
+        { url = "http://127.0.0.1:5000/active"
+        , expect = Http.expectJson DataReceived decodeListQuote
+        })
     ToggleStatusDialog quote ->
           case model.quotes of 
             QuoteSuccess current ->
@@ -362,7 +346,10 @@ submissionForm visibility buffer name =
             , ("float-left", True)
             ]
           ]
-          [ div [class "float-left"][ button [onClick Toggle][text "hide"]]
+          [ div [class "float-left"][ 
+              button [onClick Toggle][text "hide"]
+            , button [onClick ToggleDead][text "closed requests"]
+            ]
           , div [][ viewTextArea "description of request" buffer SubmissionBuffer
                   , viewInput "text" "name" name Name
                   , button [onClick (CreateRequest buffer)][text "create"]
@@ -375,7 +362,7 @@ submissionForm visibility buffer name =
             , ("float-left", True)
             ]
           ]
-          [ button [onClick Toggle][text "show"]
+          [ button [onClick Toggle][text "menu"]
           , div [][]
           ] 
 
