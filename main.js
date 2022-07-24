@@ -6323,7 +6323,7 @@ var $author$project$Main$init = function (_v0) {
 		$elm$http$Http$get(
 			{
 				expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
-				url: 'http://127.0.0.1:5000/active'
+				url: 'http://192.168.122.1:5000/active'
 			}));
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -6636,7 +6636,7 @@ var $author$project$Main$postCloseRequest = function (quote) {
 			body: $elm$http$Http$jsonBody(
 				$author$project$Main$statusEncoder(quote)),
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://127.0.0.1:5000/close'
+			url: 'http://192.168.122.1:5000/close'
 		});
 };
 var $elm$json$Json$Encode$list = F2(
@@ -6684,7 +6684,7 @@ var $author$project$Main$postNewRequest = function (quote) {
 			body: $elm$http$Http$jsonBody(
 				$author$project$Main$newRequestEncoder(quote)),
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://127.0.0.1:5000/new'
+			url: 'http://192.168.122.1:5000/new'
 		});
 };
 var $author$project$Main$postStatusChange = function (quote) {
@@ -6693,7 +6693,7 @@ var $author$project$Main$postStatusChange = function (quote) {
 			body: $elm$http$Http$jsonBody(
 				$author$project$Main$statusEncoder(quote)),
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://127.0.0.1:5000/status'
+			url: 'http://192.168.122.1:5000/status'
 		});
 };
 var $author$project$Main$updateEncoder = function (quote) {
@@ -6717,7 +6717,7 @@ var $author$project$Main$postUpdate = function (quote) {
 			body: $elm$http$Http$jsonBody(
 				$author$project$Main$updateEncoder(quote)),
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://127.0.0.1:5000/update'
+			url: 'http://192.168.122.1:5000/update'
 		});
 };
 var $author$project$Main$requestFactory = F3(
@@ -6839,7 +6839,7 @@ var $author$project$Main$update = F2(
 					$elm$http$Http$get(
 						{
 							expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
-							url: 'http://127.0.0.1:5000/inactive'
+							url: 'http://192.168.122.1:5000/inactive'
 						})) : _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -6847,7 +6847,7 @@ var $author$project$Main$update = F2(
 					$elm$http$Http$get(
 						{
 							expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
-							url: 'http://127.0.0.1:5000/active'
+							url: 'http://192.168.122.1:5000/active'
 						}));
 			case 'ToggleStatusDialog':
 				var quote = msg.a;
