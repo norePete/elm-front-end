@@ -76,7 +76,7 @@ init : () -> (Model, Cmd Msg)
 init _=
   (Model "" Closed QuoteLoading "" 1
   , Http.get
-    { url = "http://127.0.0.1:5000/active"
+    { url = "http://192.168.0.222:5000/active"
     , expect = Http.expectJson DataReceived decodeListQuote
     }
   )
@@ -149,12 +149,12 @@ update msg model =
     ToggleDead ->
       if model.deadbool == 1 then
         ({model | deadbool = 0}, Http.get
-        { url = "http://127.0.0.1:5000/inactive"
+        { url = "http://192.168.0.222:5000/inactive"
         , expect = Http.expectJson DataReceived decodeListQuote
         })
       else 
         ({model | deadbool = 1}, Http.get
-        { url = "http://127.0.0.1:5000/active"
+        { url = "http://192.168.0.222:5000/active"
         , expect = Http.expectJson DataReceived decodeListQuote
         })
     ToggleStatusDialog quote ->
@@ -493,7 +493,7 @@ getCurrentState: Model -> Cmd Msg
 getCurrentState model =
   Http.get
   {
-    url = "http://127.0.0.1:5000/active"
+    url = "http://192.168.0.222:5000/active"
   , expect = Http.expectJson DataReceived decodeListQuote
   }
 
@@ -604,7 +604,7 @@ postNewRequest quote =
     { 
       body = newRequestEncoder quote |> Http.jsonBody
     , expect = Http.expectWhatever Sent
-    , url = "http://127.0.0.1:5000/new"
+    , url = "http://192.168.0.222:5000/new"
     }
 postUpdate: Quote -> Cmd Msg
 postUpdate quote = 
@@ -612,7 +612,7 @@ postUpdate quote =
     { 
       body = updateEncoder quote |> Http.jsonBody
     , expect = Http.expectWhatever Sent 
-    , url = "http://127.0.0.1:5000/update"
+    , url = "http://192.168.0.222:5000/update"
     }
 postStatusChange: Quote -> Cmd Msg
 postStatusChange quote = 
@@ -620,7 +620,7 @@ postStatusChange quote =
     { 
       body = statusEncoder quote |> Http.jsonBody
     , expect = Http.expectWhatever Sent
-    , url = "http://127.0.0.1:5000/status"
+    , url = "http://192.168.0.222:5000/status"
     }
 postCloseRequest: Quote -> Cmd Msg
 postCloseRequest quote =
@@ -628,7 +628,7 @@ postCloseRequest quote =
     { 
       body = statusEncoder quote |> Http.jsonBody
     , expect = Http.expectWhatever Sent
-    , url = "http://127.0.0.1:5000/close"
+    , url = "http://192.168.0.222:5000/close"
     }
 
 newRequestEncoder : Quote -> Encode.Value
