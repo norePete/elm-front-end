@@ -1,5 +1,9 @@
 module Main exposing (..)
 
+import Date exposing (Date, Interval(..), Unit(..))
+import Task exposing (Task)
+import Time exposing (Month(..))
+
 import Random
 import Browser
 import Html exposing (..)
@@ -39,7 +43,7 @@ type alias Quote =
   { quote: String 
   , source: String 
   , author: String
-  , year: Int 
+  , year: String
   , updateDialog: Dialog
   , updateBuffer: String
   , changeStatusDialog: Dialog
@@ -100,7 +104,8 @@ type Msg
   | Buffer Quote String
   | SubmissionBuffer String
   | SwitchTo Quote Urgency
-  | NewNumber String Int 
+  | NewNumber String Date Int
+  | GetDate String Date
 
 --declare type
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -108,17 +113,19 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = 
   case msg of 
     CreateRequest currentBuffer ->
-      (model, (newId currentBuffer))
-    NewNumber buff id ->
+      (model, (generateDate currentBuffer))
+    GetDate buff currentDate ->
+      (model, (newId buff currentDate))
+    NewNumber buff currentDate id->
       ({model | name = "", buffer = "", quotes = 
         QuoteSuccess (List.concat[
-          [requestFactory buff model.name id]
+          [requestFactory (Date.toIsoString currentDate) buff model.name id]
           , (case model.quotes of 
               QuoteSuccess ql -> ql
               QuoteLoading -> []
               QuoteFailure -> [])
           ])
-      }, postNewRequest (requestFactory buff model.name id))
+      }, postNewRequest (requestFactory (Date.toIsoString currentDate) buff model.name id))
     SubmissionBuffer currentBuffer ->
       ({model | buffer = currentBuffer}, Cmd.none)
     Name name ->
@@ -245,7 +252,7 @@ update msg model =
         Ok data ->
           ({ model | quotes = (QuoteSuccess data)}, Cmd.none)
         Err httpError -> 
-          ({ model | quotes = (QuoteSuccess [Quote "ERROR" "" "" 2022 Closed "" Closed [] High (ID 1000)])}, Cmd.none)
+          ({ model | quotes = (QuoteSuccess [Quote "ERROR" "" "" "NOW" Closed "" Closed [] High (ID 1000)])}, Cmd.none)
     SwitchTo quote urgencyLevel -> 
           case model.quotes of 
             QuoteSuccess current ->
@@ -265,13 +272,13 @@ update msg model =
             QuoteLoading ->
               (model, Cmd.none)
 
-requestFactory: String -> String -> Int -> Quote
-requestFactory buffer name id =
+requestFactory: String -> String -> String -> Int -> Quote
+requestFactory currentDate buffer name id =
   Quote 
   buffer 
   "created..." 
   name 
-  2020 
+  currentDate
   Closed 
   "" 
   Closed 
@@ -283,9 +290,14 @@ randomNumber: Random.Generator Int
 randomNumber = 
   Random.int 1 9999
 
-newId:String -> Cmd Msg
-newId buffer = 
-  Random.generate (NewNumber buffer) randomNumber
+newId:String -> Date -> Cmd Msg
+newId buffer currentDate= 
+  Random.generate (NewNumber buffer currentDate) randomNumber
+
+
+generateDate:String -> Cmd Msg
+generateDate buffer = 
+  (Date.today |> Task.perform (GetDate buffer))
 
 resetUrgency: Quote -> Quote
 resetUrgency quote =
@@ -419,7 +431,7 @@ viewList ql =
                        div [class "row", style "width" "80%"]
                        [ blockquote [style "color" "green", style "font-size" "16px"][text y]
                        , p [ style "margin-left" "auto", style "text-align" "right", style "font-size" "14px" ]
-                       [ text (x.author ++ " " ++ String.fromInt x.year)]]) x.updateList)
+                       [ text (x.author ++ " " ++ x.year)]]) x.updateList)
                     ]
                   ] 
                 , viewDialog x.updateDialog 
@@ -507,7 +519,7 @@ decodeSingleQuote = Decode.succeed Quote
     |> required "quote" Decode.string
     |> required "source" Decode.string
     |> required "author" Decode.string
-    |> required "year" Decode.int
+    |> required "year" Decode.string
     |> hardcoded (Closed)
     |> hardcoded ""
     |> hardcoded Closed
@@ -554,7 +566,7 @@ newRequestDecoder =
     |> required "quote" string
     |> required "source" string
     |> required "author" string
-    |> required "year" int
+    |> required "year" string
     |> optional "updateDialog" decodeToClosed Closed
     |> optional "updateBuffer" decodeToEmptyString ""
     |> optional "changeStatusDialog" decodeToClosed Closed
@@ -567,6 +579,7 @@ newRequestDecoder =
 decodeToClosed: Decoder Dialog
 decodeToClosed = 
   Decode.succeed Closed
+
 decodeToEmptyString: Decoder String
 decodeToEmptyString = 
   Decode.succeed ""
@@ -638,7 +651,7 @@ newRequestEncoder quote =
     , ("quote", Encode.string quote.quote)
     , ("source", Encode.string quote.source)
     , ("author", Encode.string quote.author)
-    , ("year", Encode.int quote.year)
+    , ("year", Encode.string quote.year)
     , ("updateList", encodeUpdateList quote.updateList)
     , ("urgency", encodeUrgency quote.urgency)
     ]
