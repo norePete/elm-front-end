@@ -5596,9 +5596,19 @@ var $author$project$Main$numberToID = A2(
 			$author$project$Main$ID(id));
 	},
 	$elm$json$Json$Decode$int);
-var $elm$json$Json$Decode$list = _Json_decodeList;
+var $elm$json$Json$Decode$index = _Json_decodeIndex;
+var $elm$core$Tuple$pair = F2(
+	function (a, b) {
+		return _Utils_Tuple2(a, b);
+	});
 var $elm$json$Json$Decode$string = _Json_decodeString;
-var $author$project$Main$pipeUpdateList = $elm$json$Json$Decode$list($elm$json$Json$Decode$string);
+var $author$project$Main$decodePair = A3(
+	$elm$json$Json$Decode$map2,
+	$elm$core$Tuple$pair,
+	A2($elm$json$Json$Decode$index, 0, $elm$json$Json$Decode$string),
+	A2($elm$json$Json$Decode$index, 1, $elm$json$Json$Decode$string));
+var $elm$json$Json$Decode$list = _Json_decodeList;
+var $author$project$Main$pipeUpdateList = $elm$json$Json$Decode$list($author$project$Main$decodePair);
 var $author$project$Main$ClosedOut = {$: 'ClosedOut'};
 var $author$project$Main$High = {$: 'High'};
 var $author$project$Main$Low = {$: 'Low'};
@@ -6453,7 +6463,7 @@ var $author$project$Main$init = function (_v0) {
 		$elm$http$Http$get(
 			{
 				expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
-				url: 'http://192.168.1.252/server/active'
+				url: 'http://127.0.0.1:5000/active'
 			}));
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -6478,8 +6488,8 @@ var $elm$core$List$append = F2(
 var $elm$core$List$concat = function (lists) {
 	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
 };
-var $author$project$Main$appendUpdate = F3(
-	function (quote, buffer, existingUpdates) {
+var $author$project$Main$appendUpdate = F4(
+	function (quote, buffer, existingUpdates, date) {
 		return _Utils_update(
 			quote,
 			{
@@ -6488,7 +6498,9 @@ var $author$project$Main$appendUpdate = F3(
 						[
 							existingUpdates,
 							_List_fromArray(
-							[buffer])
+							[
+								_Utils_Tuple2(buffer, date)
+							])
 						]))
 			});
 	});
@@ -6749,6 +6761,16 @@ var $author$project$Main$generateDate = function (buffer) {
 		$author$project$Main$GetDate(buffer),
 		$justinmimbs$date$Date$today);
 };
+var $author$project$Main$GetUpdateDate = F2(
+	function (a, b) {
+		return {$: 'GetUpdateDate', a: a, b: b};
+	});
+var $author$project$Main$generateUpdateDate = function (quote) {
+	return A2(
+		$elm$core$Task$perform,
+		$author$project$Main$GetUpdateDate(quote),
+		$justinmimbs$date$Date$today);
+};
 var $author$project$Main$mutateDialog = function (dialog) {
 	return _Utils_eq(dialog, $author$project$Main$Closed) ? $author$project$Main$Open('dialog') : $author$project$Main$Closed;
 };
@@ -6984,7 +7006,7 @@ var $author$project$Main$postCloseRequest = function (quote) {
 			body: $elm$http$Http$jsonBody(
 				$author$project$Main$statusEncoder(quote)),
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://192.168.1.252/server/close'
+			url: 'http://127.0.0.1:5000/close'
 		});
 };
 var $elm$json$Json$Encode$list = F2(
@@ -6996,8 +7018,24 @@ var $elm$json$Json$Encode$list = F2(
 				_Json_emptyArray(_Utils_Tuple0),
 				entries));
 	});
+var $elm$core$Tuple$second = function (_v0) {
+	var y = _v0.b;
+	return y;
+};
 var $author$project$Main$encodeUpdateList = function (updateList) {
-	return A2($elm$json$Json$Encode$list, $elm$json$Json$Encode$string, updateList);
+	return A2(
+		$elm$json$Json$Encode$list,
+		$elm$core$Basics$identity,
+		A2(
+			$elm$core$List$map,
+			function (x) {
+				return A2(
+					$elm$json$Json$Encode$list,
+					$elm$json$Json$Encode$string,
+					_List_fromArray(
+						[x.a, x.b]));
+			},
+			updateList));
 };
 var $author$project$Main$newRequestEncoder = function (quote) {
 	return $elm$json$Json$Encode$object(
@@ -7032,7 +7070,7 @@ var $author$project$Main$postNewRequest = function (quote) {
 			body: $elm$http$Http$jsonBody(
 				$author$project$Main$newRequestEncoder(quote)),
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://192.168.1.252/server/new'
+			url: 'http://127.0.0.1:5000/new'
 		});
 };
 var $author$project$Main$postStatusChange = function (quote) {
@@ -7041,7 +7079,7 @@ var $author$project$Main$postStatusChange = function (quote) {
 			body: $elm$http$Http$jsonBody(
 				$author$project$Main$statusEncoder(quote)),
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://192.168.1.252/server/status'
+			url: 'http://127.0.0.1:5000/status'
 		});
 };
 var $author$project$Main$updateEncoder = function (quote) {
@@ -7065,14 +7103,16 @@ var $author$project$Main$postUpdate = function (quote) {
 			body: $elm$http$Http$jsonBody(
 				$author$project$Main$updateEncoder(quote)),
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://192.168.1.252/server/update'
+			url: 'http://127.0.0.1:5000/update'
 		});
 };
 var $author$project$Main$requestFactory = F4(
 	function (currentDate, buffer, name, id) {
 		return $author$project$Main$Quote(buffer)('created...')(name)(currentDate)($author$project$Main$Closed)('')($author$project$Main$Closed)(
 			_List_fromArray(
-				['created']))($author$project$Main$Low)(
+				[
+					_Utils_Tuple2('created', currentDate)
+				]))($author$project$Main$Low)(
 			$author$project$Main$ID(id));
 	});
 var $author$project$Main$resetUrgency = function (quote) {
@@ -8349,7 +8389,7 @@ var $author$project$Main$update = F2(
 					$elm$http$Http$get(
 						{
 							expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
-							url: 'http://192.168.1.252/server/inactive'
+							url: 'http://127.0.0.1:5000/inactive'
 						})) : _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -8357,7 +8397,7 @@ var $author$project$Main$update = F2(
 					$elm$http$Http$get(
 						{
 							expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
-							url: 'http://192.168.1.252/server/active'
+							url: 'http://127.0.0.1:5000/active'
 						}));
 			case 'ToggleStatusDialog':
 				var quote = msg.a;
@@ -8420,6 +8460,12 @@ var $author$project$Main$update = F2(
 			case 'UpdateQuote':
 				var quote = msg.a;
 				var pointlessString = msg.b;
+				return _Utils_Tuple2(
+					model,
+					$author$project$Main$generateUpdateDate(quote));
+			case 'GetUpdateDate':
+				var quote = msg.a;
+				var currentDate = msg.b;
 				var _v8 = model.quotes;
 				switch (_v8.$) {
 					case 'QuoteSuccess':
@@ -8437,7 +8483,12 @@ var $author$project$Main$update = F2(
 													return $author$project$Main$mutateUpdateDialog(
 														$author$project$Main$resetUrgency(
 															$author$project$Main$clearBuffer(
-																A3($author$project$Main$appendUpdate, x, quote.updateBuffer, x.updateList))));
+																A4(
+																	$author$project$Main$appendUpdate,
+																	x,
+																	quote.updateBuffer,
+																	x.updateList,
+																	$justinmimbs$date$Date$toIsoString(currentDate)))));
 												} else {
 													return x;
 												}
@@ -8446,7 +8497,12 @@ var $author$project$Main$update = F2(
 								}),
 							$author$project$Main$postUpdate(
 								$author$project$Main$resetUrgency(
-									A3($author$project$Main$appendUpdate, quote, quote.updateBuffer, quote.updateList))));
+									A4(
+										$author$project$Main$appendUpdate,
+										quote,
+										quote.updateBuffer,
+										quote.updateList,
+										$justinmimbs$date$Date$toIsoString(currentDate)))));
 					case 'QuoteFailure':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
@@ -8573,10 +8629,6 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			$elm$json$Json$Encode$string(string));
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
-var $elm$core$Tuple$second = function (_v0) {
-	var y = _v0.b;
-	return y;
-};
 var $elm$html$Html$Attributes$classList = function (classes) {
 	return $elm$html$Html$Attributes$class(
 		A2(
@@ -8778,21 +8830,6 @@ var $author$project$Main$submissionForm = F3(
 		}
 	});
 var $elm$html$Html$blockquote = _VirtualDom_node('blockquote');
-var $author$project$Main$Buffer = F2(
-	function (a, b) {
-		return {$: 'Buffer', a: a, b: b};
-	});
-var $author$project$Main$CloseRequest = function (a) {
-	return {$: 'CloseRequest', a: a};
-};
-var $author$project$Main$ToggleUpdateDialog = function (a) {
-	return {$: 'ToggleUpdateDialog', a: a};
-};
-var $author$project$Main$UpdateQuote = F2(
-	function (a, b) {
-		return {$: 'UpdateQuote', a: a, b: b};
-	});
-var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
@@ -8808,102 +8845,6 @@ var $author$project$Main$urgencyColour = function (urgency) {
 			return 'rgba(0,0,0,0.4)';
 	}
 };
-var $author$project$Main$viewDialog = F3(
-	function (dialog, html, hiddenHtml) {
-		if (dialog.$ === 'Closed') {
-			return A2($elm$html$Html$div, _List_Nil, hiddenHtml);
-		} else {
-			var paragraph = dialog.a;
-			return A2($elm$html$Html$div, _List_Nil, html);
-		}
-	});
-var $author$project$Main$SwitchTo = F2(
-	function (a, b) {
-		return {$: 'SwitchTo', a: a, b: b};
-	});
-var $elm$html$Html$fieldset = _VirtualDom_node('fieldset');
-var $elm$json$Json$Encode$bool = _Json_wrap;
-var $elm$html$Html$Attributes$boolProperty = F2(
-	function (key, bool) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$bool(bool));
-	});
-var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
-var $elm$html$Html$label = _VirtualDom_node('label');
-var $elm$html$Html$Attributes$name = $elm$html$Html$Attributes$stringProperty('name');
-var $author$project$Main$radio = function (_v0) {
-	var isChecked = _v0.a;
-	var choiceName = _v0.b;
-	var msg = _v0.c;
-	return A2(
-		$elm$html$Html$label,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$input,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$type_('radio'),
-						$elm$html$Html$Attributes$name(choiceName),
-						$elm$html$Html$Events$onClick(msg),
-						$elm$html$Html$Attributes$checked(isChecked)
-					]),
-				_List_Nil),
-				isChecked ? $elm$html$Html$text(choiceName) : $elm$html$Html$text('')
-			]));
-};
-var $author$project$Main$viewPicker = function (options) {
-	return A2(
-		$elm$html$Html$fieldset,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('radio-picker')
-			]),
-		A2($elm$core$List$map, $author$project$Main$radio, options));
-};
-var $author$project$Main$viewRadio = function (quote) {
-	return $author$project$Main$viewPicker(
-		_List_fromArray(
-			[
-				_Utils_Tuple3(
-				_Utils_eq(quote.urgency, $author$project$Main$Low),
-				'low',
-				$author$project$Main$SwitchTo(quote)($author$project$Main$Low)),
-				_Utils_Tuple3(
-				_Utils_eq(quote.urgency, $author$project$Main$Medium),
-				'Medium',
-				$author$project$Main$SwitchTo(quote)($author$project$Main$Medium)),
-				_Utils_Tuple3(
-				_Utils_eq(quote.urgency, $author$project$Main$High),
-				'high',
-				$author$project$Main$SwitchTo(quote)($author$project$Main$High))
-			]));
-};
-var $author$project$Main$viewUpdateForm = F4(
-	function (placeholder, value, callback, onclick) {
-		return A2(
-			$elm$html$Html$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A3($author$project$Main$viewTextArea, placeholder, value, callback),
-					A2(
-					$elm$html$Html$button,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$id('done-button'),
-							$elm$html$Html$Events$onClick(
-							onclick('pointlessString'))
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('done')
-						]))
-				]));
-	});
 var $author$project$Main$viewList = function (ql) {
 	return A2(
 		$elm$core$List$map,
@@ -9007,65 +8948,9 @@ var $author$project$Main$viewList = function (ql) {
 																]))
 														]));
 											},
-											x.updateList))
+											_List_fromArray(
+												['placeholder'])))
 									]))
-							])),
-						A3(
-						$author$project$Main$viewDialog,
-						x.updateDialog,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('update-dialog')
-									]),
-								_List_fromArray(
-									[
-										A4(
-										$author$project$Main$viewUpdateForm,
-										'What\'s the update on this request?',
-										x.updateBuffer,
-										$author$project$Main$Buffer(x),
-										$author$project$Main$UpdateQuote(x))
-									]))
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$classList(
-										_List_fromArray(
-											[
-												_Utils_Tuple2('row', true),
-												_Utils_Tuple2('float-left', true)
-											]))
-									]),
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$button,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$id('update-button'),
-												$elm$html$Html$Events$onClick(
-												$author$project$Main$ToggleUpdateDialog(x))
-											]),
-										_List_Nil),
-										A2(
-										$elm$html$Html$button,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$id('close-button'),
-												$elm$html$Html$Events$onClick(
-												$author$project$Main$CloseRequest(x))
-											]),
-										_List_Nil)
-									])),
-								$author$project$Main$viewRadio(x)
 							]))
 					]));
 		},
