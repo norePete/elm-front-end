@@ -6463,7 +6463,7 @@ var $author$project$Main$init = function (_v0) {
 		$elm$http$Http$get(
 			{
 				expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
-				url: 'http://127.0.0.1:5000/active'
+				url: 'http://192.168.1.252/server/active'
 			}));
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -6488,15 +6488,15 @@ var $elm$core$List$append = F2(
 var $elm$core$List$concat = function (lists) {
 	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
 };
-var $author$project$Main$appendUpdate = F4(
-	function (quote, buffer, existingUpdates, date) {
+var $author$project$Main$appendUpdate = F3(
+	function (quote, buffer, date) {
 		return _Utils_update(
 			quote,
 			{
 				updateList: $elm$core$List$concat(
 					_List_fromArray(
 						[
-							existingUpdates,
+							quote.updateList,
 							_List_fromArray(
 							[
 								_Utils_Tuple2(buffer, date)
@@ -6761,6 +6761,34 @@ var $author$project$Main$generateDate = function (buffer) {
 		$author$project$Main$GetDate(buffer),
 		$justinmimbs$date$Date$today);
 };
+var $author$project$Main$GetStatusUpdate = F4(
+	function (a, b, c, d) {
+		return {$: 'GetStatusUpdate', a: a, b: b, c: c, d: d};
+	});
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $author$project$Main$generateStatusUpdate = F2(
+	function (quote, urgencyLevel) {
+		switch (urgencyLevel.$) {
+			case 'Low':
+				return A2(
+					$elm$core$Task$perform,
+					A3($author$project$Main$GetStatusUpdate, quote, 'status changed to \'LOW\'', urgencyLevel),
+					$justinmimbs$date$Date$today);
+			case 'Medium':
+				return A2(
+					$elm$core$Task$perform,
+					A3($author$project$Main$GetStatusUpdate, quote, 'status changed to \'MEDIUM\'', urgencyLevel),
+					$justinmimbs$date$Date$today);
+			case 'High':
+				return A2(
+					$elm$core$Task$perform,
+					A3($author$project$Main$GetStatusUpdate, quote, 'status changed to \'HIGH\'', urgencyLevel),
+					$justinmimbs$date$Date$today);
+			default:
+				return $elm$core$Platform$Cmd$none;
+		}
+	});
 var $author$project$Main$GetUpdateDate = F2(
 	function (a, b) {
 		return {$: 'GetUpdateDate', a: a, b: b};
@@ -6926,8 +6954,6 @@ var $author$project$Main$newId = F2(
 			A2($author$project$Main$NewNumber, buffer, currentDate),
 			$author$project$Main$randomNumber);
 	});
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
-var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$Sent = function (a) {
 	return {$: 'Sent', a: a};
 };
@@ -7006,7 +7032,7 @@ var $author$project$Main$postCloseRequest = function (quote) {
 			body: $elm$http$Http$jsonBody(
 				$author$project$Main$statusEncoder(quote)),
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://127.0.0.1:5000/close'
+			url: 'http://192.168.1.252/server/close'
 		});
 };
 var $elm$json$Json$Encode$list = F2(
@@ -7070,16 +7096,7 @@ var $author$project$Main$postNewRequest = function (quote) {
 			body: $elm$http$Http$jsonBody(
 				$author$project$Main$newRequestEncoder(quote)),
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://127.0.0.1:5000/new'
-		});
-};
-var $author$project$Main$postStatusChange = function (quote) {
-	return $elm$http$Http$post(
-		{
-			body: $elm$http$Http$jsonBody(
-				$author$project$Main$statusEncoder(quote)),
-			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://127.0.0.1:5000/status'
+			url: 'http://192.168.1.252/server/new'
 		});
 };
 var $author$project$Main$updateEncoder = function (quote) {
@@ -7103,7 +7120,7 @@ var $author$project$Main$postUpdate = function (quote) {
 			body: $elm$http$Http$jsonBody(
 				$author$project$Main$updateEncoder(quote)),
 			expect: $elm$http$Http$expectWhatever($author$project$Main$Sent),
-			url: 'http://127.0.0.1:5000/update'
+			url: 'http://192.168.1.252/server/update'
 		});
 };
 var $author$project$Main$requestFactory = F4(
@@ -7115,11 +7132,6 @@ var $author$project$Main$requestFactory = F4(
 				]))($author$project$Main$Low)(
 			$author$project$Main$ID(id));
 	});
-var $author$project$Main$resetUrgency = function (quote) {
-	return _Utils_update(
-		quote,
-		{urgency: $author$project$Main$Low});
-};
 var $justinmimbs$date$Date$monthToNumber = function (m) {
 	switch (m.$) {
 		case 'Jan':
@@ -8389,7 +8401,7 @@ var $author$project$Main$update = F2(
 					$elm$http$Http$get(
 						{
 							expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
-							url: 'http://127.0.0.1:5000/inactive'
+							url: 'http://192.168.1.252/server/inactive'
 						})) : _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -8397,7 +8409,7 @@ var $author$project$Main$update = F2(
 					$elm$http$Http$get(
 						{
 							expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
-							url: 'http://127.0.0.1:5000/active'
+							url: 'http://192.168.1.252/server/active'
 						}));
 			case 'ToggleStatusDialog':
 				var quote = msg.a;
@@ -8481,14 +8493,12 @@ var $author$project$Main$update = F2(
 												var _v9 = _Utils_eq(x, quote);
 												if (_v9) {
 													return $author$project$Main$mutateUpdateDialog(
-														$author$project$Main$resetUrgency(
-															$author$project$Main$clearBuffer(
-																A4(
-																	$author$project$Main$appendUpdate,
-																	x,
-																	quote.updateBuffer,
-																	x.updateList,
-																	$justinmimbs$date$Date$toIsoString(currentDate)))));
+														$author$project$Main$clearBuffer(
+															A3(
+																$author$project$Main$appendUpdate,
+																x,
+																quote.updateBuffer,
+																$justinmimbs$date$Date$toIsoString(currentDate))));
 												} else {
 													return x;
 												}
@@ -8496,13 +8506,11 @@ var $author$project$Main$update = F2(
 											current))
 								}),
 							$author$project$Main$postUpdate(
-								$author$project$Main$resetUrgency(
-									A4(
-										$author$project$Main$appendUpdate,
-										quote,
-										quote.updateBuffer,
-										quote.updateList,
-										$justinmimbs$date$Date$toIsoString(currentDate)))));
+								A3(
+									$author$project$Main$appendUpdate,
+									quote,
+									quote.updateBuffer,
+									$justinmimbs$date$Date$toIsoString(currentDate))));
 					case 'QuoteFailure':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
@@ -8584,9 +8592,17 @@ var $author$project$Main$update = F2(
 							}),
 						$elm$core$Platform$Cmd$none);
 				}
-			default:
+			case 'SwitchTo':
 				var quote = msg.a;
 				var urgencyLevel = msg.b;
+				return _Utils_Tuple2(
+					model,
+					A2($author$project$Main$generateStatusUpdate, quote, urgencyLevel));
+			default:
+				var quote = msg.a;
+				var statusText = msg.b;
+				var urgencyLevel = msg.c;
+				var currentDate = msg.d;
 				var _v14 = model.quotes;
 				switch (_v14.$) {
 					case 'QuoteSuccess':
@@ -8601,19 +8617,27 @@ var $author$project$Main$update = F2(
 											function (x) {
 												var _v15 = _Utils_eq(x, quote);
 												if (_v15) {
-													return _Utils_update(
-														x,
-														{urgency: urgencyLevel});
+													return A3(
+														$author$project$Main$appendUpdate,
+														_Utils_update(
+															x,
+															{urgency: urgencyLevel}),
+														statusText,
+														$justinmimbs$date$Date$toIsoString(currentDate));
 												} else {
 													return x;
 												}
 											},
 											current))
 								}),
-							$author$project$Main$postStatusChange(
-								_Utils_update(
-									quote,
-									{urgency: urgencyLevel})));
+							$author$project$Main$postUpdate(
+								A3(
+									$author$project$Main$appendUpdate,
+									_Utils_update(
+										quote,
+										{urgency: urgencyLevel}),
+									statusText,
+									$justinmimbs$date$Date$toIsoString(currentDate))));
 					case 'QuoteFailure':
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 					default:
@@ -8830,6 +8854,21 @@ var $author$project$Main$submissionForm = F3(
 		}
 	});
 var $elm$html$Html$blockquote = _VirtualDom_node('blockquote');
+var $author$project$Main$Buffer = F2(
+	function (a, b) {
+		return {$: 'Buffer', a: a, b: b};
+	});
+var $author$project$Main$CloseRequest = function (a) {
+	return {$: 'CloseRequest', a: a};
+};
+var $author$project$Main$ToggleUpdateDialog = function (a) {
+	return {$: 'ToggleUpdateDialog', a: a};
+};
+var $author$project$Main$UpdateQuote = F2(
+	function (a, b) {
+		return {$: 'UpdateQuote', a: a, b: b};
+	});
+var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
@@ -8845,6 +8884,102 @@ var $author$project$Main$urgencyColour = function (urgency) {
 			return 'rgba(0,0,0,0.4)';
 	}
 };
+var $author$project$Main$viewDialog = F3(
+	function (dialog, html, hiddenHtml) {
+		if (dialog.$ === 'Closed') {
+			return A2($elm$html$Html$div, _List_Nil, hiddenHtml);
+		} else {
+			var paragraph = dialog.a;
+			return A2($elm$html$Html$div, _List_Nil, html);
+		}
+	});
+var $author$project$Main$SwitchTo = F2(
+	function (a, b) {
+		return {$: 'SwitchTo', a: a, b: b};
+	});
+var $elm$html$Html$fieldset = _VirtualDom_node('fieldset');
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
+var $elm$html$Html$label = _VirtualDom_node('label');
+var $elm$html$Html$Attributes$name = $elm$html$Html$Attributes$stringProperty('name');
+var $author$project$Main$radio = function (_v0) {
+	var isChecked = _v0.a;
+	var choiceName = _v0.b;
+	var msg = _v0.c;
+	return A2(
+		$elm$html$Html$label,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$input,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$type_('radio'),
+						$elm$html$Html$Attributes$name(choiceName),
+						$elm$html$Html$Events$onClick(msg),
+						$elm$html$Html$Attributes$checked(isChecked)
+					]),
+				_List_Nil),
+				isChecked ? $elm$html$Html$text(choiceName) : $elm$html$Html$text('')
+			]));
+};
+var $author$project$Main$viewPicker = function (options) {
+	return A2(
+		$elm$html$Html$fieldset,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('radio-picker')
+			]),
+		A2($elm$core$List$map, $author$project$Main$radio, options));
+};
+var $author$project$Main$viewRadio = function (quote) {
+	return $author$project$Main$viewPicker(
+		_List_fromArray(
+			[
+				_Utils_Tuple3(
+				_Utils_eq(quote.urgency, $author$project$Main$Low),
+				'low',
+				$author$project$Main$SwitchTo(quote)($author$project$Main$Low)),
+				_Utils_Tuple3(
+				_Utils_eq(quote.urgency, $author$project$Main$Medium),
+				'Medium',
+				$author$project$Main$SwitchTo(quote)($author$project$Main$Medium)),
+				_Utils_Tuple3(
+				_Utils_eq(quote.urgency, $author$project$Main$High),
+				'high',
+				$author$project$Main$SwitchTo(quote)($author$project$Main$High))
+			]));
+};
+var $author$project$Main$viewUpdateForm = F4(
+	function (placeholder, value, callback, onclick) {
+		return A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3($author$project$Main$viewTextArea, placeholder, value, callback),
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$id('done-button'),
+							$elm$html$Html$Events$onClick(
+							onclick('pointlessString'))
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('done')
+						]))
+				]));
+	});
 var $author$project$Main$viewList = function (ql) {
 	return A2(
 		$elm$core$List$map,
@@ -8900,6 +9035,17 @@ var $author$project$Main$viewList = function (ql) {
 												$elm$html$Html$blockquote,
 												_List_fromArray(
 													[
+														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'width', '80%')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text(x.author)
+													])),
+												A2(
+												$elm$html$Html$blockquote,
+												_List_fromArray(
+													[
 														A2($elm$html$Html$Attributes$style, 'font-size', '20px'),
 														A2($elm$html$Html$Attributes$style, 'width', '80%')
 													]),
@@ -8913,7 +9059,9 @@ var $author$project$Main$viewList = function (ql) {
 										_List_Nil,
 										A2(
 											$elm$core$List$map,
-											function (y) {
+											function (_v0) {
+												var y = _v0.a;
+												var z = _v0.b;
 												return A2(
 													$elm$html$Html$div,
 													_List_fromArray(
@@ -8944,13 +9092,69 @@ var $author$project$Main$viewList = function (ql) {
 																]),
 															_List_fromArray(
 																[
-																	$elm$html$Html$text(x.author + (' ' + x.year))
+																	$elm$html$Html$text(z)
 																]))
 														]));
 											},
-											_List_fromArray(
-												['placeholder'])))
+											x.updateList))
 									]))
+							])),
+						A3(
+						$author$project$Main$viewDialog,
+						x.updateDialog,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('update-dialog')
+									]),
+								_List_fromArray(
+									[
+										A4(
+										$author$project$Main$viewUpdateForm,
+										'What\'s the update on this request?',
+										x.updateBuffer,
+										$author$project$Main$Buffer(x),
+										$author$project$Main$UpdateQuote(x))
+									]))
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$classList(
+										_List_fromArray(
+											[
+												_Utils_Tuple2('row', true),
+												_Utils_Tuple2('float-left', true)
+											]))
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$button,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$id('update-button'),
+												$elm$html$Html$Events$onClick(
+												$author$project$Main$ToggleUpdateDialog(x))
+											]),
+										_List_Nil),
+										A2(
+										$elm$html$Html$button,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$id('close-button'),
+												$elm$html$Html$Events$onClick(
+												$author$project$Main$CloseRequest(x))
+											]),
+										_List_Nil)
+									])),
+								$author$project$Main$viewRadio(x)
 							]))
 					]));
 		},

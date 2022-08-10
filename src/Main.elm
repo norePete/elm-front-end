@@ -106,6 +106,7 @@ type Msg
   | NewNumber String Date Int
   | GetDate String Date
   | GetUpdateDate Quote Date
+  | GetStatusUpdate Quote String Urgency Date
 
 --declare type
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -211,15 +212,18 @@ update msg model =
                    case x == quote of 
                      True ->
                         mutateUpdateDialog 
-                        <| resetUrgency 
+                        --<| resetUrgency 
                         <| clearBuffer 
-                        <| appendUpdate x quote.updateBuffer x.updateList 
+                        <| appendUpdate x quote.updateBuffer 
                         <| (Date.toIsoString currentDate)
                      False -> 
                        x
                      ) current) 
                }
-              , postUpdate <| resetUrgency <| appendUpdate quote quote.updateBuffer quote.updateList <| (Date.toIsoString currentDate) )
+              , postUpdate 
+             -- <| resetUrgency 
+              <| appendUpdate quote quote.updateBuffer 
+              <| (Date.toIsoString currentDate) )
             QuoteFailure ->
               (model, Cmd.none)
             QuoteLoading ->
@@ -256,7 +260,11 @@ update msg model =
           ({ model | quotes = (QuoteSuccess data)}, Cmd.none)
         Err httpError -> 
           ({ model | quotes = (QuoteSuccess [Quote "ERROR" "" "" "NOW" Closed "" Closed [] High (ID 1000)])}, Cmd.none)
+
     SwitchTo quote urgencyLevel -> 
+      (model, (generateStatusUpdate quote urgencyLevel))
+
+    GetStatusUpdate quote statusText urgencyLevel currentDate->
           case model.quotes of 
             QuoteSuccess current ->
               ({ model | quotes = 
@@ -264,12 +272,12 @@ update msg model =
                  (List.map (\x -> 
                    case x == quote of 
                      True ->
-                       {x  | urgency = urgencyLevel}
+                       appendUpdate {x  | urgency = urgencyLevel} statusText (Date.toIsoString currentDate)
                      False -> 
                        x
                      ) current) 
                }
-              , postStatusChange <| {quote | urgency = urgencyLevel})
+              , postUpdate <| appendUpdate {quote | urgency = urgencyLevel} statusText (Date.toIsoString currentDate))
             QuoteFailure ->
               (model, Cmd.none)
             QuoteLoading ->
@@ -306,6 +314,18 @@ generateUpdateDate:Quote -> Cmd Msg
 generateUpdateDate quote = 
   (Date.today |> Task.perform (GetUpdateDate quote))
 
+generateStatusUpdate: Quote -> Urgency -> Cmd Msg
+generateStatusUpdate quote urgencyLevel =
+  case urgencyLevel of
+    Low -> 
+      (Date.today |> Task.perform (GetStatusUpdate quote "status changed to 'LOW'" urgencyLevel))
+    Medium -> 
+      (Date.today |> Task.perform (GetStatusUpdate quote "status changed to 'MEDIUM'" urgencyLevel))
+    High -> 
+      (Date.today |> Task.perform (GetStatusUpdate quote "status changed to 'HIGH'" urgencyLevel))
+    _ -> Cmd.none
+
+
 resetUrgency: Quote -> Quote
 resetUrgency quote =
   {quote | urgency = Low}
@@ -314,9 +334,12 @@ clearBuffer: Quote -> Quote
 clearBuffer quote =
   {quote | updateBuffer = ""}
 
-appendUpdate: Quote -> String -> List (String, String) -> String -> Quote
-appendUpdate quote buffer existingUpdates date=
-  {quote | updateList = List.concat [existingUpdates,[(buffer, date)]]}
+appendUpdate: Quote -> String -> String -> Quote
+appendUpdate quote buffer date=
+  {quote | updateList = List.concat [quote.updateList ,[(buffer, date)]]}
+--appendUpdate: Quote -> String -> List (String, String) -> String -> Quote
+--appendUpdate quote buffer existingUpdates date=
+--  {quote | updateList = List.concat [existingUpdates,[(buffer, date)]]}
 
 mutateStatusDialog: Quote -> Quote
 mutateStatusDialog quote =
@@ -422,13 +445,44 @@ urgencyColour urgency =
       "rgba(0,0,0,0.4)"
 
 
+viewList : List Quote -> List (Html Msg)
+viewList ql =
+          List.map (
+            \x -> 
+                div [classList [("row", True),("request", True)]]
+                [ div [classList [("row", True), ("request-body", True)]
+                  , style "background-color" (urgencyColour x.urgency)] [
+                    div [class "column", style "width" "100%"]
+                    [ 
+                      div [class "row"]
+                      [ 
+                        blockquote [style "font-size" "14px", style "width" "80%"][text x.author]
+                      , blockquote [style "font-size" "20px", style "width" "80%"][text x.quote]
+                      ]
+                    , div [] (List.map (\(y, z) ->
+                       div [class "row", style "width" "80%"]
+                       [ blockquote [style "color" "green", style "font-size" "16px"][text y]
+                       , p [ style "margin-left" "auto", style "text-align" "right", style "font-size" "14px" ]
+                       [ text z]]) x.updateList)
+                    ]
+                  ] 
+                , viewDialog x.updateDialog [div[class "update-dialog"][viewUpdateForm "What's the update on this request?" x.updateBuffer (Buffer x) (UpdateQuote x)]]
+                  [ div [classList [("row", True),("float-left", True)]][ button [id "update-button", onClick (ToggleUpdateDialog x)][]
+                  , button [id "close-button", onClick (CloseRequest x)][]]
+                  , viewRadio x
+                  ]
+                ]) ql
+
+  --, updateList: (List (String, String))
+
 --viewList : List Quote -> List (Html Msg)
 --viewList ql =
 --          List.map (
 --            \x -> 
 --                div [classList [("row", True),("request", True)]]
 --                [ div [classList [("row", True), ("request-body", True)]
---                  , style "background-color" (urgencyColour x.urgency)] [
+--                  , style "background-color" (urgencyColour x.urgency)]
+--                  [
 --                    div [class "column", style "width" "100%"]
 --                    [ 
 --                      div [class "row"]
@@ -437,36 +491,10 @@ urgencyColour urgency =
 --                       div [class "row", style "width" "80%"]
 --                       [ blockquote [style "color" "green", style "font-size" "16px"][text y]
 --                       , p [ style "margin-left" "auto", style "text-align" "right", style "font-size" "14px" ]
---                       [ text (x.author ++ " " ++ x.year)]]) ["x.updateList"])
+--                       [ text (x.author ++ " " ++ x.year)]]) ["placeholder"])
 --                    ]
 --                  ] 
---                , viewDialog x.updateDialog [div[class "update-dialog"][viewUpdateForm "What's the update on this request?" x.updateBuffer (Buffer x) (UpdateQuote x)]]
---                  [ div [classList [("row", True),("float-left", True)]][ button [id "update-button", onClick (ToggleUpdateDialog x)][]
---                  , button [id "close-button", onClick (CloseRequest x)][]]
---                  , viewRadio x
---                  ]
---                ]) ql
-
-viewList : List Quote -> List (Html Msg)
-viewList ql =
-          List.map (
-            \x -> 
-                div [classList [("row", True),("request", True)]]
-                [ div [classList [("row", True), ("request-body", True)]
-                  , style "background-color" (urgencyColour x.urgency)]
-                  [
-                    div [class "column", style "width" "100%"]
-                    [ 
-                      div [class "row"]
-                      [ blockquote [style "font-size" "20px", style "width" "80%"][text x.quote]]
-                    , div [] (List.map (\y ->
-                       div [class "row", style "width" "80%"]
-                       [ blockquote [style "color" "green", style "font-size" "16px"][text y]
-                       , p [ style "margin-left" "auto", style "text-align" "right", style "font-size" "14px" ]
-                       [ text (x.author ++ " " ++ x.year)]]) ["placeholder"])
-                    ]
-                  ] 
-              ]) ql
+--              ]) ql
 
 
 viewDialog : Dialog -> List (Html msg) -> List (Html msg) -> Html msg 
@@ -490,13 +518,11 @@ viewInput t p v toMsg =
 
 viewRadio : Quote -> Html Msg
 viewRadio quote =
-
      viewPicker 
         [ ((quote.urgency == Low), "low", (SwitchTo quote) Low)
         , ((quote.urgency == Medium), "Medium", (SwitchTo quote) Medium)
         , ((quote.urgency == High), "high", (SwitchTo quote) High)
         ]
-    
 
 viewPicker : List (Bool, String, msg) -> Html msg
 viewPicker options =
