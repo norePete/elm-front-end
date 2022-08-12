@@ -24,16 +24,21 @@ input[type=radio] {
       justify-content: space-around;
       margin:10px;
       padding: 4px 12px;
-      border-radius: 5px;
+      border-radius: 8px;
       background-color: rgba(200,200,255,0.1);
       box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.1) inset;
   -webkit-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.1) inset;
   -moz-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.1) inset;
       border: white 3px solid;
-      width: 50vw;
+      width: 100%;
       font-family: Helvetica, Helvetica, serif;
       color: rgba(136, 143, 174, 1);
   }
+  .radio-picker input[type=radio] {
+          border: 0px;
+          width: 100%;
+          height: 4em;
+      }
 
   .panel-active textarea {
     width: 100%;
