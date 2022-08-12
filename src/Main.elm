@@ -457,7 +457,7 @@ viewList ql =
                       div [class "row"]
                       [ 
                         blockquote [style "font-size" "14px", style "width" "80%"][text x.author]
-                      , blockquote [style "font-size" "20px", style "width" "80%"][text x.quote]
+                      , blockquote [style "font-size" "30px", style "width" "80%"][text x.quote]
                       ]
                     , div [] (List.map (\(y, z) ->
                        div [class "row", style "width" "80%"]

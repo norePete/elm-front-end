@@ -4,11 +4,15 @@ body {
 input[type=radio] {
     margin:10px;
 }
-.row {
+.row-old {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
+}
+.row {
+  display: flex;
+  flex-direction: row;
 }
 
 .column {
@@ -70,9 +74,9 @@ input[type=radio] {
 
   .request textarea {
     width: 90vw;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
     height: 30vh;
-    padding: 12px 20px;
     box-sizing: border-box;
     border-radius: 4px;
     background-color: #f8f8f8;
@@ -83,13 +87,13 @@ input[type=radio] {
   .update-dialog {
     height: auto;
     width: auto;
-    border: green solid 2px;
   }
 
   .request-body {
     display: flex;
     width: 100%;
-    background: grey;
+    background: black;
+    color: black;
   }
 
   .panel-active {
@@ -122,8 +126,12 @@ input[type=radio] {
     margin-left: auto;
     justify-content: start;
   }
-  .float-left {
+  .float-left-old {
     margin-right: auto;
+    justify-content: start;
+  }
+  .float-left {
+    display: flex;
     justify-content: start;
   }
   .float {
