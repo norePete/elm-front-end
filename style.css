@@ -80,15 +80,16 @@ input[type=radio] {
   }
 
   .update-dialog {
-    margin: 15px;
     height: auto;
     width: auto;
+    border: green solid 2px;
   }
 
   .request-body {
     display: flex;
     width: 100%;
     background: grey;
+    border: black solid 2px;
   }
 
   .panel-active {
@@ -132,7 +133,6 @@ input[type=radio] {
   }
   .urgency-menu {
     border: red solid 2px;
-
   }
 
   #close-button {
