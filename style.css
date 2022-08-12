@@ -5,7 +5,7 @@ input[type=radio] {
     margin:10px;
 
     border: 0px;
-    width: 100%;
+    width: 4em;
     height: 4em;
 }
 .row {
@@ -92,8 +92,6 @@ input[type=radio] {
   .request-body {
     display: flex;
     width: 100%;
-    background: black;
-    color: black;
   }
 
   .panel-active {
@@ -141,7 +139,7 @@ input[type=radio] {
   }
   .urgency-menu {
     border: red solid 2px;
-    width: 90vw;
+    width: 100%;
   }
 
   #close-button {
