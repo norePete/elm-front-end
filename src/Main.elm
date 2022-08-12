@@ -467,7 +467,7 @@ viewList ql =
                     ]
                   ] 
                 , viewDialog x.updateDialog [div[class "update-dialog"][viewUpdateForm "What's the update on this request?" x.updateBuffer (Buffer x) (UpdateQuote x)]]
-                  [ div [classList [("row", True),("float-left", True)]][ button [id "update-button", onClick (ToggleUpdateDialog x)][]
+                  [ div [classList [("urgency-menu", True),("float", True)]][ button [id "update-button", onClick (ToggleUpdateDialog x)][]
                   , button [id "close-button", onClick (CloseRequest x)][]]
                   , viewRadio x
                   ]

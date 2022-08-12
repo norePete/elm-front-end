@@ -9129,8 +9129,8 @@ var $author$project$Main$viewList = function (ql) {
 										$elm$html$Html$Attributes$classList(
 										_List_fromArray(
 											[
-												_Utils_Tuple2('row', true),
-												_Utils_Tuple2('float-left', true)
+												_Utils_Tuple2('urgency-menu', true),
+												_Utils_Tuple2('float', true)
 											]))
 									]),
 								_List_fromArray(
