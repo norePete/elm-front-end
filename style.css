@@ -143,11 +143,14 @@ input[type=radio] {
   }
 
   #close-button {
+    margin: 30px;
+    font-weight: 900;
+    font-size: 10px;
     display: flex;
     color: White;
     background-color: red;
-    width: 85px;
-    height: 85px;
+    width: 65px;
+    height: 65px;
     border-radius: 50%;
     border: 2px blue solid;
   }
