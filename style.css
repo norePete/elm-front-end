@@ -149,10 +149,10 @@ input[type=radio] {
     display: flex;
     color: White;
     background-color: red;
-    width: 65px;
+    width: 85px;
     height: 65px;
     border-radius: 50%;
-    border: 2px blue solid;
+    border: 2px white solid;
   }
 
   #update-button {
