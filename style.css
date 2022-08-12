@@ -4,15 +4,11 @@ body {
 input[type=radio] {
     margin:10px;
 }
-.row-old {
+.row {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-}
-.row {
-  display: flex;
-  flex-direction: row;
 }
 
 .column {
