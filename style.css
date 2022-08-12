@@ -137,7 +137,7 @@ input[type=radio] {
   }
   .urgency-menu {
     border: red solid 2px;
-    flex-shrink: 1;
+    flex-shrink: 2;
   }
 
   #close-button {

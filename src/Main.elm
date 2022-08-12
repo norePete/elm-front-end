@@ -466,10 +466,10 @@ viewList ql =
                        [ text z]]) x.updateList)
                     ]
                   ] 
-                , viewDialog x.updateDialog [div[class "update-dialog"][viewUpdateForm "What's the update on this request?" x.updateBuffer (Buffer x) (UpdateQuote x)]]
+                  , viewDialog x.updateDialog [div[class "update-dialog"][viewUpdateForm "What's the update on this request?" x.updateBuffer (Buffer x) (UpdateQuote x)]]
                   [ div [classList [("urgency-menu", True),("float", True)]][ button [id "update-button", onClick (ToggleUpdateDialog x)][]
-                  , button [id "close-button", onClick (CloseRequest x)][]]
-                  , viewRadio x
+                  , button [id "close-button", onClick (CloseRequest x)][]
+                  , viewRadio x]
                   ]
                 ]) ql
 

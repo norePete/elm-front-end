@@ -9046,7 +9046,7 @@ var $author$project$Main$viewList = function (ql) {
 												$elm$html$Html$blockquote,
 												_List_fromArray(
 													[
-														A2($elm$html$Html$Attributes$style, 'font-size', '20px'),
+														A2($elm$html$Html$Attributes$style, 'font-size', '30px'),
 														A2($elm$html$Html$Attributes$style, 'width', '80%')
 													]),
 												_List_fromArray(
@@ -9152,9 +9152,9 @@ var $author$project$Main$viewList = function (ql) {
 												$elm$html$Html$Events$onClick(
 												$author$project$Main$CloseRequest(x))
 											]),
-										_List_Nil)
-									])),
-								$author$project$Main$viewRadio(x)
+										_List_Nil),
+										$author$project$Main$viewRadio(x)
+									]))
 							]))
 					]));
 		},
