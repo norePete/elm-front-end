@@ -10,6 +10,7 @@
   font-family: Lato, Arial, sans-serif;
   text-transform: uppercase;
   text-decoration: none;
+  font-size: 24px;
 }
 .request-button button:hover {
   filter: opacity(0.8);
@@ -29,6 +30,7 @@
   font-family: Lato, Arial, sans-serif;
   text-transform: uppercase;
   text-decoration: none;
+  font-size: 24px;
 }
 #done-button:hover {
   filter: opacity(0.8);
