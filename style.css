@@ -88,6 +88,7 @@ input[type=radio] {
   .request-body {
     display: flex;
     width: 100%;
+    background: grey;
   }
 
   .panel-active {
@@ -128,6 +129,10 @@ input[type=radio] {
     display: flex;
     justify-content: start;
     width: auto;
+  }
+  .urgency-menu {
+    border: red solid 2px;
+
   }
 
   #close-button {
