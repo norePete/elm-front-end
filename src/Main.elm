@@ -450,7 +450,13 @@ viewList ql =
           List.map (
             \x -> 
                 div [classList [("row", True),("request", True)]]
-                [ div [classList [("row", True), ("request-body", True)]
+                [ 
+                  viewDialog x.updateDialog [div[class "update-dialog"][viewUpdateForm "What's the update on this request?" x.updateBuffer (Buffer x) (UpdateQuote x)]]
+                  [ div [classList [("urgency-menu", True),("float", True)]][ button [id "update-button", onClick (ToggleUpdateDialog x)][]
+                  , button [id "close-button", onClick (CloseRequest x)][]
+                  , viewRadio x]
+                  ]
+                  , div [classList [("row", True), ("request-body", True)]
                   , style "background-color" (urgencyColour x.urgency)] [
                     div [class "column", style "width" "100%"]
                     [ 
@@ -466,11 +472,6 @@ viewList ql =
                        [ text z]]) x.updateList)
                     ]
                   ] 
-                  , viewDialog x.updateDialog [div[class "update-dialog"][viewUpdateForm "What's the update on this request?" x.updateBuffer (Buffer x) (UpdateQuote x)]]
-                  [ div [classList [("urgency-menu", True),("float", True)]][ button [id "update-button", onClick (ToggleUpdateDialog x)][]
-                  , button [id "close-button", onClick (CloseRequest x)][]
-                  , viewRadio x]
-                  ]
                 ]) ql
 
   --, updateList: (List (String, String))

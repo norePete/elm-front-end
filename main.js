@@ -8997,6 +8997,63 @@ var $author$project$Main$viewList = function (ql) {
 					]),
 				_List_fromArray(
 					[
+						A3(
+						$author$project$Main$viewDialog,
+						x.updateDialog,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('update-dialog')
+									]),
+								_List_fromArray(
+									[
+										A4(
+										$author$project$Main$viewUpdateForm,
+										'What\'s the update on this request?',
+										x.updateBuffer,
+										$author$project$Main$Buffer(x),
+										$author$project$Main$UpdateQuote(x))
+									]))
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$classList(
+										_List_fromArray(
+											[
+												_Utils_Tuple2('urgency-menu', true),
+												_Utils_Tuple2('float', true)
+											]))
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$button,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$id('update-button'),
+												$elm$html$Html$Events$onClick(
+												$author$project$Main$ToggleUpdateDialog(x))
+											]),
+										_List_Nil),
+										A2(
+										$elm$html$Html$button,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$id('close-button'),
+												$elm$html$Html$Events$onClick(
+												$author$project$Main$CloseRequest(x))
+											]),
+										_List_Nil),
+										$author$project$Main$viewRadio(x)
+									]))
+							])),
 						A2(
 						$elm$html$Html$div,
 						_List_fromArray(
@@ -9097,63 +9154,6 @@ var $author$project$Main$viewList = function (ql) {
 														]));
 											},
 											x.updateList))
-									]))
-							])),
-						A3(
-						$author$project$Main$viewDialog,
-						x.updateDialog,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('update-dialog')
-									]),
-								_List_fromArray(
-									[
-										A4(
-										$author$project$Main$viewUpdateForm,
-										'What\'s the update on this request?',
-										x.updateBuffer,
-										$author$project$Main$Buffer(x),
-										$author$project$Main$UpdateQuote(x))
-									]))
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$classList(
-										_List_fromArray(
-											[
-												_Utils_Tuple2('urgency-menu', true),
-												_Utils_Tuple2('float', true)
-											]))
-									]),
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$button,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$id('update-button'),
-												$elm$html$Html$Events$onClick(
-												$author$project$Main$ToggleUpdateDialog(x))
-											]),
-										_List_Nil),
-										A2(
-										$elm$html$Html$button,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$id('close-button'),
-												$elm$html$Html$Events$onClick(
-												$author$project$Main$CloseRequest(x))
-											]),
-										_List_Nil),
-										$author$project$Main$viewRadio(x)
 									]))
 							]))
 					]));
