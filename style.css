@@ -162,15 +162,15 @@ input[type=radio] {
     font-size: 10px;
     background-color: green;
     width: 85px;
-    height: 85px;
+    height: 65px;
     border-radius: 50%;
     border: 2px white solid;
   }
   #update-button:hover {
     filter: opacity(0.8);
-    box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.1) inset;
--webkit-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.1) inset;
--moz-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.1) inset;
+    box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.5) inset;
+-webkit-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.5) inset;
+-moz-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.5) inset;
   }
   #update-button:active {
     transform: translate3d(0, 1px, 0);
@@ -180,9 +180,9 @@ input[type=radio] {
   }
   #close-button:hover {
     filter: opacity(0.8);
-    box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.1) inset;
--webkit-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.1) inset;
--moz-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.1) inset;
+    box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.5) inset;
+-webkit-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.5) inset;
+-moz-box-shadow: -2px 1px 12px 0px rgba(0,0,0,0.5) inset;
   }
   #close-button:active {
     transform: translate3d(0, 1px, 0);
