@@ -392,8 +392,18 @@ submissionForm visibility buffer name =
               button [onClick Toggle][text "hide"]
             , button [onClick ToggleDead][text "closed requests"]
             ]
-          , div [][ viewTextArea "description of request" buffer SubmissionBuffer
-                  , viewInput "text" "name" name Name
+          , div [][ 
+
+
+                  viewInput "text" "name" name Name
+                  , viewInput "text" "start time" name Name
+                  , viewInput "text" "end time" name Name
+                  , viewInput "text" "equipment" name Name
+                  , viewInput "text" "location (department)" name Name
+                  , viewTextArea "job description" buffer SubmissionBuffer
+                  , viewTextArea "parts used" buffer SubmissionBuffer
+                  , viewTextArea "materials used" buffer SubmissionBuffer
+                  , viewTextArea "further action required" buffer SubmissionBuffer
                   , button [onClick (CreateRequest buffer)][text "create"]
                   ]
           ] 

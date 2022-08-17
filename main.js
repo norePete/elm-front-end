@@ -8809,8 +8809,15 @@ var $author$project$Main$submissionForm = F3(
 						_List_Nil,
 						_List_fromArray(
 							[
-								A3($author$project$Main$viewTextArea, 'description of request', buffer, $author$project$Main$SubmissionBuffer),
 								A4($author$project$Main$viewInput, 'text', 'name', name, $author$project$Main$Name),
+								A4($author$project$Main$viewInput, 'text', 'start time', name, $author$project$Main$Name),
+								A4($author$project$Main$viewInput, 'text', 'end time', name, $author$project$Main$Name),
+								A4($author$project$Main$viewInput, 'text', 'equipment', name, $author$project$Main$Name),
+								A4($author$project$Main$viewInput, 'text', 'location (department)', name, $author$project$Main$Name),
+								A3($author$project$Main$viewTextArea, 'job description', buffer, $author$project$Main$SubmissionBuffer),
+								A3($author$project$Main$viewTextArea, 'parts used', buffer, $author$project$Main$SubmissionBuffer),
+								A3($author$project$Main$viewTextArea, 'materials used', buffer, $author$project$Main$SubmissionBuffer),
+								A3($author$project$Main$viewTextArea, 'further action required', buffer, $author$project$Main$SubmissionBuffer),
 								A2(
 								$elm$html$Html$button,
 								_List_fromArray(
