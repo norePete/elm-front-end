@@ -49,6 +49,13 @@ type alias Quote =
   , updateList: (List (String, String))
   , urgency: Urgency
   , id: ID
+  , startTime: String
+  , endTime: String
+  , equipment: String
+  , location: String
+  , partsUsed: String
+  , materialsUsed: String
+  , furtherAction: String
   }
 
 type Dialog = 
@@ -70,6 +77,13 @@ type alias Model =
     , quotes: QuoteState
     , buffer: String
     , deadbool: Int
+    , startTime: String
+    , endTime: String
+    , equipment: String
+    , location: String
+    , partsUsed: String
+    , materialsUsed: String
+    , furtherAction: String
   }
 
 --declare type
@@ -77,7 +91,7 @@ init : () -> (Model, Cmd Msg)
 --init _=
  -- (Model "" Closed QuoteLoading "", Cmd.none)
 init _=
-  (Model "" Closed QuoteLoading "" 1
+  (Model "" Closed QuoteLoading "" 1 "" "" "" "" "" "" ""
   , Http.get
     { url = "http://192.168.1.252/server/active"
     , expect = Http.expectJson DataReceived decodeListQuote
@@ -102,6 +116,13 @@ type Msg
   --| GotQuote (Result Http.Error RawQuote)
   | Buffer Quote String
   | SubmissionBuffer String
+  | StartTimeBuffer String
+  | EndTimeBuffer String
+  | EquipmentBuffer String
+  | LocationBuffer String
+  | PartsUsedBuffer String
+  | MaterialsUsedBuffer String
+  | FurtherActionBuffer String
   | SwitchTo Quote Urgency
   | NewNumber String Date Int
   | GetDate String Date
@@ -118,19 +139,33 @@ update msg model =
     GetDate buff currentDate ->
       (model, (newId buff currentDate))
     NewNumber buff currentDate id->
-      ({model | name = "", buffer = "", quotes = 
+      ({model | name = "", buffer = "", startTime = "", endTime = "", equipment = "", location = "", partsUsed = "", materialsUsed = "", furtherAction = "", quotes = 
         QuoteSuccess (List.concat[
-          [requestFactory (Date.toIsoString currentDate) buff model.name id]
+          [requestFactory (Date.toIsoString currentDate) buff model.name id model.startTime model.endTime model.equipment model.location model.partsUsed model.materialsUsed model.furtherAction]
           , (case model.quotes of 
               QuoteSuccess ql -> ql
               QuoteLoading -> []
               QuoteFailure -> [])
           ])
-      }, postNewRequest (requestFactory (Date.toIsoString currentDate) buff model.name id))
+      }, postNewRequest (requestFactory (Date.toIsoString currentDate) buff model.name id model.startTime model.endTime model.equipment model.location model.partsUsed model.materialsUsed model.furtherAction))
     SubmissionBuffer currentBuffer ->
       ({model | buffer = currentBuffer}, Cmd.none)
     Name name ->
       ({model | name = name}, Cmd.none)
+    StartTimeBuffer startTime -> 
+      ({model | startTime = startTime}, Cmd.none)
+    EndTimeBuffer endTime -> 
+      ({model | endTime = endTime}, Cmd.none)
+    EquipmentBuffer equipment -> 
+      ({model | equipment = equipment}, Cmd.none)
+    LocationBuffer location -> 
+      ({model | location = location}, Cmd.none)
+    PartsUsedBuffer partsUsed -> 
+      ({model | partsUsed = partsUsed}, Cmd.none)
+    MaterialsUsedBuffer materialsUsed -> 
+      ({model | materialsUsed = materialsUsed}, Cmd.none)
+    FurtherActionBuffer furtherAction -> 
+      ({model | furtherAction = furtherAction}, Cmd.none)
     Buffer quote currentBuffer ->
           case model.quotes of 
             QuoteSuccess current ->
@@ -259,7 +294,7 @@ update msg model =
         Ok data ->
           ({ model | quotes = (QuoteSuccess data)}, Cmd.none)
         Err httpError -> 
-          ({ model | quotes = (QuoteSuccess [Quote "ERROR" "" "" "NOW" Closed "" Closed [] High (ID 1000)])}, Cmd.none)
+          ({ model | quotes = (QuoteSuccess [Quote "ERROR" "" "" "NOW" Closed "" Closed [] High (ID 1000) "" "" "" "" "" "" ""])}, Cmd.none)
 
     SwitchTo quote urgencyLevel -> 
       (model, (generateStatusUpdate quote urgencyLevel))
@@ -283,8 +318,8 @@ update msg model =
             QuoteLoading ->
               (model, Cmd.none)
 
-requestFactory: String -> String -> String -> Int -> Quote
-requestFactory currentDate buffer name id =
+requestFactory: String -> String -> String -> Int -> String -> String -> String -> String -> String -> String -> String -> Quote
+requestFactory currentDate buffer name id startTime endTime equipment location partsUsed materialsUsed furtherAction =
   Quote 
   buffer 
   "created..." 
@@ -296,6 +331,13 @@ requestFactory currentDate buffer name id =
   [("created", currentDate)] 
   Low 
   (ID id)
+  startTime 
+  endTime 
+  equipment 
+  location 
+  partsUsed 
+  materialsUsed 
+  furtherAction 
 
 randomNumber: Random.Generator Int
 randomNumber = 
@@ -372,14 +414,14 @@ view model =
       ]
       [ h2 [][text "Job Request"]
       , div [classList [("row", True)]]
-        [ submissionForm model.status model.buffer model.name
+        [ submissionForm model.status model.buffer model.name model.startTime model.endTime model.equipment model.location model.partsUsed model.materialsUsed model.furtherAction
         , viewQuote model
         ]
       ]
   
 
-submissionForm : Dialog -> String -> String -> Html Msg
-submissionForm visibility buffer name =
+submissionForm : Dialog -> String -> String -> String -> String -> String -> String -> String -> String -> String -> Html Msg
+submissionForm visibility buffer name startTime endTime equipment location partsUsed materials furtherAction =
       case visibility of 
         Open t ->
           div [classList
@@ -396,14 +438,14 @@ submissionForm visibility buffer name =
 
 
                   viewInput "text" "name" name Name
-                  , viewInput "text" "start time" name Name
-                  , viewInput "text" "end time" name Name
-                  , viewInput "text" "equipment" name Name
-                  , viewInput "text" "location (department)" name Name
+                  , viewInput "text" "start time" startTime StartTimeBuffer
+                  , viewInput "text" "end time" endTime EndTimeBuffer
+                  , viewInput "text" "equipment" equipment EquipmentBuffer
+                  , viewInput "text" "location (department)" location LocationBuffer
                   , viewTextArea "job description" buffer SubmissionBuffer
-                  , viewTextArea "parts used" buffer SubmissionBuffer
-                  , viewTextArea "materials used" buffer SubmissionBuffer
-                  , viewTextArea "further action required" buffer SubmissionBuffer
+                  , viewTextArea "parts used" partsUsed PartsUsedBuffer
+                  , viewTextArea "materials used" materials MaterialsUsedBuffer
+                  , viewTextArea "further action required" furtherAction FurtherActionBuffer
                   , button [onClick (CreateRequest buffer)][text "create"]
                   ]
           ] 
@@ -470,11 +512,15 @@ viewList ql =
                   , style "background-color" (urgencyColour x.urgency)] [
                     div [class "column", style "width" "100%"]
                     [ 
-                      div [class "row"]
-                      [ 
-                        blockquote [style "font-size" "14px", style "width" "80%"][text x.author]
-                      , blockquote [style "font-size" "30px", style "width" "80%"][text x.quote]
-                      ]
+                      div [class "row"][ blockquote [style "font-size" "14px", style "width" "80%"][text x.author] ]
+                    , div [class "row"][ blockquote [style "font-size" "14px", style "width" "80%"][text x.startTime] ]
+                    , div [class "row"][ blockquote [style "font-size" "14px", style "width" "80%"][text x.endTime] ]
+                    , div [class "row"][ blockquote [style "font-size" "14px", style "width" "80%"][text x.equipment] ]
+                    , div [class "row"][ blockquote [style "font-size" "14px", style "width" "80%"][text x.location] ]
+                    , div [class "row"][ blockquote [style "font-size" "14px", style "width" "80%"][text x.partsUsed] ]
+                    , div [class "row"][ blockquote [style "font-size" "14px", style "width" "80%"][text x.materialsUsed] ]
+                    , div [class "row"][ blockquote [style "font-size" "14px", style "width" "80%"][text x.furtherAction] ]
+                    , div [class "row"][ blockquote [style "font-size" "20px", style "width" "80%"][text x.quote] ]
                     , div [] (List.map (\(y, z) ->
                        div [class "row", style "width" "80%"]
                        [ blockquote [style "color" "green", style "font-size" "16px"][text y]
@@ -525,7 +571,9 @@ viewUpdateForm placeholder value callback onclick =
 
 viewInput : String -> String -> String -> (String -> msg) -> Html msg
 viewInput t p v toMsg = 
+      div [class "inputfield"] [
       input [ type_ t, placeholder p, value v, onInput toMsg] []
+      ]
 
 viewRadio : Quote -> Html Msg
 viewRadio quote =
@@ -583,6 +631,13 @@ decodeSingleQuote = Decode.succeed Quote
     |> required "updateList" pipeUpdateList
     |> required "urgency" pipeUrgency
     |> required "id" numberToID
+    |> required "startTime" Decode.string
+    |> required "endTime" Decode.string
+    |> required "equipment" Decode.string
+    |> required "location" Decode.string
+    |> required "partsUsed" Decode.string
+    |> required "materialsUsed" Decode.string
+    |> required "furtherAction" Decode.string
 
 numberToID:Decoder ID
 numberToID = 
@@ -654,6 +709,13 @@ newRequestEncoder quote =
     , ("year", Encode.string quote.year)
     , ("updateList", encodeUpdateList quote.updateList)
     , ("urgency", encodeUrgency quote.urgency)
+    , ("startTime", Encode.string quote.startTime)
+    , ("endTime", Encode.string quote.endTime)
+    , ("equipment", Encode.string quote.equipment)
+    , ("location", Encode.string quote.location)
+    , ("partsUsed", Encode.string quote.partsUsed)
+    , ("materialsUsed", Encode.string quote.materialsUsed)
+    , ("furtherAction", Encode.string quote.furtherAction)
     ]
 updateEncoder : Quote -> Encode.Value
 updateEncoder quote =

@@ -5551,10 +5551,31 @@ var $author$project$Main$Closed = {$: 'Closed'};
 var $author$project$Main$DataReceived = function (a) {
 	return {$: 'DataReceived', a: a};
 };
-var $author$project$Main$Model = F5(
-	function (name, status, quotes, buffer, deadbool) {
-		return {buffer: buffer, deadbool: deadbool, name: name, quotes: quotes, status: status};
-	});
+var $author$project$Main$Model = function (name) {
+	return function (status) {
+		return function (quotes) {
+			return function (buffer) {
+				return function (deadbool) {
+					return function (startTime) {
+						return function (endTime) {
+							return function (equipment) {
+								return function (location) {
+									return function (partsUsed) {
+										return function (materialsUsed) {
+											return function (furtherAction) {
+												return {buffer: buffer, deadbool: deadbool, endTime: endTime, equipment: equipment, furtherAction: furtherAction, location: location, materialsUsed: materialsUsed, name: name, partsUsed: partsUsed, quotes: quotes, startTime: startTime, status: status};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var $author$project$Main$QuoteLoading = {$: 'QuoteLoading'};
 var $author$project$Main$Quote = function (quote) {
 	return function (source) {
@@ -5566,7 +5587,21 @@ var $author$project$Main$Quote = function (quote) {
 							return function (updateList) {
 								return function (urgency) {
 									return function (id) {
-										return {author: author, changeStatusDialog: changeStatusDialog, id: id, quote: quote, source: source, updateBuffer: updateBuffer, updateDialog: updateDialog, updateList: updateList, urgency: urgency, year: year};
+										return function (startTime) {
+											return function (endTime) {
+												return function (equipment) {
+													return function (location) {
+														return function (partsUsed) {
+															return function (materialsUsed) {
+																return function (furtherAction) {
+																	return {author: author, changeStatusDialog: changeStatusDialog, endTime: endTime, equipment: equipment, furtherAction: furtherAction, id: id, location: location, materialsUsed: materialsUsed, partsUsed: partsUsed, quote: quote, source: source, startTime: startTime, updateBuffer: updateBuffer, updateDialog: updateDialog, updateList: updateList, urgency: urgency, year: year};
+																};
+															};
+														};
+													};
+												};
+											};
+										};
 									};
 								};
 							};
@@ -5638,42 +5673,70 @@ var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
 	});
 var $author$project$Main$decodeSingleQuote = A3(
 	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-	'id',
-	$author$project$Main$numberToID,
+	'furtherAction',
+	$elm$json$Json$Decode$string,
 	A3(
 		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-		'urgency',
-		$author$project$Main$pipeUrgency,
+		'materialsUsed',
+		$elm$json$Json$Decode$string,
 		A3(
 			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-			'updateList',
-			$author$project$Main$pipeUpdateList,
-			A2(
-				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded,
-				$author$project$Main$Closed,
-				A2(
-					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded,
-					'',
-					A2(
-						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded,
-						$author$project$Main$Closed,
+			'partsUsed',
+			$elm$json$Json$Decode$string,
+			A3(
+				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+				'location',
+				$elm$json$Json$Decode$string,
+				A3(
+					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+					'equipment',
+					$elm$json$Json$Decode$string,
+					A3(
+						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+						'endTime',
+						$elm$json$Json$Decode$string,
 						A3(
 							$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-							'year',
+							'startTime',
 							$elm$json$Json$Decode$string,
 							A3(
 								$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-								'author',
-								$elm$json$Json$Decode$string,
+								'id',
+								$author$project$Main$numberToID,
 								A3(
 									$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-									'source',
-									$elm$json$Json$Decode$string,
+									'urgency',
+									$author$project$Main$pipeUrgency,
 									A3(
 										$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-										'quote',
-										$elm$json$Json$Decode$string,
-										$elm$json$Json$Decode$succeed($author$project$Main$Quote)))))))))));
+										'updateList',
+										$author$project$Main$pipeUpdateList,
+										A2(
+											$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded,
+											$author$project$Main$Closed,
+											A2(
+												$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded,
+												'',
+												A2(
+													$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$hardcoded,
+													$author$project$Main$Closed,
+													A3(
+														$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+														'year',
+														$elm$json$Json$Decode$string,
+														A3(
+															$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+															'author',
+															$elm$json$Json$Decode$string,
+															A3(
+																$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+																'source',
+																$elm$json$Json$Decode$string,
+																A3(
+																	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+																	'quote',
+																	$elm$json$Json$Decode$string,
+																	$elm$json$Json$Decode$succeed($author$project$Main$Quote))))))))))))))))));
 var $author$project$Main$decodeListQuote = $elm$json$Json$Decode$list($author$project$Main$decodeSingleQuote);
 var $elm$json$Json$Decode$decodeString = _Json_runOnString;
 var $elm$http$Http$BadStatus_ = F2(
@@ -6459,7 +6522,7 @@ var $elm$http$Http$get = function (r) {
 };
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		A5($author$project$Main$Model, '', $author$project$Main$Closed, $author$project$Main$QuoteLoading, '', 1),
+		$author$project$Main$Model('')($author$project$Main$Closed)($author$project$Main$QuoteLoading)('')(1)('')('')('')('')('')('')(''),
 		$elm$http$Http$get(
 			{
 				expect: A2($elm$http$Http$expectJson, $author$project$Main$DataReceived, $author$project$Main$decodeListQuote),
@@ -7087,7 +7150,28 @@ var $author$project$Main$newRequestEncoder = function (quote) {
 				$author$project$Main$encodeUpdateList(quote.updateList)),
 				_Utils_Tuple2(
 				'urgency',
-				$author$project$Main$encodeUrgency(quote.urgency))
+				$author$project$Main$encodeUrgency(quote.urgency)),
+				_Utils_Tuple2(
+				'startTime',
+				$elm$json$Json$Encode$string(quote.startTime)),
+				_Utils_Tuple2(
+				'endTime',
+				$elm$json$Json$Encode$string(quote.endTime)),
+				_Utils_Tuple2(
+				'equipment',
+				$elm$json$Json$Encode$string(quote.equipment)),
+				_Utils_Tuple2(
+				'location',
+				$elm$json$Json$Encode$string(quote.location)),
+				_Utils_Tuple2(
+				'partsUsed',
+				$elm$json$Json$Encode$string(quote.partsUsed)),
+				_Utils_Tuple2(
+				'materialsUsed',
+				$elm$json$Json$Encode$string(quote.materialsUsed)),
+				_Utils_Tuple2(
+				'furtherAction',
+				$elm$json$Json$Encode$string(quote.furtherAction))
 			]));
 };
 var $author$project$Main$postNewRequest = function (quote) {
@@ -7123,15 +7207,34 @@ var $author$project$Main$postUpdate = function (quote) {
 			url: 'http://192.168.1.252/server/update'
 		});
 };
-var $author$project$Main$requestFactory = F4(
-	function (currentDate, buffer, name, id) {
-		return $author$project$Main$Quote(buffer)('created...')(name)(currentDate)($author$project$Main$Closed)('')($author$project$Main$Closed)(
-			_List_fromArray(
-				[
-					_Utils_Tuple2('created', currentDate)
-				]))($author$project$Main$Low)(
-			$author$project$Main$ID(id));
-	});
+var $author$project$Main$requestFactory = function (currentDate) {
+	return function (buffer) {
+		return function (name) {
+			return function (id) {
+				return function (startTime) {
+					return function (endTime) {
+						return function (equipment) {
+							return function (location) {
+								return function (partsUsed) {
+									return function (materialsUsed) {
+										return function (furtherAction) {
+											return $author$project$Main$Quote(buffer)('created...')(name)(currentDate)($author$project$Main$Closed)('')($author$project$Main$Closed)(
+												_List_fromArray(
+													[
+														_Utils_Tuple2('created', currentDate)
+													]))($author$project$Main$Low)(
+												$author$project$Main$ID(id))(startTime)(endTime)(equipment)(location)(partsUsed)(materialsUsed)(furtherAction);
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var $justinmimbs$date$Date$monthToNumber = function (m) {
 	switch (m.$) {
 		case 'Jan':
@@ -8300,19 +8403,21 @@ var $author$project$Main$update = F2(
 						model,
 						{
 							buffer: '',
+							endTime: '',
+							equipment: '',
+							furtherAction: '',
+							location: '',
+							materialsUsed: '',
 							name: '',
+							partsUsed: '',
 							quotes: $author$project$Main$QuoteSuccess(
 								$elm$core$List$concat(
 									_List_fromArray(
 										[
 											_List_fromArray(
 											[
-												A4(
-												$author$project$Main$requestFactory,
-												$justinmimbs$date$Date$toIsoString(currentDate),
-												buff,
-												model.name,
-												id)
+												$author$project$Main$requestFactory(
+												$justinmimbs$date$Date$toIsoString(currentDate))(buff)(model.name)(id)(model.startTime)(model.endTime)(model.equipment)(model.location)(model.partsUsed)(model.materialsUsed)(model.furtherAction)
 											]),
 											function () {
 											var _v1 = model.quotes;
@@ -8326,15 +8431,12 @@ var $author$project$Main$update = F2(
 													return _List_Nil;
 											}
 										}()
-										])))
+										]))),
+							startTime: ''
 						}),
 					$author$project$Main$postNewRequest(
-						A4(
-							$author$project$Main$requestFactory,
-							$justinmimbs$date$Date$toIsoString(currentDate),
-							buff,
-							model.name,
-							id)));
+						$author$project$Main$requestFactory(
+							$justinmimbs$date$Date$toIsoString(currentDate))(buff)(model.name)(id)(model.startTime)(model.endTime)(model.equipment)(model.location)(model.partsUsed)(model.materialsUsed)(model.furtherAction)));
 			case 'SubmissionBuffer':
 				var currentBuffer = msg.a;
 				return _Utils_Tuple2(
@@ -8348,6 +8450,55 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{name: name}),
+					$elm$core$Platform$Cmd$none);
+			case 'StartTimeBuffer':
+				var startTime = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{startTime: startTime}),
+					$elm$core$Platform$Cmd$none);
+			case 'EndTimeBuffer':
+				var endTime = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{endTime: endTime}),
+					$elm$core$Platform$Cmd$none);
+			case 'EquipmentBuffer':
+				var equipment = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{equipment: equipment}),
+					$elm$core$Platform$Cmd$none);
+			case 'LocationBuffer':
+				var location = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{location: location}),
+					$elm$core$Platform$Cmd$none);
+			case 'PartsUsedBuffer':
+				var partsUsed = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{partsUsed: partsUsed}),
+					$elm$core$Platform$Cmd$none);
+			case 'MaterialsUsedBuffer':
+				var materialsUsed = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{materialsUsed: materialsUsed}),
+					$elm$core$Platform$Cmd$none);
+			case 'FurtherActionBuffer':
+				var furtherAction = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{furtherAction: furtherAction}),
 					$elm$core$Platform$Cmd$none);
 			case 'Buffer':
 				var quote = msg.a;
@@ -8587,7 +8738,7 @@ var $author$project$Main$update = F2(
 									_List_fromArray(
 										[
 											$author$project$Main$Quote('ERROR')('')('')('NOW')($author$project$Main$Closed)('')($author$project$Main$Closed)(_List_Nil)($author$project$Main$High)(
-											$author$project$Main$ID(1000))
+											$author$project$Main$ID(1000))('')('')('')('')('')('')('')
 										]))
 							}),
 						$elm$core$Platform$Cmd$none);
@@ -8668,8 +8819,29 @@ var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $author$project$Main$CreateRequest = function (a) {
 	return {$: 'CreateRequest', a: a};
 };
+var $author$project$Main$EndTimeBuffer = function (a) {
+	return {$: 'EndTimeBuffer', a: a};
+};
+var $author$project$Main$EquipmentBuffer = function (a) {
+	return {$: 'EquipmentBuffer', a: a};
+};
+var $author$project$Main$FurtherActionBuffer = function (a) {
+	return {$: 'FurtherActionBuffer', a: a};
+};
+var $author$project$Main$LocationBuffer = function (a) {
+	return {$: 'LocationBuffer', a: a};
+};
+var $author$project$Main$MaterialsUsedBuffer = function (a) {
+	return {$: 'MaterialsUsedBuffer', a: a};
+};
 var $author$project$Main$Name = function (a) {
 	return {$: 'Name', a: a};
+};
+var $author$project$Main$PartsUsedBuffer = function (a) {
+	return {$: 'PartsUsedBuffer', a: a};
+};
+var $author$project$Main$StartTimeBuffer = function (a) {
+	return {$: 'StartTimeBuffer', a: a};
 };
 var $author$project$Main$SubmissionBuffer = function (a) {
 	return {$: 'SubmissionBuffer', a: a};
@@ -8734,15 +8906,24 @@ var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('
 var $author$project$Main$viewInput = F4(
 	function (t, p, v, toMsg) {
 		return A2(
-			$elm$html$Html$input,
+			$elm$html$Html$div,
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$type_(t),
-					$elm$html$Html$Attributes$placeholder(p),
-					$elm$html$Html$Attributes$value(v),
-					$elm$html$Html$Events$onInput(toMsg)
+					$elm$html$Html$Attributes$class('inputfield')
 				]),
-			_List_Nil);
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$input,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$type_(t),
+							$elm$html$Html$Attributes$placeholder(p),
+							$elm$html$Html$Attributes$value(v),
+							$elm$html$Html$Events$onInput(toMsg)
+						]),
+					_List_Nil)
+				]));
 	});
 var $elm$html$Html$textarea = _VirtualDom_node('textarea');
 var $author$project$Main$viewTextArea = F3(
@@ -8757,109 +8938,126 @@ var $author$project$Main$viewTextArea = F3(
 				]),
 			_List_Nil);
 	});
-var $author$project$Main$submissionForm = F3(
-	function (visibility, buffer, name) {
-		if (visibility.$ === 'Open') {
-			var t = visibility.a;
-			return A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$classList(
-						_List_fromArray(
-							[
-								_Utils_Tuple2('request-button', true),
-								_Utils_Tuple2('panel-active', true),
-								_Utils_Tuple2('float-left', true)
-							]))
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('float-left')
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$Toggle)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('hide')
-									])),
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick($author$project$Main$ToggleDead)
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('closed requests')
-									]))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A4($author$project$Main$viewInput, 'text', 'name', name, $author$project$Main$Name),
-								A4($author$project$Main$viewInput, 'text', 'start time', name, $author$project$Main$Name),
-								A4($author$project$Main$viewInput, 'text', 'end time', name, $author$project$Main$Name),
-								A4($author$project$Main$viewInput, 'text', 'equipment', name, $author$project$Main$Name),
-								A4($author$project$Main$viewInput, 'text', 'location (department)', name, $author$project$Main$Name),
-								A3($author$project$Main$viewTextArea, 'job description', buffer, $author$project$Main$SubmissionBuffer),
-								A3($author$project$Main$viewTextArea, 'parts used', buffer, $author$project$Main$SubmissionBuffer),
-								A3($author$project$Main$viewTextArea, 'materials used', buffer, $author$project$Main$SubmissionBuffer),
-								A3($author$project$Main$viewTextArea, 'further action required', buffer, $author$project$Main$SubmissionBuffer),
-								A2(
-								$elm$html$Html$button,
-								_List_fromArray(
-									[
-										$elm$html$Html$Events$onClick(
-										$author$project$Main$CreateRequest(buffer))
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text('create')
-									]))
-							]))
-					]));
-		} else {
-			return A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$classList(
-						_List_fromArray(
-							[
-								_Utils_Tuple2('request-button', true),
-								_Utils_Tuple2('panel-hidden', true),
-								_Utils_Tuple2('float-left', true)
-							]))
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Events$onClick($author$project$Main$Toggle)
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('menu')
-							])),
-						A2($elm$html$Html$div, _List_Nil, _List_Nil)
-					]));
-		}
-	});
+var $author$project$Main$submissionForm = function (visibility) {
+	return function (buffer) {
+		return function (name) {
+			return function (startTime) {
+				return function (endTime) {
+					return function (equipment) {
+						return function (location) {
+							return function (partsUsed) {
+								return function (materials) {
+									return function (furtherAction) {
+										if (visibility.$ === 'Open') {
+											var t = visibility.a;
+											return A2(
+												$elm$html$Html$div,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$classList(
+														_List_fromArray(
+															[
+																_Utils_Tuple2('request-button', true),
+																_Utils_Tuple2('panel-active', true),
+																_Utils_Tuple2('float-left', true)
+															]))
+													]),
+												_List_fromArray(
+													[
+														A2(
+														$elm$html$Html$div,
+														_List_fromArray(
+															[
+																$elm$html$Html$Attributes$class('float-left')
+															]),
+														_List_fromArray(
+															[
+																A2(
+																$elm$html$Html$button,
+																_List_fromArray(
+																	[
+																		$elm$html$Html$Events$onClick($author$project$Main$Toggle)
+																	]),
+																_List_fromArray(
+																	[
+																		$elm$html$Html$text('hide')
+																	])),
+																A2(
+																$elm$html$Html$button,
+																_List_fromArray(
+																	[
+																		$elm$html$Html$Events$onClick($author$project$Main$ToggleDead)
+																	]),
+																_List_fromArray(
+																	[
+																		$elm$html$Html$text('closed requests')
+																	]))
+															])),
+														A2(
+														$elm$html$Html$div,
+														_List_Nil,
+														_List_fromArray(
+															[
+																A4($author$project$Main$viewInput, 'text', 'name', name, $author$project$Main$Name),
+																A4($author$project$Main$viewInput, 'text', 'start time', startTime, $author$project$Main$StartTimeBuffer),
+																A4($author$project$Main$viewInput, 'text', 'end time', endTime, $author$project$Main$EndTimeBuffer),
+																A4($author$project$Main$viewInput, 'text', 'equipment', equipment, $author$project$Main$EquipmentBuffer),
+																A4($author$project$Main$viewInput, 'text', 'location (department)', location, $author$project$Main$LocationBuffer),
+																A3($author$project$Main$viewTextArea, 'job description', buffer, $author$project$Main$SubmissionBuffer),
+																A3($author$project$Main$viewTextArea, 'parts used', partsUsed, $author$project$Main$PartsUsedBuffer),
+																A3($author$project$Main$viewTextArea, 'materials used', materials, $author$project$Main$MaterialsUsedBuffer),
+																A3($author$project$Main$viewTextArea, 'further action required', furtherAction, $author$project$Main$FurtherActionBuffer),
+																A2(
+																$elm$html$Html$button,
+																_List_fromArray(
+																	[
+																		$elm$html$Html$Events$onClick(
+																		$author$project$Main$CreateRequest(buffer))
+																	]),
+																_List_fromArray(
+																	[
+																		$elm$html$Html$text('create')
+																	]))
+															]))
+													]));
+										} else {
+											return A2(
+												$elm$html$Html$div,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$classList(
+														_List_fromArray(
+															[
+																_Utils_Tuple2('request-button', true),
+																_Utils_Tuple2('panel-hidden', true),
+																_Utils_Tuple2('float-left', true)
+															]))
+													]),
+												_List_fromArray(
+													[
+														A2(
+														$elm$html$Html$button,
+														_List_fromArray(
+															[
+																$elm$html$Html$Events$onClick($author$project$Main$Toggle)
+															]),
+														_List_fromArray(
+															[
+																$elm$html$Html$text('menu')
+															])),
+														A2($elm$html$Html$div, _List_Nil, _List_Nil)
+													]));
+										}
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var $elm$html$Html$blockquote = _VirtualDom_node('blockquote');
 var $author$project$Main$Buffer = F2(
 	function (a, b) {
@@ -9105,12 +9303,161 @@ var $author$project$Main$viewList = function (ql) {
 												_List_fromArray(
 													[
 														$elm$html$Html$text(x.author)
-													])),
+													]))
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('row')
+											]),
+										_List_fromArray(
+											[
 												A2(
 												$elm$html$Html$blockquote,
 												_List_fromArray(
 													[
-														A2($elm$html$Html$Attributes$style, 'font-size', '30px'),
+														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'width', '80%')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text(x.startTime)
+													]))
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('row')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$blockquote,
+												_List_fromArray(
+													[
+														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'width', '80%')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text(x.endTime)
+													]))
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('row')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$blockquote,
+												_List_fromArray(
+													[
+														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'width', '80%')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text(x.equipment)
+													]))
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('row')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$blockquote,
+												_List_fromArray(
+													[
+														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'width', '80%')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text(x.location)
+													]))
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('row')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$blockquote,
+												_List_fromArray(
+													[
+														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'width', '80%')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text(x.partsUsed)
+													]))
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('row')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$blockquote,
+												_List_fromArray(
+													[
+														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'width', '80%')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text(x.materialsUsed)
+													]))
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('row')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$blockquote,
+												_List_fromArray(
+													[
+														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'width', '80%')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text(x.furtherAction)
+													]))
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('row')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$blockquote,
+												_List_fromArray(
+													[
+														A2($elm$html$Html$Attributes$style, 'font-size', '20px'),
 														A2($elm$html$Html$Attributes$style, 'width', '80%')
 													]),
 												_List_fromArray(
@@ -9259,7 +9606,7 @@ var $author$project$Main$view = function (model) {
 					]),
 				_List_fromArray(
 					[
-						A3($author$project$Main$submissionForm, model.status, model.buffer, model.name),
+						$author$project$Main$submissionForm(model.status)(model.buffer)(model.name)(model.startTime)(model.endTime)(model.equipment)(model.location)(model.partsUsed)(model.materialsUsed)(model.furtherAction),
 						$author$project$Main$viewQuote(model)
 					]))
 			]));
