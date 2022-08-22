@@ -408,57 +408,45 @@ subscriptions model =
 --declare type
 view : Model -> Html Msg
 view model =
-      div [classList
-        [ ("column", True)
-        ]
-      ]
-      [ h2 [][text "Job Request"]
-      , div [classList [("row", True)]]
-        [ submissionForm model.status model.buffer model.name model.startTime model.endTime model.equipment model.location model.partsUsed model.materialsUsed model.furtherAction
-        , viewQuote model
-        ]
-      ]
+      div [][ 
+        div []
+        [ submissionForm 
+        model.status model.buffer model.name model.startTime model.endTime 
+        model.equipment model.location model.partsUsed model.materialsUsed 
+        model.furtherAction]]
   
 
 submissionForm : Dialog -> String -> String -> String -> String -> String -> String -> String -> String -> String -> Html Msg
 submissionForm visibility buffer name startTime endTime equipment location partsUsed materials furtherAction =
       case visibility of 
         Open t ->
-          div [classList
-            [ ("request-button", True)
-            , ("panel-active", True)
-            , ("float-left", True)
-            ]
+          div [class "popup"]
+          [ div [class "container"]
+            [ div [class "hide_button"][button [onClick Toggle][text "hide"]]
+            , div [class "row_1"][ 
+                      viewInput "text" "name" name Name
+                    , viewInput "text" "start time" startTime StartTimeBuffer
+                    , viewInput "text" "end time" endTime EndTimeBuffer
+                    ]
+            , div [class "row_2"][
+                      viewInput "text" "equipment" equipment EquipmentBuffer
+                    , viewInput "text" "location (department)" location LocationBuffer
+                    ]
+            , div [class "row_3"][
+                      viewTextArea "job description" buffer SubmissionBuffer
+                    ]
+            , div [class "row_4"][
+                      viewTextArea "parts used" partsUsed PartsUsedBuffer
+                    , viewTextArea "materials used" materials MaterialsUsedBuffer
+                    ]
+            , div [class "row_5"][
+                      viewTextArea "further action required" furtherAction FurtherActionBuffer
+                    ]
+             , div [class "row_6"][button [onClick (CreateRequest buffer)][text "create"]]
+            ] 
           ]
-          [ div [class "float-left"][ 
-              button [onClick Toggle][text "hide"]
-            , button [onClick ToggleDead][text "closed requests"]
-            ]
-          , div [][ 
-
-
-                  viewInput "text" "name" name Name
-                  , viewInput "text" "start time" startTime StartTimeBuffer
-                  , viewInput "text" "end time" endTime EndTimeBuffer
-                  , viewInput "text" "equipment" equipment EquipmentBuffer
-                  , viewInput "text" "location (department)" location LocationBuffer
-                  , viewTextArea "job description" buffer SubmissionBuffer
-                  , viewTextArea "parts used" partsUsed PartsUsedBuffer
-                  , viewTextArea "materials used" materials MaterialsUsedBuffer
-                  , viewTextArea "further action required" furtherAction FurtherActionBuffer
-                  , button [onClick (CreateRequest buffer)][text "create"]
-                  ]
-          ] 
         Closed -> 
-          div [classList
-            [ ("request-button", True)
-            , ("panel-hidden", True)
-            , ("float-left", True)
-            ]
-          ]
-          [ button [onClick Toggle][text "menu"]
-          , div [][]
-          ] 
+          div [class "menu_button"][button [onClick Toggle][text "menu"]] 
 
 viewTextArea : String -> String -> (String -> msg) -> Html msg
 viewTextArea p v toMsg = 
@@ -468,19 +456,13 @@ viewQuote : Model -> Html Msg
 viewQuote model = 
   case model.quotes of 
     QuoteFailure ->
-          div [classList
-            [ ("column", True)
-            ]
+          div [
           ][blockquote [][text "Failed to reach database"]]
     QuoteLoading -> 
-          div [classList
-            [ ("column", True)
-            ]
+          div [
           ][blockquote [][text "Loading ..." ]]
     QuoteSuccess quotelist ->
-          div [classList
-            [ ("column", True)
-            ]
+          div [
           ](viewList quotelist)
 
 
@@ -501,58 +483,35 @@ viewList : List Quote -> List (Html Msg)
 viewList ql =
           List.map (
             \x -> 
-                div [classList [("row", True),("request", True)]]
+                div []
                 [ 
                   viewDialog x.updateDialog [div[class "update-dialog"][viewUpdateForm "What's the update on this request?" x.updateBuffer (Buffer x) (UpdateQuote x)]]
-                  [ div [classList [("urgency-menu", True),("float", True)]][ button [id "update-button", onClick (ToggleUpdateDialog x)][]
+                  [ div [][ button [id "update-button", onClick (ToggleUpdateDialog x)][]
                   , button [id "close-button", onClick (CloseRequest x)][]
                   , viewRadio x]
                   ]
-                  , div [classList [("row", True), ("request-body", True)]
-                  , style "background-color" (urgencyColour x.urgency)] [
-                    div [class "column", style "width" "100%"]
+                  , div [] [
+                    div []
                     [ 
-                      div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text "Engineer: " x.author] ]
-                    , div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text x.startTime] ]
-                    , div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text x.endTime] ]
-                    , div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text x.equipment] ]
-                    , div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text x.location] ]
-                    , div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text x.partsUsed] ]
-                    , div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text x.materialsUsed] ]
-                    , div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text x.furtherAction] ]
-                    , div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text x.quote] ]
+                      div [][ blockquote [style "font-size" "16px", style "width" "80%"][text "Engineer:   ", text  x.author] ]
+                    , div [][ 
+                        blockquote [style "font-size" "16px", style "width" "80%"][text "Start Time:   ", text x.startTime] 
+                      , blockquote [style "font-size" "16px", style "width" "80%"][text "End Time:   ", text x.endTime]]
+                    , div [][ 
+                        blockquote [style "font-size" "16px", style "width" "80%"][text "Equipment:   ", text x.equipment] 
+                      , blockquote [style "font-size" "16px", style "width" "80%"][text "Location:   ", text x.location]]
+                    , div [][ blockquote [style "font-size" "20px", style "width" "80%"][text "Job Description:   ", text x.quote] ]
+                    , div [][ blockquote [style "font-size" "16px", style "width" "80%"][text "Parts Used:   ", text x.partsUsed] ]
+                    , div [][ blockquote [style "font-size" "16px", style "width" "80%"][text "Materials Used:   ", text x.materialsUsed] ]
+                    , div [][ blockquote [style "font-size" "16px", style "width" "80%"][text "Further Action:   ", text x.furtherAction] ]
                     , div [] (List.map (\(y, z) ->
-                       div [class "row", style "width" "80%"]
+                       div []
                        [ blockquote [style "color" "green", style "font-size" "16px"][text y]
                        , p [ style "margin-left" "auto", style "text-align" "right", style "font-size" "14px" ]
                        [ text z]]) x.updateList)
                     ]
                   ] 
                 ]) ql
-
-  --, updateList: (List (String, String))
-
---viewList : List Quote -> List (Html Msg)
---viewList ql =
---          List.map (
---            \x -> 
---                div [classList [("row", True),("request", True)]]
---                [ div [classList [("row", True), ("request-body", True)]
---                  , style "background-color" (urgencyColour x.urgency)]
---                  [
---                    div [class "column", style "width" "100%"]
---                    [ 
---                      div [class "row"]
---                      [ blockquote [style "font-size" "20px", style "width" "80%"][text x.quote]]
---                    , div [] (List.map (\y ->
---                       div [class "row", style "width" "80%"]
---                       [ blockquote [style "color" "green", style "font-size" "16px"][text y]
---                       , p [ style "margin-left" "auto", style "text-align" "right", style "font-size" "14px" ]
---                       [ text (x.author ++ " " ++ x.year)]]) ["placeholder"])
---                    ]
---                  ] 
---              ]) ql
-
 
 viewDialog : Dialog -> List (Html msg) -> List (Html msg) -> Html msg 
 viewDialog dialog html hiddenHtml = 
