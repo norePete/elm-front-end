@@ -411,19 +411,15 @@ view model =
       div [][ 
         div []
         [ submissionForm 
-        model.status model.buffer model.name model.startTime model.endTime 
+        model.buffer model.name model.startTime model.endTime 
         model.equipment model.location model.partsUsed model.materialsUsed 
         model.furtherAction]]
   
 
-submissionForm : Dialog -> String -> String -> String -> String -> String -> String -> String -> String -> String -> Html Msg
-submissionForm visibility buffer name startTime endTime equipment location partsUsed materials furtherAction =
-      case visibility of 
-        Open t ->
+submissionForm : String -> String -> String -> String -> String -> String -> String -> String -> String -> Html Msg
+submissionForm buffer name startTime endTime equipment location partsUsed materials furtherAction =
           div [class "popup"]
-          [ div [class "container"]
-            [ div [class "hide_button"][button [onClick Toggle][text "hide"]]
-            , div [class "row_1"][ 
+          [  div [class "row_1"][ 
                       viewInput "text" "name" name Name
                     , viewInput "text" "start time" startTime StartTimeBuffer
                     , viewInput "text" "end time" endTime EndTimeBuffer
@@ -444,9 +440,6 @@ submissionForm visibility buffer name startTime endTime equipment location parts
                     ]
              , div [class "row_6"][button [onClick (CreateRequest buffer)][text "create"]]
             ] 
-          ]
-        Closed -> 
-          div [class "menu_button"][button [onClick Toggle][text "menu"]] 
 
 viewTextArea : String -> String -> (String -> msg) -> Html msg
 viewTextArea p v toMsg = 

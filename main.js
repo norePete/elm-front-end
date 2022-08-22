@@ -8827,7 +8827,6 @@ var $author$project$Main$StartTimeBuffer = function (a) {
 var $author$project$Main$SubmissionBuffer = function (a) {
 	return {$: 'SubmissionBuffer', a: a};
 };
-var $author$project$Main$Toggle = {$: 'Toggle'};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -8926,160 +8925,92 @@ var $author$project$Main$viewTextArea = F3(
 				]),
 			_List_Nil);
 	});
-var $author$project$Main$submissionForm = function (visibility) {
-	return function (buffer) {
-		return function (name) {
-			return function (startTime) {
-				return function (endTime) {
-					return function (equipment) {
-						return function (location) {
-							return function (partsUsed) {
-								return function (materials) {
-									return function (furtherAction) {
-										if (visibility.$ === 'Open') {
-											var t = visibility.a;
-											return A2(
-												$elm$html$Html$div,
-												_List_fromArray(
-													[
-														$elm$html$Html$Attributes$class('popup')
-													]),
-												_List_fromArray(
-													[
-														A2(
-														$elm$html$Html$div,
-														_List_fromArray(
-															[
-																$elm$html$Html$Attributes$class('container')
-															]),
-														_List_fromArray(
-															[
-																A2(
-																$elm$html$Html$div,
-																_List_fromArray(
-																	[
-																		$elm$html$Html$Attributes$class('hide_button')
-																	]),
-																_List_fromArray(
-																	[
-																		A2(
-																		$elm$html$Html$button,
-																		_List_fromArray(
-																			[
-																				$elm$html$Html$Events$onClick($author$project$Main$Toggle)
-																			]),
-																		_List_fromArray(
-																			[
-																				$elm$html$Html$text('hide')
-																			]))
-																	])),
-																A2(
-																$elm$html$Html$div,
-																_List_fromArray(
-																	[
-																		$elm$html$Html$Attributes$class('row_1')
-																	]),
-																_List_fromArray(
-																	[
-																		A4($author$project$Main$viewInput, 'text', 'name', name, $author$project$Main$Name),
-																		A4($author$project$Main$viewInput, 'text', 'start time', startTime, $author$project$Main$StartTimeBuffer),
-																		A4($author$project$Main$viewInput, 'text', 'end time', endTime, $author$project$Main$EndTimeBuffer)
-																	])),
-																A2(
-																$elm$html$Html$div,
-																_List_fromArray(
-																	[
-																		$elm$html$Html$Attributes$class('row_2')
-																	]),
-																_List_fromArray(
-																	[
-																		A4($author$project$Main$viewInput, 'text', 'equipment', equipment, $author$project$Main$EquipmentBuffer),
-																		A4($author$project$Main$viewInput, 'text', 'location (department)', location, $author$project$Main$LocationBuffer)
-																	])),
-																A2(
-																$elm$html$Html$div,
-																_List_fromArray(
-																	[
-																		$elm$html$Html$Attributes$class('row_3')
-																	]),
-																_List_fromArray(
-																	[
-																		A3($author$project$Main$viewTextArea, 'job description', buffer, $author$project$Main$SubmissionBuffer)
-																	])),
-																A2(
-																$elm$html$Html$div,
-																_List_fromArray(
-																	[
-																		$elm$html$Html$Attributes$class('row_4')
-																	]),
-																_List_fromArray(
-																	[
-																		A3($author$project$Main$viewTextArea, 'parts used', partsUsed, $author$project$Main$PartsUsedBuffer),
-																		A3($author$project$Main$viewTextArea, 'materials used', materials, $author$project$Main$MaterialsUsedBuffer)
-																	])),
-																A2(
-																$elm$html$Html$div,
-																_List_fromArray(
-																	[
-																		$elm$html$Html$Attributes$class('row_5')
-																	]),
-																_List_fromArray(
-																	[
-																		A3($author$project$Main$viewTextArea, 'further action required', furtherAction, $author$project$Main$FurtherActionBuffer)
-																	])),
-																A2(
-																$elm$html$Html$div,
-																_List_fromArray(
-																	[
-																		$elm$html$Html$Attributes$class('row_6')
-																	]),
-																_List_fromArray(
-																	[
-																		A2(
-																		$elm$html$Html$button,
-																		_List_fromArray(
-																			[
-																				$elm$html$Html$Events$onClick(
-																				$author$project$Main$CreateRequest(buffer))
-																			]),
-																		_List_fromArray(
-																			[
-																				$elm$html$Html$text('create')
-																			]))
-																	]))
-															]))
-													]));
-										} else {
-											return A2(
-												$elm$html$Html$div,
-												_List_fromArray(
-													[
-														$elm$html$Html$Attributes$class('menu_button')
-													]),
-												_List_fromArray(
-													[
-														A2(
-														$elm$html$Html$button,
-														_List_fromArray(
-															[
-																$elm$html$Html$Events$onClick($author$project$Main$Toggle)
-															]),
-														_List_fromArray(
-															[
-																$elm$html$Html$text('menu')
-															]))
-													]));
-										}
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-};
+var $author$project$Main$submissionForm = F9(
+	function (buffer, name, startTime, endTime, equipment, location, partsUsed, materials, furtherAction) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('popup')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row_1')
+						]),
+					_List_fromArray(
+						[
+							A4($author$project$Main$viewInput, 'text', 'name', name, $author$project$Main$Name),
+							A4($author$project$Main$viewInput, 'text', 'start time', startTime, $author$project$Main$StartTimeBuffer),
+							A4($author$project$Main$viewInput, 'text', 'end time', endTime, $author$project$Main$EndTimeBuffer)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row_2')
+						]),
+					_List_fromArray(
+						[
+							A4($author$project$Main$viewInput, 'text', 'equipment', equipment, $author$project$Main$EquipmentBuffer),
+							A4($author$project$Main$viewInput, 'text', 'location (department)', location, $author$project$Main$LocationBuffer)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row_3')
+						]),
+					_List_fromArray(
+						[
+							A3($author$project$Main$viewTextArea, 'job description', buffer, $author$project$Main$SubmissionBuffer)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row_4')
+						]),
+					_List_fromArray(
+						[
+							A3($author$project$Main$viewTextArea, 'parts used', partsUsed, $author$project$Main$PartsUsedBuffer),
+							A3($author$project$Main$viewTextArea, 'materials used', materials, $author$project$Main$MaterialsUsedBuffer)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row_5')
+						]),
+					_List_fromArray(
+						[
+							A3($author$project$Main$viewTextArea, 'further action required', furtherAction, $author$project$Main$FurtherActionBuffer)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row_6')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$button,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onClick(
+									$author$project$Main$CreateRequest(buffer))
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('create')
+								]))
+						]))
+				]));
+	});
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -9091,7 +9022,7 @@ var $author$project$Main$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$author$project$Main$submissionForm(model.status)(model.buffer)(model.name)(model.startTime)(model.endTime)(model.equipment)(model.location)(model.partsUsed)(model.materialsUsed)(model.furtherAction)
+						A9($author$project$Main$submissionForm, model.buffer, model.name, model.startTime, model.endTime, model.equipment, model.location, model.partsUsed, model.materialsUsed, model.furtherAction)
 					]))
 			]));
 };
