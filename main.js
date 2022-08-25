@@ -8931,7 +8931,7 @@ var $author$project$Main$submissionForm = F9(
 			$elm$html$Html$div,
 			_List_fromArray(
 				[
-					$elm$html$Html$Attributes$class('popup')
+					$elm$html$Html$Attributes$class('container')
 				]),
 			_List_fromArray(
 				[

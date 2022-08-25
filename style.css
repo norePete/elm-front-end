@@ -1,5 +1,10 @@
 * {
   box-sizing: border-box;
+
+}
+
+html {
+  font-size: 30px;
 }
 body {
 }
@@ -30,7 +35,6 @@ input[type=text] {
   top: 50px;
   margin-left: auto;
   margin-right: auto;
-  width: 800px;
   border: black solid 1px;
   padding: 1rem;
   border-radius: 6px;
@@ -39,7 +43,8 @@ input[type=text] {
 .container {
   display: grid;
   align-items: center;
-  grid-template-columns: repeat(auto-fit, minmax(700px, 1fr));
+  width: 100%; 
+  grid-template-columns: repeat(auto-fit, minmax(90vw, 1fr));
   grid-gap: 1rem;
 }
 .row_1 {
@@ -67,6 +72,7 @@ input[type=text] {
   grid-gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   justify-content: start;
+  height: 20vh;
 }
 
 .row_4 {
@@ -74,6 +80,7 @@ input[type=text] {
   grid-gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   justify-content: start;
+  height: 20vh;
 }
 
 .row_5 {
@@ -81,6 +88,7 @@ input[type=text] {
   grid-gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   justify-content: start;
+  height: 20vh;
 }
 
 .row_6 {
@@ -93,6 +101,7 @@ input[type=text] {
 .row_6 button{
   color: rgba(100,100,100,1);
   border: green solid 2px;
+  width: 10vw;
   background: rgba(200,200,200,0.5);
   border-radius: 4px;
 }

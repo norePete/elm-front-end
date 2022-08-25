@@ -418,7 +418,7 @@ view model =
 
 submissionForm : String -> String -> String -> String -> String -> String -> String -> String -> String -> Html Msg
 submissionForm buffer name startTime endTime equipment location partsUsed materials furtherAction =
-          div [class "popup"]
+          div [class "container"]
           [  div [class "row_1"][ 
                       viewInput "text" "name" name Name
                     , viewInput "text" "start time" startTime StartTimeBuffer
