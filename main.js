@@ -8925,6 +8925,28 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
+														$elm$html$Html$text('__Job_ID____ '),
+														$elm$html$Html$text(
+														$elm$core$String$fromInt(x.id.id))
+													]))
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('row')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$blockquote,
+												_List_fromArray(
+													[
+														A2($elm$html$Html$Attributes$style, 'font-size', '24px'),
+														A2($elm$html$Html$Attributes$style, 'width', '80%')
+													]),
+												_List_fromArray(
+													[
 														$elm$html$Html$text('Engineer____ '),
 														$elm$html$Html$text(x.author)
 													]))

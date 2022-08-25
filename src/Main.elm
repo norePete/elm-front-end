@@ -462,6 +462,7 @@ viewList ql =
                       [ 
 
                         button [id "close-button", onClick (CloseRequest x)][]
+                      , div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text "__Job_ID____ ", text (String.fromInt x.id.id)] ]
                       , div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text "Engineer____ ", text x.author] ]
                       , div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text "Start_Time__ ", text x.startTime] ]
                       , div [class "row"][ blockquote [style "font-size" "24px", style "width" "80%"][text "End_Time____ ", text x.endTime] ]
