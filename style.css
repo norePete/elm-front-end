@@ -1,18 +1,18 @@
 * {
   box-sizing: border-box;
-  font-size: 40px;
+  font-size: 30px;
 
 }
 :root {
-  font-size: 40px;
+  font-size: 30px;
 }
 
 html {
-  font-size: 40px;
+  font-size: 30px;
 }
 body {
   background: rgba(200,200,200,1);
-  font-size: 40px;
+  font-size: 30px;
 }
 
 textarea {
