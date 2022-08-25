@@ -1,18 +1,18 @@
 * {
   box-sizing: border-box;
-  font-size: 10px;
+  font-size: 60px;
 
 }
 :root {
-  font-size: 10px;
+  font-size: 60px;
 }
 
 html {
-  font-size: 10px;
+  font-size: 60px;
 }
 body {
   background: rgba(200,200,200,1);
-  font-size: 10px;
+  font-size: 60px;
 }
 
 textarea {
@@ -20,7 +20,7 @@ textarea {
 }
 input[type=text] {
   box-sizing: border-box;
-  height: 2vh;
+  height: 2rem;
   width: 100%;
 }
 .hide_button button{
@@ -43,7 +43,7 @@ input[type=text] {
   margin-left: auto;
   margin-right: auto;
   border: black solid 1px;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 6px;
 
 }
@@ -55,31 +55,31 @@ input[type=text] {
   margin-left: auto;
   margin-right: auto;
   grid-template-columns: repeat(auto-fit, minmax(90vw, 1fr));
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
 }
 .row_1 {
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 .row_2 {
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   justify-content: start;
 }
 
 .row_3 {
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   justify-content: start;
 }
 
 .row_3 {
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   justify-content: start;
   height: 20vh;
@@ -87,7 +87,7 @@ input[type=text] {
 
 .row_4 {
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   justify-content: start;
   height: 20vh;
@@ -95,7 +95,7 @@ input[type=text] {
 
 .row_5 {
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   justify-content: start;
   height: 20vh;
@@ -103,7 +103,7 @@ input[type=text] {
 
 .row_6 {
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   justify-content: start;
 }
