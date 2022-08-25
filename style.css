@@ -7,7 +7,7 @@ html {
   font-size: 30px;
 }
 body {
-  background: grey;
+  background: rgba(200,200,200,1);
 }
 
 textarea {
@@ -102,10 +102,10 @@ input[type=text] {
 }
 
 .row_6 button{
-  color: rgba(100,100,100,1);
+  color: rgba(255,255,255,1);
   border: green solid 2px;
   width: 10vw;
-  background: rgba(200,200,200,0.5);
+  background: rgba(50,200,50,1);
   border-radius: 4px;
 }
 
