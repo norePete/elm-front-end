@@ -420,23 +420,23 @@ submissionForm : String -> String -> String -> String -> String -> String -> Str
 submissionForm buffer name startTime endTime equipment location partsUsed materials furtherAction =
           div [class "container"]
           [  div [class "row_1"][ 
-                      viewInput "text" "name" name Name
-                    , viewInput "text" "start time" startTime StartTimeBuffer
-                    , viewInput "text" "end time" endTime EndTimeBuffer
+                      viewInput "text" "Name" name Name
+                    , viewInput "text" "Start Time" startTime StartTimeBuffer
+                    , viewInput "text" "End Time" endTime EndTimeBuffer
                     ]
             , div [class "row_2"][
-                      viewInput "text" "equipment" equipment EquipmentBuffer
-                    , viewInput "text" "location (department)" location LocationBuffer
+                      viewInput "text" "Equipment" equipment EquipmentBuffer
+                    , viewInput "text" "Location (department)" location LocationBuffer
                     ]
             , div [class "row_3"][
-                      viewTextArea "job description" buffer SubmissionBuffer
+                      viewTextArea "Job Description" buffer SubmissionBuffer
                     ]
             , div [class "row_4"][
-                      viewTextArea "parts used" partsUsed PartsUsedBuffer
-                    , viewTextArea "materials used" materials MaterialsUsedBuffer
+                      viewTextArea "Parts Used" partsUsed PartsUsedBuffer
+                    , viewTextArea "Materials Used" materials MaterialsUsedBuffer
                     ]
             , div [class "row_5"][
-                      viewTextArea "further action required" furtherAction FurtherActionBuffer
+                      viewTextArea "Further Action Required" furtherAction FurtherActionBuffer
                     ]
              , div [class "row_6"][button [onClick (CreateRequest buffer)][text "create"]]
             ] 
