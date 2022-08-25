@@ -8925,7 +8925,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
-														$elm$html$Html$text('Engineer '),
+														$elm$html$Html$text('Engineer____ '),
 														$elm$html$Html$text(x.author)
 													]))
 											])),
@@ -8946,7 +8946,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
-														$elm$html$Html$text('Start Time '),
+														$elm$html$Html$text('Start_Time__ '),
 														$elm$html$Html$text(x.startTime)
 													]))
 											])),
@@ -8967,7 +8967,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
-														$elm$html$Html$text('End Time '),
+														$elm$html$Html$text('End_Time____ '),
 														$elm$html$Html$text(x.endTime)
 													]))
 											])),
@@ -8988,7 +8988,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
-														$elm$html$Html$text('Equipment '),
+														$elm$html$Html$text('Equipment___ '),
 														$elm$html$Html$text(x.equipment)
 													]))
 											])),
@@ -9009,7 +9009,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
-														$elm$html$Html$text('Location '),
+														$elm$html$Html$text('Location____ '),
 														$elm$html$Html$text(x.location)
 													]))
 											])),
@@ -9030,7 +9030,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
-														$elm$html$Html$text('Job Description '),
+														$elm$html$Html$text('Job_Desc____ '),
 														$elm$html$Html$text(x.quote)
 													]))
 											])),
@@ -9051,7 +9051,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
-														$elm$html$Html$text('Parts Used '),
+														$elm$html$Html$text('Parts_Used__ '),
 														$elm$html$Html$text(x.partsUsed)
 													]))
 											])),
@@ -9072,7 +9072,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
-														$elm$html$Html$text('Materials Used '),
+														$elm$html$Html$text('Materials___ '),
 														$elm$html$Html$text(x.materialsUsed)
 													]))
 											])),
@@ -9093,7 +9093,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
-														$elm$html$Html$text('Further Action '),
+														$elm$html$Html$text('Further_____ '),
 														$elm$html$Html$text(x.furtherAction)
 													]))
 											])),
