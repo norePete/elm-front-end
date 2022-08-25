@@ -7,7 +7,10 @@ html {
   font-size: 30px;
 }
 body {
-  margin: 10vh;
+  margin-right: 10vh;
+  margin-left: 10vh;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
 }
 
 textarea {
