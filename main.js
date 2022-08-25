@@ -8819,6 +8819,28 @@ var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$blockquote = _VirtualDom_node('blockquote');
+var $author$project$Main$CloseRequest = function (a) {
+	return {$: 'CloseRequest', a: a};
+};
+var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
@@ -8878,6 +8900,15 @@ var $author$project$Main$viewList = function (ql) {
 								_List_fromArray(
 									[
 										A2(
+										$elm$html$Html$button,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$id('close-button'),
+												$elm$html$Html$Events$onClick(
+												$author$project$Main$CloseRequest(x))
+											]),
+										_List_Nil),
+										A2(
 										$elm$html$Html$div,
 										_List_fromArray(
 											[
@@ -8894,6 +8925,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
+														$elm$html$Html$text('Engineer '),
 														$elm$html$Html$text(x.author)
 													]))
 											])),
@@ -8914,6 +8946,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
+														$elm$html$Html$text('Start Time '),
 														$elm$html$Html$text(x.startTime)
 													]))
 											])),
@@ -8934,6 +8967,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
+														$elm$html$Html$text('End Time '),
 														$elm$html$Html$text(x.endTime)
 													]))
 											])),
@@ -8954,6 +8988,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
+														$elm$html$Html$text('Equipment '),
 														$elm$html$Html$text(x.equipment)
 													]))
 											])),
@@ -8974,6 +9009,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
+														$elm$html$Html$text('Location '),
 														$elm$html$Html$text(x.location)
 													]))
 											])),
@@ -8994,6 +9030,28 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
+														$elm$html$Html$text('Job Description '),
+														$elm$html$Html$text(x.quote)
+													]))
+											])),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('row')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$blockquote,
+												_List_fromArray(
+													[
+														A2($elm$html$Html$Attributes$style, 'font-size', '24px'),
+														A2($elm$html$Html$Attributes$style, 'width', '80%')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text('Parts Used '),
 														$elm$html$Html$text(x.partsUsed)
 													]))
 											])),
@@ -9014,6 +9072,7 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
+														$elm$html$Html$text('Materials Used '),
 														$elm$html$Html$text(x.materialsUsed)
 													]))
 											])),
@@ -9034,27 +9093,8 @@ var $author$project$Main$viewList = function (ql) {
 													]),
 												_List_fromArray(
 													[
+														$elm$html$Html$text('Further Action '),
 														$elm$html$Html$text(x.furtherAction)
-													]))
-											])),
-										A2(
-										$elm$html$Html$div,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$class('row')
-											]),
-										_List_fromArray(
-											[
-												A2(
-												$elm$html$Html$blockquote,
-												_List_fromArray(
-													[
-														A2($elm$html$Html$Attributes$style, 'font-size', '24px'),
-														A2($elm$html$Html$Attributes$style, 'width', '80%')
-													]),
-												_List_fromArray(
-													[
-														$elm$html$Html$text(x.quote)
 													]))
 											])),
 										A2(
