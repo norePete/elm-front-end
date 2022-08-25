@@ -7,10 +7,6 @@ html {
   font-size: 30px;
 }
 body {
-  margin-right: 10vh;
-  margin-left: 10vh;
-  margin-top: 10vh;
-  margin-bottom: 10vh;
 }
 
 textarea {
@@ -47,7 +43,9 @@ input[type=text] {
 .container {
   display: grid;
   align-items: center;
-  width: 100%; 
+  width: 90%; 
+  margin-left: auto;
+  margin-right: auto;
   grid-template-columns: repeat(auto-fit, minmax(90vw, 1fr));
   grid-gap: 1rem;
 }
