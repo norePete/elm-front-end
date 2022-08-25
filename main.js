@@ -8816,264 +8816,9 @@ var $elm$html$Html$Attributes$classList = function (classes) {
 };
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
-var $author$project$Main$CreateRequest = function (a) {
-	return {$: 'CreateRequest', a: a};
-};
-var $author$project$Main$EndTimeBuffer = function (a) {
-	return {$: 'EndTimeBuffer', a: a};
-};
-var $author$project$Main$EquipmentBuffer = function (a) {
-	return {$: 'EquipmentBuffer', a: a};
-};
-var $author$project$Main$FurtherActionBuffer = function (a) {
-	return {$: 'FurtherActionBuffer', a: a};
-};
-var $author$project$Main$LocationBuffer = function (a) {
-	return {$: 'LocationBuffer', a: a};
-};
-var $author$project$Main$MaterialsUsedBuffer = function (a) {
-	return {$: 'MaterialsUsedBuffer', a: a};
-};
-var $author$project$Main$Name = function (a) {
-	return {$: 'Name', a: a};
-};
-var $author$project$Main$PartsUsedBuffer = function (a) {
-	return {$: 'PartsUsedBuffer', a: a};
-};
-var $author$project$Main$StartTimeBuffer = function (a) {
-	return {$: 'StartTimeBuffer', a: a};
-};
-var $author$project$Main$SubmissionBuffer = function (a) {
-	return {$: 'SubmissionBuffer', a: a};
-};
-var $author$project$Main$Toggle = {$: 'Toggle'};
-var $author$project$Main$ToggleDead = {$: 'ToggleDead'};
-var $elm$html$Html$button = _VirtualDom_node('button');
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $elm$html$Html$input = _VirtualDom_node('input');
-var $elm$html$Html$Events$alwaysStop = function (x) {
-	return _Utils_Tuple2(x, true);
-};
-var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
-	return {$: 'MayStopPropagation', a: a};
-};
-var $elm$html$Html$Events$stopPropagationOn = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
-	});
-var $elm$json$Json$Decode$at = F2(
-	function (fields, decoder) {
-		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
-	});
-var $elm$html$Html$Events$targetValue = A2(
-	$elm$json$Json$Decode$at,
-	_List_fromArray(
-		['target', 'value']),
-	$elm$json$Json$Decode$string);
-var $elm$html$Html$Events$onInput = function (tagger) {
-	return A2(
-		$elm$html$Html$Events$stopPropagationOn,
-		'input',
-		A2(
-			$elm$json$Json$Decode$map,
-			$elm$html$Html$Events$alwaysStop,
-			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
-};
-var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
-var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
-var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
-var $author$project$Main$viewInput = F4(
-	function (t, p, v, toMsg) {
-		return A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('inputfield')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$input,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$type_(t),
-							$elm$html$Html$Attributes$placeholder(p),
-							$elm$html$Html$Attributes$value(v),
-							$elm$html$Html$Events$onInput(toMsg)
-						]),
-					_List_Nil)
-				]));
-	});
-var $elm$html$Html$textarea = _VirtualDom_node('textarea');
-var $author$project$Main$viewTextArea = F3(
-	function (p, v, toMsg) {
-		return A2(
-			$elm$html$Html$textarea,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$placeholder(p),
-					$elm$html$Html$Attributes$value(v),
-					$elm$html$Html$Events$onInput(toMsg)
-				]),
-			_List_Nil);
-	});
-var $author$project$Main$submissionForm = function (visibility) {
-	return function (buffer) {
-		return function (name) {
-			return function (startTime) {
-				return function (endTime) {
-					return function (equipment) {
-						return function (location) {
-							return function (partsUsed) {
-								return function (materials) {
-									return function (furtherAction) {
-										if (visibility.$ === 'Open') {
-											var t = visibility.a;
-											return A2(
-												$elm$html$Html$div,
-												_List_fromArray(
-													[
-														$elm$html$Html$Attributes$classList(
-														_List_fromArray(
-															[
-																_Utils_Tuple2('request-button', true),
-																_Utils_Tuple2('panel-active', true),
-																_Utils_Tuple2('float-left', true)
-															]))
-													]),
-												_List_fromArray(
-													[
-														A2(
-														$elm$html$Html$div,
-														_List_fromArray(
-															[
-																$elm$html$Html$Attributes$class('float-left')
-															]),
-														_List_fromArray(
-															[
-																A2(
-																$elm$html$Html$button,
-																_List_fromArray(
-																	[
-																		$elm$html$Html$Events$onClick($author$project$Main$Toggle)
-																	]),
-																_List_fromArray(
-																	[
-																		$elm$html$Html$text('hide')
-																	])),
-																A2(
-																$elm$html$Html$button,
-																_List_fromArray(
-																	[
-																		$elm$html$Html$Events$onClick($author$project$Main$ToggleDead)
-																	]),
-																_List_fromArray(
-																	[
-																		$elm$html$Html$text('closed requests')
-																	]))
-															])),
-														A2(
-														$elm$html$Html$div,
-														_List_Nil,
-														_List_fromArray(
-															[
-																A4($author$project$Main$viewInput, 'text', 'name', name, $author$project$Main$Name),
-																A4($author$project$Main$viewInput, 'text', 'start time', startTime, $author$project$Main$StartTimeBuffer),
-																A4($author$project$Main$viewInput, 'text', 'end time', endTime, $author$project$Main$EndTimeBuffer),
-																A4($author$project$Main$viewInput, 'text', 'equipment', equipment, $author$project$Main$EquipmentBuffer),
-																A4($author$project$Main$viewInput, 'text', 'location (department)', location, $author$project$Main$LocationBuffer),
-																A3($author$project$Main$viewTextArea, 'job description', buffer, $author$project$Main$SubmissionBuffer),
-																A3($author$project$Main$viewTextArea, 'parts used', partsUsed, $author$project$Main$PartsUsedBuffer),
-																A3($author$project$Main$viewTextArea, 'materials used', materials, $author$project$Main$MaterialsUsedBuffer),
-																A3($author$project$Main$viewTextArea, 'further action required', furtherAction, $author$project$Main$FurtherActionBuffer),
-																A2(
-																$elm$html$Html$button,
-																_List_fromArray(
-																	[
-																		$elm$html$Html$Events$onClick(
-																		$author$project$Main$CreateRequest(buffer))
-																	]),
-																_List_fromArray(
-																	[
-																		$elm$html$Html$text('create')
-																	]))
-															]))
-													]));
-										} else {
-											return A2(
-												$elm$html$Html$div,
-												_List_fromArray(
-													[
-														$elm$html$Html$Attributes$classList(
-														_List_fromArray(
-															[
-																_Utils_Tuple2('request-button', true),
-																_Utils_Tuple2('panel-hidden', true),
-																_Utils_Tuple2('float-left', true)
-															]))
-													]),
-												_List_fromArray(
-													[
-														A2(
-														$elm$html$Html$button,
-														_List_fromArray(
-															[
-																$elm$html$Html$Events$onClick($author$project$Main$Toggle)
-															]),
-														_List_fromArray(
-															[
-																$elm$html$Html$text('menu')
-															])),
-														A2($elm$html$Html$div, _List_Nil, _List_Nil)
-													]));
-										}
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-};
 var $elm$html$Html$blockquote = _VirtualDom_node('blockquote');
-var $author$project$Main$Buffer = F2(
-	function (a, b) {
-		return {$: 'Buffer', a: a, b: b};
-	});
-var $author$project$Main$CloseRequest = function (a) {
-	return {$: 'CloseRequest', a: a};
-};
-var $author$project$Main$ToggleUpdateDialog = function (a) {
-	return {$: 'ToggleUpdateDialog', a: a};
-};
-var $author$project$Main$UpdateQuote = F2(
-	function (a, b) {
-		return {$: 'UpdateQuote', a: a, b: b};
-	});
-var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
@@ -9089,102 +8834,6 @@ var $author$project$Main$urgencyColour = function (urgency) {
 			return 'rgba(0,0,0,0.4)';
 	}
 };
-var $author$project$Main$viewDialog = F3(
-	function (dialog, html, hiddenHtml) {
-		if (dialog.$ === 'Closed') {
-			return A2($elm$html$Html$div, _List_Nil, hiddenHtml);
-		} else {
-			var paragraph = dialog.a;
-			return A2($elm$html$Html$div, _List_Nil, html);
-		}
-	});
-var $author$project$Main$SwitchTo = F2(
-	function (a, b) {
-		return {$: 'SwitchTo', a: a, b: b};
-	});
-var $elm$html$Html$fieldset = _VirtualDom_node('fieldset');
-var $elm$json$Json$Encode$bool = _Json_wrap;
-var $elm$html$Html$Attributes$boolProperty = F2(
-	function (key, bool) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$bool(bool));
-	});
-var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
-var $elm$html$Html$label = _VirtualDom_node('label');
-var $elm$html$Html$Attributes$name = $elm$html$Html$Attributes$stringProperty('name');
-var $author$project$Main$radio = function (_v0) {
-	var isChecked = _v0.a;
-	var choiceName = _v0.b;
-	var msg = _v0.c;
-	return A2(
-		$elm$html$Html$label,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$input,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$type_('radio'),
-						$elm$html$Html$Attributes$name(choiceName),
-						$elm$html$Html$Events$onClick(msg),
-						$elm$html$Html$Attributes$checked(isChecked)
-					]),
-				_List_Nil),
-				isChecked ? $elm$html$Html$text(choiceName) : $elm$html$Html$text('')
-			]));
-};
-var $author$project$Main$viewPicker = function (options) {
-	return A2(
-		$elm$html$Html$fieldset,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('radio-picker')
-			]),
-		A2($elm$core$List$map, $author$project$Main$radio, options));
-};
-var $author$project$Main$viewRadio = function (quote) {
-	return $author$project$Main$viewPicker(
-		_List_fromArray(
-			[
-				_Utils_Tuple3(
-				_Utils_eq(quote.urgency, $author$project$Main$Low),
-				'low',
-				$author$project$Main$SwitchTo(quote)($author$project$Main$Low)),
-				_Utils_Tuple3(
-				_Utils_eq(quote.urgency, $author$project$Main$Medium),
-				'Medium',
-				$author$project$Main$SwitchTo(quote)($author$project$Main$Medium)),
-				_Utils_Tuple3(
-				_Utils_eq(quote.urgency, $author$project$Main$High),
-				'high',
-				$author$project$Main$SwitchTo(quote)($author$project$Main$High))
-			]));
-};
-var $author$project$Main$viewUpdateForm = F4(
-	function (placeholder, value, callback, onclick) {
-		return A2(
-			$elm$html$Html$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A3($author$project$Main$viewTextArea, placeholder, value, callback),
-					A2(
-					$elm$html$Html$button,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$id('done-button'),
-							$elm$html$Html$Events$onClick(
-							onclick('pointlessString'))
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('done')
-						]))
-				]));
-	});
 var $author$project$Main$viewList = function (ql) {
 	return A2(
 		$elm$core$List$map,
@@ -9202,63 +8851,6 @@ var $author$project$Main$viewList = function (ql) {
 					]),
 				_List_fromArray(
 					[
-						A3(
-						$author$project$Main$viewDialog,
-						x.updateDialog,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('update-dialog')
-									]),
-								_List_fromArray(
-									[
-										A4(
-										$author$project$Main$viewUpdateForm,
-										'What\'s the update on this request?',
-										x.updateBuffer,
-										$author$project$Main$Buffer(x),
-										$author$project$Main$UpdateQuote(x))
-									]))
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$classList(
-										_List_fromArray(
-											[
-												_Utils_Tuple2('urgency-menu', true),
-												_Utils_Tuple2('float', true)
-											]))
-									]),
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$button,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$id('update-button'),
-												$elm$html$Html$Events$onClick(
-												$author$project$Main$ToggleUpdateDialog(x))
-											]),
-										_List_Nil),
-										A2(
-										$elm$html$Html$button,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$id('close-button'),
-												$elm$html$Html$Events$onClick(
-												$author$project$Main$CloseRequest(x))
-											]),
-										_List_Nil),
-										$author$project$Main$viewRadio(x)
-									]))
-							])),
 						A2(
 						$elm$html$Html$div,
 						_List_fromArray(
@@ -9297,7 +8889,7 @@ var $author$project$Main$viewList = function (ql) {
 												$elm$html$Html$blockquote,
 												_List_fromArray(
 													[
-														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'font-size', '24px'),
 														A2($elm$html$Html$Attributes$style, 'width', '80%')
 													]),
 												_List_fromArray(
@@ -9317,7 +8909,7 @@ var $author$project$Main$viewList = function (ql) {
 												$elm$html$Html$blockquote,
 												_List_fromArray(
 													[
-														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'font-size', '24px'),
 														A2($elm$html$Html$Attributes$style, 'width', '80%')
 													]),
 												_List_fromArray(
@@ -9337,7 +8929,7 @@ var $author$project$Main$viewList = function (ql) {
 												$elm$html$Html$blockquote,
 												_List_fromArray(
 													[
-														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'font-size', '24px'),
 														A2($elm$html$Html$Attributes$style, 'width', '80%')
 													]),
 												_List_fromArray(
@@ -9357,7 +8949,7 @@ var $author$project$Main$viewList = function (ql) {
 												$elm$html$Html$blockquote,
 												_List_fromArray(
 													[
-														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'font-size', '24px'),
 														A2($elm$html$Html$Attributes$style, 'width', '80%')
 													]),
 												_List_fromArray(
@@ -9377,7 +8969,7 @@ var $author$project$Main$viewList = function (ql) {
 												$elm$html$Html$blockquote,
 												_List_fromArray(
 													[
-														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'font-size', '24px'),
 														A2($elm$html$Html$Attributes$style, 'width', '80%')
 													]),
 												_List_fromArray(
@@ -9397,7 +8989,7 @@ var $author$project$Main$viewList = function (ql) {
 												$elm$html$Html$blockquote,
 												_List_fromArray(
 													[
-														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'font-size', '24px'),
 														A2($elm$html$Html$Attributes$style, 'width', '80%')
 													]),
 												_List_fromArray(
@@ -9417,7 +9009,7 @@ var $author$project$Main$viewList = function (ql) {
 												$elm$html$Html$blockquote,
 												_List_fromArray(
 													[
-														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'font-size', '24px'),
 														A2($elm$html$Html$Attributes$style, 'width', '80%')
 													]),
 												_List_fromArray(
@@ -9437,7 +9029,7 @@ var $author$project$Main$viewList = function (ql) {
 												$elm$html$Html$blockquote,
 												_List_fromArray(
 													[
-														A2($elm$html$Html$Attributes$style, 'font-size', '14px'),
+														A2($elm$html$Html$Attributes$style, 'font-size', '24px'),
 														A2($elm$html$Html$Attributes$style, 'width', '80%')
 													]),
 												_List_fromArray(
@@ -9457,7 +9049,7 @@ var $author$project$Main$viewList = function (ql) {
 												$elm$html$Html$blockquote,
 												_List_fromArray(
 													[
-														A2($elm$html$Html$Attributes$style, 'font-size', '20px'),
+														A2($elm$html$Html$Attributes$style, 'font-size', '24px'),
 														A2($elm$html$Html$Attributes$style, 'width', '80%')
 													]),
 												_List_fromArray(
@@ -9606,7 +9198,6 @@ var $author$project$Main$view = function (model) {
 					]),
 				_List_fromArray(
 					[
-						$author$project$Main$submissionForm(model.status)(model.buffer)(model.name)(model.startTime)(model.endTime)(model.equipment)(model.location)(model.partsUsed)(model.materialsUsed)(model.furtherAction),
 						$author$project$Main$viewQuote(model)
 					]))
 			]));
